@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using static XNode.Node;
 
@@ -29,10 +29,11 @@ public enum BTResult
 public enum BehaviourTreeType
 {
     GUARD,
-    LUMBERJACK,
-    ANIMAL_IDLE,
+    Forward,
+    Middle,
     //Add stuff here
     COUNT,
+    Back,
 }
 
 public enum HasOp
