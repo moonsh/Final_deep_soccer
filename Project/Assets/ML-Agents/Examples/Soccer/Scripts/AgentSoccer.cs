@@ -28,7 +28,7 @@ public class AgentSoccer : Agent
 
     [HideInInspector]
     public Team team;
-    float m_KickPower;
+    float m_KickPower = 2000f;
     // The coefficient for the reward for colliding with a ball. Set using curriculum.
     float m_BallTouch;
     public Position position;
@@ -58,7 +58,7 @@ public class AgentSoccer : Agent
         if (m_BehaviorParameters.TeamId == (int)Team.Blue)
         {
             team = Team.Blue;
-            initialPos = new Vector3(transform.position.x - 5f, .5f, transform.position.z);
+            initialPos = new Vector3(transform.position.x -5f, .5f, transform.position.z+10f);
             rotSign = 1f;
         }
         else
@@ -95,7 +95,6 @@ public class AgentSoccer : Agent
         var dirToGo = Vector3.zero;
         var rotateDir = Vector3.zero;
 
-        m_KickPower = 0f;
 
         var forwardAxis = act[0];
         var rightAxis = act[1];
@@ -106,7 +105,7 @@ public class AgentSoccer : Agent
         {
             case 1:
                 dirToGo = transform.forward * m_ForwardSpeed;
-                m_KickPower = 1f;
+                
                 break;
             case 2:
                 dirToGo = transform.forward * -m_ForwardSpeed;
@@ -142,8 +141,7 @@ public class AgentSoccer : Agent
                     var dir = transform.forward;
                     dir = dir.normalized;
                     m_ballcontrol.owner = null;
-                    m_ballcontrol.gameObject.GetComponent<Rigidbody>().AddForce(dir * 2000f);
-                    gameObject.GetComponent<Rigidbody>().drag = 6.0f;
+                    m_ballcontrol.gameObject.GetComponent<Rigidbody>().AddForce(dir * k_Power);
                     break;
 
                 }
@@ -158,7 +156,13 @@ public class AgentSoccer : Agent
         agentRb.AddForce(dirToGo * m_SoccerSettings.agentRunSpeed,
             ForceMode.VelocityChange);
     }
-
+    
+    public void Kick(Vector3 direction, float power)
+    {
+        var dir = direction.normalized;
+        m_ballcontrol.owner = null;
+        m_ballcontrol.gameObject.GetComponent<Rigidbody>().AddForce(dir * power);
+    }
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
 

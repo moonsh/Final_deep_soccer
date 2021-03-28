@@ -8,7 +8,7 @@ public class BTTeammateCloseToBall : BTNode
     public override BTResult Execute()
     {
         float closestTeammate = Mathf.Sqrt(((context.navAgent.transform.position.z - context.ball.transform.position.z) * (context.navAgent.transform.position.z - context.ball.transform.position.z))
-            + ((context.navAgent.transform.position.x - context.ball.transform.position.x) * (context.navAgent.transform.position.x - context.ball.transform.position.x))); ;
+            + ((context.navAgent.transform.position.x - context.ball.transform.position.x) * (context.navAgent.transform.position.x - context.ball.transform.position.x)));
         foreach (GameObject teammate in context.teammates)
         {
             float distance2 = Mathf.Sqrt(((teammate.transform.position.z - context.ball.transform.position.z) * (teammate.transform.position.z - context.ball.transform.position.z))
@@ -31,8 +31,10 @@ public class BTTeammateCloseToBall : BTNode
                 closestOpponent = distance2;
             }
         }
+
         if (closestTeammate < closestOpponent)
         {
+            
             XNode.NodePort inPort = GetPort("inResults");
             if (inPort != null)
             {

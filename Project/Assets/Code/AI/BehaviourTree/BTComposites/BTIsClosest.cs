@@ -19,6 +19,15 @@ public class BTIsClosest : BTNode
                 isClosest = false;
             }
         }
+        foreach (GameObject opponent in context.opponents)
+        {
+            float distance2 = Mathf.Sqrt(((opponent.transform.position.z - context.ball.transform.position.z) * (opponent.transform.position.z - context.ball.transform.position.z))
+            + ((opponent.transform.position.x - context.ball.transform.position.x) * (opponent.transform.position.x - context.ball.transform.position.x)));
+            if (distance1 > distance2)
+            {
+                isClosest = false;
+            }
+        }
         if (isClosest)
         {
             XNode.NodePort inPort = GetPort("inResults");

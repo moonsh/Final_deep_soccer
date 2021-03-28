@@ -372,9 +372,6 @@ MonoBehaviour:
         node: {fileID: 114087231554151080}
         reroutePoints: []
       - fieldName: outResult
-        node: {fileID: 0}
-        reroutePoints: []
-      - fieldName: outResult
         node: {fileID: 114995352889003802}
         reroutePoints: []
       _direction: 0
@@ -516,7 +513,7 @@ MonoBehaviour:
   m_Name: BT Forward Defending
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -536, y: 40}
+  position: {x: -520, y: 40}
   ports:
     keys:
     - outResult
