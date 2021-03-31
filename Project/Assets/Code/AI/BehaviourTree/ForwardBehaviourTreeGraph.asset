@@ -570,9 +570,6 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: outResult
-        node: {fileID: 0}
-        reroutePoints: []
-      - fieldName: outResult
         node: {fileID: 114676038554786346}
         reroutePoints: []
       _direction: 0

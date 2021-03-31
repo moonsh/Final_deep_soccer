@@ -8,6 +8,7 @@ public class BTHasBall : BTNode
 
     public override BTResult Execute()
     {
+        
         if (context.ball.GetComponent<SoccerBallController>().owner)
         {
             if (context.ball.GetComponent<SoccerBallController>().owner.name.Equals(context.rb.name))

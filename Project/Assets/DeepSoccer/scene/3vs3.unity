@@ -112,6 +112,42 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 9a9c710d8d2970c44806a15627b032c8, type: 2}
+--- !u!1 &108305303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 108305304}
+  m_Layer: 0
+  m_Name: BlueBackGoal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &108305304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108305303}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -55.289845, y: -35.920677, z: 19.73412}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 738984410}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &518147542 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2670715022663969067, guid: 83b78873ec0e58e4fa366823f8a296a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1656709003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &628121430
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +226,39 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 1656709003}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &738984409
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 738984410}
+  m_Layer: 0
+  m_Name: BlueBackGoals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &738984410
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738984409}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 35.289845, y: 35.920677, z: 8.265881}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 108305304}
+  - {fileID: 930660807}
+  - {fileID: 2002173882}
+  m_Father: {fileID: 518147542}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &754629685 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6595116529665339800, guid: 83b78873ec0e58e4fa366823f8a296a7,
@@ -216,7 +285,7 @@ MonoBehaviour:
   eventHandler:
     canHandleEvents: 1
   rb: {fileID: 754629695}
-  goal: {fileID: 1253605352}
+  goal: {fileID: 930660807}
   ball: {fileID: 1558887292}
   opponents:
   - {fileID: 653975613}
@@ -312,6 +381,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
+--- !u!1 &930660806
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 930660807}
+  m_Layer: 0
+  m_Name: BlueBackGoal2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &930660807
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930660806}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -15.2898445, y: -35.920677, z: 19.73412}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 738984410}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &972651633 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7386702081400705574, guid: 83b78873ec0e58e4fa366823f8a296a7,
@@ -327,12 +426,6 @@ GameObject:
 --- !u!54 &1160134352 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 7032398399475798191, guid: 83b78873ec0e58e4fa366823f8a296a7,
-    type: 3}
-  m_PrefabInstance: {fileID: 1656709003}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1253605352 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7386702082083986366, guid: 83b78873ec0e58e4fa366823f8a296a7,
     type: 3}
   m_PrefabInstance: {fileID: 1656709003}
   m_PrefabAsset: {fileID: 0}
@@ -396,8 +489,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d25c82b3db479b4886a233b4fb4b8b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviourTreeType: 4
-  runtimeTree: {fileID: 11400000, guid: d8043db2e8bcace4c87e4a7f651be81c, type: 2}
+  behaviourTreeType: 2
+  runtimeTree: {fileID: 0}
 --- !u!114 &1275877562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,8 +503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d25c82b3db479b4886a233b4fb4b8b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviourTreeType: 2
-  runtimeTree: {fileID: 0}
+  behaviourTreeType: 4
+  runtimeTree: {fileID: 11400000, guid: 2e6400c35ec748b4e9f4ba32d5a127b8, type: 2}
 --- !u!114 &1275877563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,7 +627,7 @@ MonoBehaviour:
   eventHandler:
     canHandleEvents: 1
   rb: {fileID: 1477767675}
-  goal: {fileID: 1253605352}
+  goal: {fileID: 2002173882}
   ball: {fileID: 1558887292}
   opponents:
   - {fileID: 653975613}
@@ -1218,6 +1311,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2002173881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2002173882}
+  m_Layer: 0
+  m_Name: BlueBackGoal3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2002173882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002173881}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -35.289845, y: -35.920677, z: 19.73412}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 738984410}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2036483430 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4344556874209728575, guid: 83b78873ec0e58e4fa366823f8a296a7,
@@ -1244,7 +1367,7 @@ MonoBehaviour:
   eventHandler:
     canHandleEvents: 1
   rb: {fileID: 2036483440}
-  goal: {fileID: 1253605352}
+  goal: {fileID: 108305304}
   ball: {fileID: 1558887292}
   opponents:
   - {fileID: 653975613}
