@@ -40,6 +40,9 @@ public class SoccerEnvController : MonoBehaviour
     //List of Agents On Platform
     public List<PlayerInfo> AgentsList = new List<PlayerInfo>();
 
+    [Range(0,100)]
+    public int stealProbability = 50;
+
     private SoccerSettings m_SoccerSettings;
 
 
@@ -51,7 +54,8 @@ public class SoccerEnvController : MonoBehaviour
     private float distance_cal;
     //    private SoccerBallController m_ballcontrol;
     private Vector3 calculate_distance_ball_agents;
-
+    private float WaitTime = 3.0f;
+    private float Timer = 0.0f;
     void Start()
     {
 
@@ -103,10 +107,22 @@ public class SoccerEnvController : MonoBehaviour
                 if (ball.GetComponent<SoccerBallController>().owner == null)
                 {
                     ball.GetComponent<SoccerBallController>().owner = item.Agent.gameObject;
-                    item.Agent.GetComponent<Rigidbody>().drag = 7.0f;
+                }
+                else
+                {
+                    if(ball.GetComponent<SoccerBallController>().owner.tag != item.Agent.gameObject.tag & Timer > WaitTime)
+                    {
+                        Timer = 0f;
+                        int temp = Random.Range(0, 100);
+                        if(temp < stealProbability)
+                        {
+                            ball.GetComponent<SoccerBallController>().owner = item.Agent.gameObject;
+                        }
+                    }
                 }
             }
         }
+        Timer += Time.deltaTime;
 
     }
     public void ResetBall()

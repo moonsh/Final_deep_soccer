@@ -24,6 +24,10 @@ public class SoccerBallController : MonoBehaviour
         {
             envController.GoalTouched(Team.Purple);
         }
+        if(col.gameObject.tag == "wall")
+        {
+            envController.ResetBall();
+        }
     }
 
 

@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dceee6000d4704343885db6d99412f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviourTreeType: 4
+  behaviourTreeType: 1
   sensorySystem:
     targetLostMaxTime: 0
     fovAngle: 60
@@ -619,7 +619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dceee6000d4704343885db6d99412f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviourTreeType: 4
+  behaviourTreeType: 1
   sensorySystem:
     targetLostMaxTime: 0
     fovAngle: 60
@@ -960,6 +960,16 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7386702081140358901, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_TagString
+      value: wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 7386702081225290516, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_TagString
+      value: wall
+      objectReference: {fileID: 0}
     - target: {fileID: 7386702081686585744, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1026,6 +1036,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 1d7384a79905e47399076985ef6317bb,
         type: 2}
+    - target: {fileID: 7386702082239624373, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_TagString
+      value: wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 7386702083037808949, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_TagString
+      value: wall
+      objectReference: {fileID: 0}
     - target: {fileID: 7436122103838711509, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_BehaviorType
@@ -1359,7 +1379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dceee6000d4704343885db6d99412f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviourTreeType: 4
+  behaviourTreeType: 1
   sensorySystem:
     targetLostMaxTime: 0
     fovAngle: 60
