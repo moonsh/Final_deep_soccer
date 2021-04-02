@@ -51,7 +51,7 @@ public class BTForwardDribbling : BTNode
                 }
                 else
                 {
-                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position, 1000f);
+                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position, 100f);
                 }
             }
         }

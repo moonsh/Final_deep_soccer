@@ -106,7 +106,7 @@ public class BTFowardPass : BTNode
         if (Vector3.Angle(context.navAgent.transform.forward, teammatePos - context.navAgent.transform.position) < 10)
         {
             
-            context.navAgent.GetComponent<AgentSoccer>().Kick(teammatePos, 250f * distance1);
+            context.navAgent.GetComponent<AgentSoccer>().Kick(teammatePos, 200f * distance1);
         }
         return BTResult.SUCCESS;
     }
