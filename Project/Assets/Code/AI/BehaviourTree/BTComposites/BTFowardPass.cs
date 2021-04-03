@@ -96,11 +96,11 @@ public class BTFowardPass : BTNode
             
             if(context.navAgent.speed < 5)
             {
-                context.navAgent.GetComponent<AgentSoccer>().Kick(teammatePos, 200f * distance1);
+                context.navAgent.GetComponent<AgentSoccer>().Kick(teammatePos - context.navAgent.transform.position, 200f * distance1);
             }
             else
             {
-                context.navAgent.GetComponent<AgentSoccer>().Kick(teammatePos, 300f * distance1);
+                context.navAgent.GetComponent<AgentSoccer>().Kick(teammatePos - context.navAgent.transform.position, 300f * distance1);
             }
         }
         return BTResult.SUCCESS;
