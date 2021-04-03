@@ -85,7 +85,7 @@ public class BTForwardDefending : BTNode
             context.navAgent.speed = 10;
             float distance = Mathf.Sqrt(((context.goal.position.z - context.ball.transform.position.z) * (context.goal.position.z - context.ball.transform.position.z))
                 + ((context.goal.position.x - context.ball.transform.position.x) * (context.goal.position.x - context.ball.transform.position.x)));
-            if (distance < 20)
+            if (distance < 15)
             {
                 context.navAgent.SetDestination(context.ball.position);
             }
