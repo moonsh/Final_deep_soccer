@@ -9,6 +9,7 @@ public class BTForwardSupporting : BTNode
     {
         Vector3 dest = new Vector3(0, 0, 0);
         Vector3 closestTeammatePos = context.navAgent.transform.position;
+        string closestTeammateName = "";
         float distance1 = Mathf.Sqrt(((context.navAgent.transform.position.z - context.ball.transform.position.z) * (context.navAgent.transform.position.z - context.ball.transform.position.z))
            + ((context.navAgent.transform.position.x - context.ball.transform.position.x) * (context.navAgent.transform.position.x - context.ball.transform.position.x)));
         foreach (GameObject teammate in context.teammates)
@@ -19,6 +20,7 @@ public class BTForwardSupporting : BTNode
             {
                 distance1 = distance2;
                 closestTeammatePos = teammate.transform.position;
+                closestTeammateName = teammate.name;
             }
         }
         if (context.navAgent.name.Contains("Forward"))
@@ -86,7 +88,7 @@ public class BTForwardSupporting : BTNode
 
             }
         }
-        else if(context.navAgent.name.Contains("Back"))
+        else if (context.navAgent.name.Contains("Back"))
         {
             if (context.navAgent.transform.position.x > closestTeammatePos.x)
             {
@@ -108,7 +110,7 @@ public class BTForwardSupporting : BTNode
                 else
                 {
                     dest = new Vector3(closestTeammatePos.x + 7 * objectBetween, 0, closestTeammatePos.z + 15 * objectBetween);
-                    
+
                 }
             }
             else
@@ -126,7 +128,7 @@ public class BTForwardSupporting : BTNode
                 }
                 if (context.navAgent.tag == "purpleAgent")
                 {
-                    dest = new Vector3(closestTeammatePos.x - 7 * objectBetween, 0, closestTeammatePos.z - 15 * objectBetween);  
+                    dest = new Vector3(closestTeammatePos.x - 7 * objectBetween, 0, closestTeammatePos.z - 15 * objectBetween);
                 }
                 else
                 {

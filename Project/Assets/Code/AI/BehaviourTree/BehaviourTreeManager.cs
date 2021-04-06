@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using XNode;
 using UnityEngine;
@@ -10,7 +10,7 @@ public class BehaviourTreeManager : Singleton<BehaviourTreeManager>
 
     bool behaviourTreeStarting = true;
 
-    public float updateRate = 0.01f;
+    public float updateRate = 0.5f;
     public float updateTimer = 0;
 
     private void Start()

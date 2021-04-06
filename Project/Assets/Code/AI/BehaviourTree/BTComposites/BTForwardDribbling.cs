@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BTForwardDribbling : BTNode
@@ -41,6 +39,7 @@ public class BTForwardDribbling : BTNode
             //Dribbling 
             context.navAgent.SetDestination(context.goal.position);
             context.navAgent.speed = 6;
+
             if (Vector3.Angle(context.navAgent.transform.forward, context.goal.position - context.navAgent.transform.position) < 10)
             {
                 float distanceToGoal = Mathf.Sqrt(((context.goal.position.z - context.navAgent.transform.position.z) * (context.goal.position.z - context.navAgent.transform.position.z))
@@ -51,7 +50,7 @@ public class BTForwardDribbling : BTNode
                 }
                 else
                 {
-                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position - context.navAgent.transform.position, 100f);
+                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position - context.navAgent.transform.position, 50f);
                 }
             }
         }
@@ -60,7 +59,7 @@ public class BTForwardDribbling : BTNode
             return BTResult.FAILURE;
         }
 
-        
+
         return BTResult.SUCCESS;
     }
 }

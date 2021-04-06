@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 [BTAgent(typeof(BTHas))]
 public class BTHas : BTNode
@@ -32,7 +32,7 @@ public class BTHas : BTNode
             case HasOp.TARGET:
                 result = context.contextOwner.currentTarget != null ? BTResult.SUCCESS : BTResult.FAILURE;
                 break;
-            case HasOp.STP:
+            case HasOp.STP: // Consider removing
                 result = context.activeSmartTerrainPoint != null ? BTResult.SUCCESS : BTResult.FAILURE;
                 break;
         }
