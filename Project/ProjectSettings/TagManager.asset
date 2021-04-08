@@ -32,6 +32,7 @@ TagManager:
   - tile
   - Boundary
   - field
+  - waypoint
   layers:
   - Default
   - TransparentFX

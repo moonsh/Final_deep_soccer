@@ -157,11 +157,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a8dac3f7e636144c8d0b084db521811, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agentTag: purpleAgent
+  fieldTag: field
+  ballTag: ball
   userActionsGUI: {fileID: 1807713414}
   cancelUserActionsGUI: {fileID: 937208919}
-  agent: purpleAgent
-  field: field
-  ball: ball
+  waypoint: {fileID: 2404444412570591962, guid: 3a8ce0cc4d3feff4faef40b5cf3be2ba,
+    type: 3}
   selectedMaterial: {fileID: 2100000, guid: 5c59bd36def9a4684be49a21cf201a2d, type: 2}
   highlightMaterial: {fileID: 2100000, guid: a1daf31cdf41e484ca9ac33a5c6f524a, type: 2}
   defaultMaterial: {fileID: 2100000, guid: b0da1813c36914e678ba57f2790424e1, type: 2}
@@ -348,6 +350,7 @@ MonoBehaviour:
   - {fileID: 2036483430}
   - {fileID: 1477767664}
   userActions: []
+  userActionMarkers: []
   userActionMoves: []
 --- !u!54 &754629695 stripped
 Rigidbody:
@@ -470,11 +473,11 @@ RectTransform:
   m_Father: {fileID: 937208920}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 620, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -75, y: 0}
   m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &879795596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -515,17 +518,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 937208919}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 39260105}
         m_MethodName: ClearAllUSerActions
         m_Mode: 1
@@ -1037,6 +1029,7 @@ MonoBehaviour:
   - {fileID: 2036483430}
   - {fileID: 754629685}
   userActions: []
+  userActionMarkers: []
   userActionMoves: []
 --- !u!54 &1477767675 stripped
 Rigidbody:
@@ -2242,6 +2235,7 @@ MonoBehaviour:
   - {fileID: 754629685}
   - {fileID: 1477767664}
   userActions: []
+  userActionMarkers: []
   userActionMoves: []
 --- !u!54 &2036483440 stripped
 Rigidbody:

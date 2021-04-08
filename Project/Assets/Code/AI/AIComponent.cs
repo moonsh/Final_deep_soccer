@@ -17,9 +17,11 @@ public class AIComponent : MonoBehaviour, IEventSource
     public Rigidbody rb;
     public Transform goal;
     public Transform ball;
+    public Scenario pendingScenario;
     public GameObject[] opponents; //forward opponents //??
     public GameObject[] teammates;
     public List<string> userActions = new List<string>();
+    public List<GameObject> userActionMarkers = new List<GameObject>();
     public List<Vector3> userActionMoves = new List<Vector3>();
     //public CoachController coachController;
     //public RefereeController refereeController;
@@ -33,25 +35,45 @@ public class AIComponent : MonoBehaviour, IEventSource
     //BTContext aiCoachContext;
     //BTContext aiRefereeContext;
 
-    public List<string> GetUserActionList()
-    {
-        return userActions;
-    }
-
-    public void AddAction(string userAction)
+    public void AddAction(string userAction, GameObject marker=null)
     {
         userActions.Add(userAction);
+
+        if (marker != null)
+        {
+            userActionMarkers.Add(marker);
+
+            if (userAction.Equals("GoToBall"))
+            {
+                Instantiate(marker, ball.position, Quaternion.identity);
+            }
+        }
     }
 
-    public void AddActionMove(Vector3 destination)
+    public void AddActionMove(Vector3 destination, GameObject waypoint)
     {
         userActionMoves.Add(destination);
+        var newWaypoint = Instantiate(waypoint, destination, Quaternion.identity);
+        userActionMarkers.Add(newWaypoint);
+    }
+
+    public void DestroyMarker()
+    {
+        Destroy(userActionMarkers[0]);
+        userActionMarkers.RemoveAt(0);
     }
 
     public void ClearAllActions()
     {
         userActions.Clear();
         userActionMoves.Clear();
+
+        foreach (GameObject marker in userActionMarkers)
+        {
+            Destroy(marker);
+        }
+
+        userActionMarkers.Clear();
     }
 
     private void Awake()
@@ -59,8 +81,8 @@ public class AIComponent : MonoBehaviour, IEventSource
         navAgent = GetComponent<NavMeshAgent>();
         animatorController = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        aiContext = new BTContext(this, goal, ball, animatorController, navAgent,
-            rb, opponents, teammates, userActions, userActionMoves);
+        aiContext = new BTContext(this, goal, ball, pendingScenario, animatorController, navAgent,
+            rb, opponents, teammates, userActions, userActionMarkers, userActionMoves);
 
         /*navAgent = GetComponent<NavMeshAgent>();
         animatorController = GetComponent<Animator>();
