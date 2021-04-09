@@ -157,12 +157,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a8dac3f7e636144c8d0b084db521811, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  purpleAgents:
+  - {fileID: 653975613}
+  - {fileID: 1160134342}
+  - {fileID: 833788103}
+  blueAgents:
+  - {fileID: 2036483430}
+  - {fileID: 754629685}
+  - {fileID: 1477767664}
+  ball: {fileID: 1558887292}
   agentTag: purpleAgent
   fieldTag: field
   ballTag: ball
   userActionsGUI: {fileID: 1807713414}
   cancelUserActionsGUI: {fileID: 937208919}
-  waypoint: {fileID: 2404444412570591962, guid: 3a8ce0cc4d3feff4faef40b5cf3be2ba,
+  waypoint: {fileID: 2404444412570591962, guid: ea662cf4d68c51b4b9b2d9c70b79d41c,
     type: 3}
   selectedMaterial: {fileID: 2100000, guid: 5c59bd36def9a4684be49a21cf201a2d, type: 2}
   highlightMaterial: {fileID: 2100000, guid: a1daf31cdf41e484ca9ac33a5c6f524a, type: 2}
@@ -263,7 +272,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628121430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -58,13 +58,13 @@ public class AgentSoccer : Agent
         if (m_BehaviorParameters.TeamId == (int)Team.Blue)
         {
             team = Team.Blue;
-            initialPos = new Vector3(transform.position.x -5f, .5f, transform.position.z+10f);
+            initialPos = new Vector3(transform.position.x, .5f, transform.position.z);
             rotSign = 1f;
         }
         else
         {
             team = Team.Purple;
-            initialPos = new Vector3(transform.position.x + 5f, .5f, transform.position.z);
+            initialPos = new Vector3(transform.position.x, .5f, transform.position.z);
             rotSign = -1f;
         }
         if (position == Position.Goalie)

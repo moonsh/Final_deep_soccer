@@ -9,7 +9,9 @@ public class CoachController : MonoBehaviour
     public static bool coachMode;
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
     public static List<Scenario> scenarios = new List<Scenario>();
-
+    public List<GameObject> purpleAgents = new List<GameObject>();
+    public List<GameObject> blueAgents = new List<GameObject>();
+    public Transform ball;
     [SerializeField] private string agentTag = "purpleAgent";
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
@@ -206,23 +208,23 @@ public class CoachController : MonoBehaviour
                                     Vector3 ballPosition = selectedAgent.ball.position;
                                     GameObject[] teammates = selectedAgent.teammates;
                                     GameObject[] opponents = selectedAgent.opponents;
-                                    HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
-                                    HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
+                                    LinkedList<Vector3> teammatePositions = new LinkedList<Vector3>();
+                                    LinkedList<Vector3> opponentPositions = new LinkedList<Vector3>();
 
                                     foreach (var teammate in teammates)
                                     {
-                                        teammatePositions.Add(teammate.GetComponent<Transform>().position);
+                                        teammatePositions.AddLast(teammate.GetComponent<Transform>().position);
                                     }
 
                                     foreach (var opponent in opponents)
                                     {
-                                        opponentPositions.Add(opponent.GetComponent<Transform>().position);
+                                        opponentPositions.AddLast(opponent.GetComponent<Transform>().position);
                                     }
 
                                     selectedAgent.AddAction(action);
                                     selectedAgent.AddActionMove(actionParameter, waypoint);
-                                    selectedAgent.pendingScenario = new Scenario(action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions);
-
+                                    selectedAgent.pendingScenario = new Scenario(action, actionParameter, selectedAgent.tag, agentPosition, ballPosition, teammatePositions, opponentPositions);
+                                    scenarios.Add(new Scenario(action, actionParameter, selectedAgent.tag, agentPosition, ballPosition, teammatePositions, opponentPositions));
                                     /*/ Testing code
                                     Debug.Log("selectedAgent.pendingScenario: " + selectedAgent.pendingScenario.ToString());
                                     Debug.Log("selectedAgent.pendingScenario.action: " + selectedAgent.pendingScenario.action);
@@ -271,5 +273,122 @@ public class CoachController : MonoBehaviour
                 userActionsGUI.SetActive(false);
             }
         }
+        ReadScenarios();
+    }
+
+
+    void ReadScenarios()
+    {
+        foreach (Scenario scenario in scenarios)
+        {  
+            if (scenario.teamTag == "purpleAgent")
+            {
+                //check if agentPosition matches
+                foreach (GameObject agent in purpleAgents)
+                {
+
+                    if (Mathf.Abs(agent.transform.position.x - scenario.agentPosition.x) < 5 && Mathf.Abs(agent.transform.position.z - scenario.agentPosition.z) < 5)
+                    {
+                        //check if all teammate positions matches
+                        foreach (GameObject teammate in purpleAgents)
+                        {
+                            bool teammateMatch = false;
+                            foreach (Vector3 teammatePosition in scenario.teammatePositions)
+                            {
+                                if (teammate.transform.position == agent.transform.position)
+                                {
+                                    teammateMatch = true;
+                                }
+                                if (Mathf.Abs(teammate.transform.position.x - teammatePosition.x) < 5 && Mathf.Abs(teammate.transform.position.z - teammatePosition.z) < 5)
+                                {
+                                    teammateMatch = true;
+                                }
+                            }
+                            if (teammateMatch == false)
+                            {
+                                break;
+                            }
+                        }
+                        //check if all opponent position matches
+                        foreach (GameObject opponent in blueAgents)
+                        {
+                            bool opponentMatch = false;
+                            foreach (Vector3 opponentPosition in scenario.opponentPositions)
+                            {
+                                if (Mathf.Abs(opponent.transform.position.x - opponentPosition.x) < 5 && Mathf.Abs(opponent.transform.position.z - opponentPosition.z) < 5)
+                                {
+                                    opponentMatch = true;
+                                }
+                            }
+                            if (opponentMatch == false)
+                            {
+                                break;
+                            }
+                        }
+                        //check if ball's position matches
+                        if(Mathf.Abs(ball.position.x - scenario.ballPosition.x)<5 && Mathf.Abs(ball.position.z - scenario.ballPosition.z) < 5)
+                        {
+                            agent.GetComponent<AIComponent>().userActions.Add(scenario.action);
+                            agent.GetComponent<AIComponent>().AddActionMove(scenario.actionParameter, waypoint);
+                            Debug.Log("found a same scenario(purple)");
+                        }
+                    }
+                }
+            }
+            if (scenario.teamTag == "blueAgent")
+            {
+                //check if agentPosition matches
+                foreach (GameObject agent in blueAgents)
+                {
+                    if (Mathf.Abs(agent.transform.position.x - scenario.agentPosition.x) < 5 && Mathf.Abs(agent.transform.position.z - scenario.agentPosition.z) < 5)
+                    {
+                        //check if all teammate positions matches
+                        foreach (GameObject teammate in blueAgents)
+                        {
+                            bool teammateMatch = false;
+                            foreach (Vector3 teammatePosition in scenario.teammatePositions)
+                            {
+                                if (teammate.transform.position == agent.transform.position)
+                                {
+                                    teammateMatch = true;
+                                }
+                                if (Mathf.Abs(teammate.transform.position.x - teammatePosition.x) < 5 && Mathf.Abs(teammate.transform.position.z - teammatePosition.z) < 5)
+                                {
+                                    teammateMatch = true;
+                                }
+                            }
+                            if (teammateMatch == false)
+                            {
+                                break;
+                            }
+                        }
+                        //check if all opponent position matches
+                        foreach (GameObject opponent in purpleAgents)
+                        {
+                            bool opponentMatch = false;
+                            foreach (Vector3 opponentPosition in scenario.opponentPositions)
+                            {
+                                if (Mathf.Abs(opponent.transform.position.x - opponentPosition.x) < 5 && Mathf.Abs(opponent.transform.position.z - opponentPosition.z) < 5)
+                                {
+                                    opponentMatch = true;
+                                }
+                            }
+                            if (opponentMatch == false)
+                            {
+                                break;
+                            }
+                        }
+                        //check if ball's position matches
+                        if (Mathf.Abs(ball.position.x - scenario.ballPosition.x) < 5 && Mathf.Abs(ball.position.z - scenario.ballPosition.z) < 5)
+                        {
+                            agent.GetComponent<AIComponent>().userActions.Add(scenario.action);
+                            agent.GetComponent<AIComponent>().AddActionMove(scenario.actionParameter, waypoint);
+                            Debug.Log("found a same scenario(blue)");
+                        }
+                    }
+                }
+            }
+        }
+        
     }
 }

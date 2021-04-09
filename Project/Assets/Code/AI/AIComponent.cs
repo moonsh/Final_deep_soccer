@@ -32,6 +32,8 @@ public class AIComponent : MonoBehaviour, IEventSource
     Animator animatorController;
     NavMeshAgent navAgent;
     BTContext aiContext;
+    LineRenderer userActionPath;
+    bool ballMarker;
     //BTContext aiCoachContext;
     //BTContext aiRefereeContext;
 
@@ -52,8 +54,9 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     public void AddActionMove(Vector3 destination, GameObject waypoint)
     {
+        Vector3 markerOffset = new Vector3(destination.x, 1, destination.z);
         userActionMoves.Add(destination);
-        var newWaypoint = Instantiate(waypoint, destination, Quaternion.identity);
+        var newWaypoint = Instantiate(waypoint, markerOffset, Quaternion.identity);
         userActionMarkers.Add(newWaypoint);
     }
 
@@ -74,6 +77,7 @@ public class AIComponent : MonoBehaviour, IEventSource
         }
 
         userActionMarkers.Clear();
+        userActionPath.positionCount = 0;
     }
 
     private void Awake()
@@ -118,6 +122,8 @@ public class AIComponent : MonoBehaviour, IEventSource
         sensorySystem.Initialize(this, navAgent);
         eventHandler.Initialize(this, animatorController, navAgent);
         BehaviourTreeRuntimeData.RegisterAgentContext(behaviourTreeType, aiContext);
+        ballMarker = false;
+        userActionPath = gameObject.AddComponent<LineRenderer>();
 
         /*if (behaviourTreeType.Equals(BehaviourTreeType.PLAYER))
         {
@@ -139,6 +145,25 @@ public class AIComponent : MonoBehaviour, IEventSource
     {
         sensorySystem.Update();
         eventHandler.Update();
+
+        if (userActionMarkers.Count > 0)
+        {
+            int lengthOfLineRenderer = userActionMoves.Count + 1;
+            LineRenderer userActionPath = GetComponent<LineRenderer>();
+            userActionPath.startWidth = 0.1f;
+            userActionPath.endWidth = 0.1f;
+            userActionPath.positionCount = lengthOfLineRenderer;
+            userActionPath.useWorldSpace = true;
+            var points = new Vector3[lengthOfLineRenderer];
+            points[0] = this.transform.position;
+
+            for (int i = 0; i < lengthOfLineRenderer - 1; i++)
+            {
+                points[i + 1] = new Vector3 (userActionMoves[i].x, 1, userActionMoves[i].z);
+            }
+
+            userActionPath.SetPositions(points);
+        }
 
         /*if (behaviourTreeType.Equals(BehaviourTreeType.PLAYER))
         {

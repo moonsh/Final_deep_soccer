@@ -28,9 +28,9 @@ public class BTUserActions : BTNode
             {
                 //Debug.Log("Test: agent has reached destination."); //
                 context.navAgent.GetComponent<AIComponent>().DestroyMarker();
-                context.userActions.RemoveAt(0);
-                context.userActionMoves.RemoveAt(0);
-                CoachController.scenarios.Add(context.navAgent.GetComponent<AIComponent>().pendingScenario);
+                context.userActions.Clear();
+                context.userActionMoves.Clear();
+                
 
                 if (context.userActions.Count == 0)
                 {
@@ -47,8 +47,8 @@ public class BTUserActions : BTNode
                 if (context.ball.GetComponent<SoccerBallController>().owner.name.Equals(context.rb.name)) // ||
                     //(context.ball.GetComponent<SoccerBallController>().owner. = context.rb.team)) need a way to check if an agent's team has ownership
                 {
-                    context.userActions.RemoveAt(0);
-                    CoachController.scenarios.Add(context.navAgent.GetComponent<AIComponent>().pendingScenario);
+                    context.userActions.Clear();
+                    
                     if (context.userActions.Count == 0)
                     {
                         CoachController.agentsWithUserActions.Remove(context.navAgent.GetComponent<AIComponent>());
@@ -71,6 +71,31 @@ public class BTUserActions : BTNode
 
                 return BTResult.FAILURE;
             }
+        }
+        else if (userAction.Equals("Kick"))
+        {
+            //move to target's position
+            context.navAgent.SetDestination(context.userActionMoves[0]);
+            // if the agent is facing the target position kick the ball and remove the action
+            if (Vector3.Angle(context.navAgent.transform.forward, context.goal.position - context.navAgent.transform.position) < 15)
+            {
+                float distanceToTarget = Mathf.Sqrt(((context.userActionMoves[0].z - context.navAgent.transform.position.z) * (context.userActionMoves[0].z - context.navAgent.transform.position.z))
+                    + ((context.userActionMoves[0].x - context.navAgent.transform.position.x) * (context.userActionMoves[0].x - context.navAgent.transform.position.x)));
+                context.navAgent.GetComponent<AgentSoccer>().Kick(context.userActionMoves[0] - context.navAgent.transform.position, 200f * distanceToTarget);
+
+                context.userActions.Clear();
+                context.userActionMoves.Clear();
+
+                //context.navAgent.GetComponent<AIComponent>().DestroyMarker();
+                
+                if (context.userActions.Count == 0)
+                {
+                    CoachController.agentsWithUserActions.Remove(context.navAgent.GetComponent<AIComponent>());
+
+                }
+                return BTResult.SUCCESS;
+            }
+            return BTResult.FAILURE;
         }
         else
         {

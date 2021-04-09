@@ -6,17 +6,19 @@ public class Scenario
 {
     public string action;
     public Vector3 actionParameter;
+    public string teamTag;
     public Vector3 agentPosition;
     public Vector3 ballPosition;
-    public HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
-    public HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
+    public LinkedList<Vector3> teammatePositions = new LinkedList<Vector3>();
+    public LinkedList<Vector3> opponentPositions = new LinkedList<Vector3>();
 
-    public Scenario(string _action, Vector3 _actionParameter,
+    public Scenario(string _action, Vector3 _actionParameter, string _teamTag,
         Vector3 _agentPosition, Vector3 _ballPosition,
-        HashSet<Vector3> _teammatePositions, HashSet<Vector3> _opponentPositions)
+        LinkedList<Vector3> _teammatePositions, LinkedList<Vector3> _opponentPositions)
     {
         action = _action;
         actionParameter = _actionParameter;
+        teamTag = _teamTag;
         agentPosition = _agentPosition;
         ballPosition = _ballPosition;
         teammatePositions = _teammatePositions;
