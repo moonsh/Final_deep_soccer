@@ -6,22 +6,24 @@ public class Scenario
 {
     public string action;
     public Vector3 actionParameter;
-    public string teamTag;
     public Vector3 agentPosition;
     public Vector3 ballPosition;
-    public LinkedList<Vector3> teammatePositions = new LinkedList<Vector3>();
-    public LinkedList<Vector3> opponentPositions = new LinkedList<Vector3>();
+    public HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
+    public HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
+    public bool ballPossessed;
+    public string teamWithBall;
 
-    public Scenario(string _action, Vector3 _actionParameter, string _teamTag,
+    public Scenario(string _action, Vector3 _actionParameter,
         Vector3 _agentPosition, Vector3 _ballPosition,
-        LinkedList<Vector3> _teammatePositions, LinkedList<Vector3> _opponentPositions)
+        HashSet<Vector3> _teammatePositions, HashSet<Vector3> _opponentPositions, bool _ballPossessed, string _teamWithBall)
     {
         action = _action;
         actionParameter = _actionParameter;
-        teamTag = _teamTag;
+        teamWithBall = _teamWithBall;
         agentPosition = _agentPosition;
         ballPosition = _ballPosition;
         teammatePositions = _teammatePositions;
         opponentPositions = _opponentPositions;
+        ballPossessed = _ballPossessed;
     }
 }

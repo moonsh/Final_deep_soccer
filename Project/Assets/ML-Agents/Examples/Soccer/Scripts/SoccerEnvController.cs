@@ -124,6 +124,10 @@ public class SoccerEnvController : MonoBehaviour
         }
         Timer += Time.deltaTime;
 
+        if(Mathf.Abs(ball.transform.position.z)>55f|| Mathf.Abs(ball.transform.position.x) > 37.5f)
+        {
+            ResetBall();
+        }
     }
     public void ResetBall()
     {
@@ -131,7 +135,7 @@ public class SoccerEnvController : MonoBehaviour
 
         
 
-        ball.transform.position = m_BallStartingPos  ;
+        ball.transform.position = m_BallStartingPos ;
         ballRb.velocity = Vector3.zero;
         ballRb.angularVelocity = Vector3.zero;
 
@@ -165,9 +169,9 @@ public class SoccerEnvController : MonoBehaviour
         {
             
             var newStartPos = item.Agent.initialPos;
-            var rot = item.Agent.rotSign;
+            var rot = item.Agent.rotSign ;
             var newRot = Quaternion.Euler(0, rot, 0);
-            item.Agent.transform.SetPositionAndRotation(newStartPos, newRot);
+            item.Agent.transform.SetPositionAndRotation(item.StartingPos, newRot);
 
             item.Rb.velocity = Vector3.zero;
             item.Rb.angularVelocity = Vector3.zero;

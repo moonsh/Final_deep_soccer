@@ -15,7 +15,7 @@ public class BTForwardDribbling : BTNode
                     {
                         float distance1 = Mathf.Sqrt(((opponent.transform.position.z - context.navAgent.transform.position.z) * (opponent.transform.position.z - context.navAgent.transform.position.z))
                             + ((opponent.transform.position.x - context.navAgent.transform.position.x) * (opponent.transform.position.x - context.navAgent.transform.position.x)));
-                        if (distance1 < 6)
+                        if (distance1 < 10)
                         {
                             return BTResult.FAILURE;
                         }
@@ -27,7 +27,7 @@ public class BTForwardDribbling : BTNode
                     {
                         float distance1 = Mathf.Sqrt(((opponent.transform.position.z - context.navAgent.transform.position.z) * (opponent.transform.position.z - context.navAgent.transform.position.z))
                             + ((opponent.transform.position.x - context.navAgent.transform.position.x) * (opponent.transform.position.x - context.navAgent.transform.position.x)));
-                        if (distance1 < 6)
+                        if (distance1 < 10)
                         {
                             return BTResult.FAILURE;
                         }
@@ -38,19 +38,18 @@ public class BTForwardDribbling : BTNode
             }
             //Dribbling 
             context.navAgent.SetDestination(context.goal.position);
-            context.navAgent.speed = 6;
-
+            context.navAgent.speed = 8;
             if (Vector3.Angle(context.navAgent.transform.forward, context.goal.position - context.navAgent.transform.position) < 10)
             {
                 float distanceToGoal = Mathf.Sqrt(((context.goal.position.z - context.navAgent.transform.position.z) * (context.goal.position.z - context.navAgent.transform.position.z))
                 + ((context.goal.position.x - context.navAgent.transform.position.x) * (context.goal.position.x - context.navAgent.transform.position.x)));
                 if (distanceToGoal < 20f)
                 {
-                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position - context.navAgent.transform.position, 200f * distanceToGoal);
+                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position, 200f * distanceToGoal);
                 }
                 else
                 {
-                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position - context.navAgent.transform.position, 50f);
+                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position, 50f);
                 }
             }
         }
@@ -59,7 +58,7 @@ public class BTForwardDribbling : BTNode
             return BTResult.FAILURE;
         }
 
-
+        
         return BTResult.SUCCESS;
     }
 }

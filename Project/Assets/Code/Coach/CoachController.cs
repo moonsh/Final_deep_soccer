@@ -9,36 +9,43 @@ public class CoachController : MonoBehaviour
     public static bool coachMode;
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
     public static List<Scenario> scenarios = new List<Scenario>();
-    public List<GameObject> purpleAgents = new List<GameObject>();
-    public List<GameObject> blueAgents = new List<GameObject>();
-    public Transform ball;
+    public enum coachCommands
+    {
+        NONE,
+        MOVE,
+        KICK,
+    }
+
     [SerializeField] private string agentTag = "purpleAgent";
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
+    [SerializeField] private string goalTag = "purpleGoal";
     [SerializeField] private GameObject userActionsGUI;
     [SerializeField] private GameObject cancelUserActionsGUI;
-    [SerializeField] private GameObject waypoint;
+    [SerializeField] private GameObject moveWaypointMarker;
+    [SerializeField] private GameObject goToBallMarker;
+    [SerializeField] private GameObject kickMarker;
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Material defaultMaterial;
 
     private Transform[] selectedPlayer = new Transform[1];
     private Transform _selection;
-    private bool coachMoveMode;
-
-    public bool GetCoachMode()
-    {
-        return coachMode;
-    }
+    private coachCommands currentCommand;
 
     public void ToggleCoachMode()
     {
         coachMode = !coachMode;
     }
 
-    public void ToggleCoachModeMove()
+    public void SetCommandModeMove()
     {
-        coachMoveMode = !coachMoveMode;
+        currentCommand = coachCommands.MOVE;
+    }
+
+    public void SetCommandModeKick()
+    {
+        currentCommand = coachCommands.KICK;
     }
 
     public void ClearAllUSerActions()
@@ -49,6 +56,206 @@ public class CoachController : MonoBehaviour
         }
 
         agentsWithUserActions.Clear();
+        currentCommand = coachCommands.NONE;
+    }
+
+    private void CoachMoveMode(Ray ray, RaycastHit hit, AIComponent selectedAgent)
+    {
+        if (Physics.Raycast(ray, out hit))
+        {
+            var selection = hit.transform;
+
+            if (selection.CompareTag(fieldTag) || selection.CompareTag(ballTag))
+            {
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    //Debug.Log("Attempting to assign a new destination for the chosen agent.");
+
+                    if (selection.CompareTag(ballTag))
+                    {
+                        var action = "GoToBall";
+                        Vector3 actionParameter = hit.point; // destination in this scenario
+                        Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
+                        Vector3 ballPosition = selectedAgent.ball.position;
+                        GameObject[] teammates = selectedAgent.teammates;
+                        GameObject[] opponents = selectedAgent.opponents;
+                        HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
+                        HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
+                        bool ballPossessed = selectedAgent.ball.GetComponent<SoccerBallController>().owner;
+                        string teamWithBall;
+
+                        if (ballPossessed)
+                        {
+                            teamWithBall = selectedAgent.ball.GetComponent<SoccerBallController>().owner.tag;
+                        }
+                        else
+                        {
+                            teamWithBall = "None";
+                        }
+
+                        foreach (var teammate in teammates)
+                        {
+                            teammatePositions.Add(teammate.GetComponent<Transform>().position);
+                        }
+
+                        foreach (var opponent in opponents)
+                        {
+                            opponentPositions.Add(opponent.GetComponent<Transform>().position);
+                        }
+
+                        selectedAgent.AddAction(action, goToBallMarker, actionParameter);
+                        selectedAgent.pendingScenarios.Add(new Scenario(action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions,ballPossessed, selectedAgent.tag));
+                    }
+                    else
+                    {
+                        var action = "Move"; // Movement scenario
+                        Vector3 actionParameter = hit.point; // destination in this scenario
+                        Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
+                        Vector3 ballPosition = selectedAgent.ball.position;
+                        GameObject[] teammates = selectedAgent.teammates;
+                        GameObject[] opponents = selectedAgent.opponents;
+                        HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
+                        HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
+                        bool ballPossessed = selectedAgent.ball.GetComponent<SoccerBallController>().owner;
+                        string teamWithBall;
+
+                        if (ballPossessed)
+                        {
+                            teamWithBall = selectedAgent.ball.GetComponent<SoccerBallController>().owner.tag;
+                        }
+                        else
+                        {
+                            teamWithBall = "None";
+                        }
+
+                        foreach (var teammate in teammates)
+                        {
+                            teammatePositions.Add(teammate.GetComponent<Transform>().position);
+                        }
+
+                        foreach (var opponent in opponents)
+                        {
+                            opponentPositions.Add(opponent.GetComponent<Transform>().position);
+                        }
+
+                        selectedAgent.AddAction(action, moveWaypointMarker, actionParameter);
+                        selectedAgent.pendingScenarios.Add(new Scenario(action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions, ballPossessed, selectedAgent.tag));
+                        /*/ Testing code
+                        Debug.Log("selectedAgent.pendingScenario: " + selectedAgent.pendingScenario.ToString());
+                        Debug.Log("selectedAgent.pendingScenario.action: " + selectedAgent.pendingScenario.action);
+                        Debug.Log("selectedAgent.pendingScenario.actionParameter: " + selectedAgent.pendingScenario.actionParameter.ToString());
+                        Debug.Log("teammatePositions: ");
+
+                        foreach (var teammatePosition in selectedAgent.pendingScenario.teammatePositions)
+                        {
+                            Debug.Log(teammatePosition.ToString());
+                        }
+
+                        Debug.Log("opponentPositions: ");
+
+                        foreach (var opponentPosition in selectedAgent.pendingScenario.opponentPositions)
+                        {
+                            Debug.Log(opponentPosition.ToString());
+                        }
+                        */// End testing code
+                    }
+
+                    agentsWithUserActions.Add(selectedAgent.GetComponent<AIComponent>());
+                    userActionsGUI.SetActive(true);
+                    currentCommand = coachCommands.NONE;
+                }
+            }
+        }
+    }
+
+    private void CoachKickMode(Ray ray, RaycastHit hit, AIComponent selectedAgent)
+    {
+        if (Physics.Raycast(ray, out hit))
+        {
+            var selection = hit.transform;
+
+            if (selection.CompareTag(fieldTag) || selection.CompareTag(goalTag))
+            {
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    string action = "Kick"; // Kick scenario
+                    Vector3 actionParameter = hit.point; // Target direction in this scenario
+                    Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
+                    Vector3 ballPosition = selectedAgent.ball.position;
+                    GameObject[] teammates = selectedAgent.teammates;
+                    GameObject[] opponents = selectedAgent.opponents;
+                    HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
+                    HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
+                    bool ballPossessed = selectedAgent.ball.GetComponent<SoccerBallController>().owner;
+                    string teamWithBall;
+
+                    if (ballPossessed)
+                    {
+                        teamWithBall = selectedAgent.ball.GetComponent<SoccerBallController>().owner.tag;
+                    }
+                    else
+                    {
+                        teamWithBall = "None";
+                    }
+
+                    foreach (var teammate in teammates)
+                    {
+                        teammatePositions.Add(teammate.GetComponent<Transform>().position);
+                    }
+
+                    foreach (var opponent in opponents)
+                    {
+                        opponentPositions.Add(opponent.GetComponent<Transform>().position);
+                    }
+
+                    selectedAgent.AddAction(action, kickMarker, actionParameter);
+                    selectedAgent.pendingScenarios.Add(new Scenario(action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions, ballPossessed, selectedAgent.tag));
+                    /*/ Testing code
+                    Debug.Log("selectedAgent.pendingScenario: " + selectedAgent.pendingScenario.ToString());
+                    Debug.Log("selectedAgent.pendingScenario.action: " + selectedAgent.pendingScenario.action);
+                    Debug.Log("selectedAgent.pendingScenario.actionParameter: " + selectedAgent.pendingScenario.actionParameter.ToString());
+                    Debug.Log("teammatePositions: ");
+
+                    foreach (var teammatePosition in selectedAgent.pendingScenario.teammatePositions)
+                    {
+                        Debug.Log(teammatePosition.ToString());
+                    }
+
+                    Debug.Log("opponentPositions: ");
+
+                    foreach (var opponentPosition in selectedAgent.pendingScenario.opponentPositions)
+                    {
+                        Debug.Log(opponentPosition.ToString());
+                    }
+                    */// End testing code
+
+                    agentsWithUserActions.Add(selectedAgent.GetComponent<AIComponent>());
+                    userActionsGUI.SetActive(true);
+                    currentCommand = coachCommands.NONE;
+                }
+            }
+        }
+    }
+
+    private void CoachModeDisabledReset(Transform _selection, Transform[] selectedPlayer)
+    {
+        if (_selection != null)
+        {
+            var selectionRenderer = _selection.GetComponent<Renderer>();
+            selectionRenderer.material = defaultMaterial;
+        }
+
+        _selection = null;
+
+        if (selectedPlayer[0] != null)
+        {
+            var selectionRenderer = selectedPlayer[0].GetComponent<Renderer>();
+            selectionRenderer.material = defaultMaterial;
+            Array.Clear(selectedPlayer, 0, 1);
+            userActionsGUI.SetActive(false);
+        }
+
+        currentCommand = coachCommands.NONE;
     }
 
     // Start is called before the first frame update
@@ -57,7 +264,7 @@ public class CoachController : MonoBehaviour
         userActionsGUI.SetActive(false);
         cancelUserActionsGUI.SetActive(false);
         coachMode = false;
-        coachMoveMode = false;
+        currentCommand = coachCommands.NONE;
     }
 
     // Update is called once per frame
@@ -106,10 +313,28 @@ public class CoachController : MonoBehaviour
 
         if (Input.GetButtonDown("Cancel"))
         {
-            ToggleCoachMode();
+            switch (currentCommand)
+            {
+                case coachCommands.NONE:
+                    if (selectedPlayer[0])
+                    {
+                        _selection = selectedPlayer[0];
+                        Array.Clear(selectedPlayer, 0, 1);
+                        userActionsGUI.SetActive(false);
+                    }
+                    else
+                    {
+                        ToggleCoachMode();
+                    }
+                    break;
+                default:
+                    userActionsGUI.SetActive(true);
+                    currentCommand = coachCommands.NONE;
+                    break;
+            }
         }
 
-        if (coachMode) // coachMode enabled.
+        if (coachMode) // coachMode enabled: player selection.
         {
             if (_selection != null)
             {
@@ -163,7 +388,6 @@ public class CoachController : MonoBehaviour
             }
             else // if there is a selected player
             {
-
                 if (Physics.Raycast(ray, out hit))
                 {
                     var selection = hit.transform;
@@ -182,213 +406,22 @@ public class CoachController : MonoBehaviour
                     }
                 }
 
-                if (coachMoveMode)
+                switch (currentCommand)
                 {
-                    var selectedAgent = selectedPlayer[0].GetComponent<AIComponent>();
-
-                    if (Physics.Raycast(ray, out hit))
-                    {
-                        var selection = hit.transform;
-
-                        if (selection.CompareTag(fieldTag) || selection.CompareTag(ballTag))
-                        {
-                            if (Input.GetButtonDown("Fire1"))
-                            {
-                                //Debug.Log("Attempting to assign a new destination for the chosen agent.");
-
-                                if (selection.CompareTag(ballTag))
-                                {
-                                    selectedAgent.AddAction("GoToBall");
-                                }
-                                else
-                                {
-                                    string action = "Move"; // Movement scenario
-                                    Vector3 actionParameter = hit.point; // destination in this scenario
-                                    Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
-                                    Vector3 ballPosition = selectedAgent.ball.position;
-                                    GameObject[] teammates = selectedAgent.teammates;
-                                    GameObject[] opponents = selectedAgent.opponents;
-                                    LinkedList<Vector3> teammatePositions = new LinkedList<Vector3>();
-                                    LinkedList<Vector3> opponentPositions = new LinkedList<Vector3>();
-
-                                    foreach (var teammate in teammates)
-                                    {
-                                        teammatePositions.AddLast(teammate.GetComponent<Transform>().position);
-                                    }
-
-                                    foreach (var opponent in opponents)
-                                    {
-                                        opponentPositions.AddLast(opponent.GetComponent<Transform>().position);
-                                    }
-
-                                    selectedAgent.AddAction(action);
-                                    selectedAgent.AddActionMove(actionParameter, waypoint);
-                                    selectedAgent.pendingScenario = new Scenario(action, actionParameter, selectedAgent.tag, agentPosition, ballPosition, teammatePositions, opponentPositions);
-                                    scenarios.Add(new Scenario(action, actionParameter, selectedAgent.tag, agentPosition, ballPosition, teammatePositions, opponentPositions));
-                                    /*/ Testing code
-                                    Debug.Log("selectedAgent.pendingScenario: " + selectedAgent.pendingScenario.ToString());
-                                    Debug.Log("selectedAgent.pendingScenario.action: " + selectedAgent.pendingScenario.action);
-                                    Debug.Log("selectedAgent.pendingScenario.actionParameter: " + selectedAgent.pendingScenario.actionParameter.ToString());
-                                    Debug.Log("teammatePositions: ");
-
-                                    foreach (var teammatePosition in selectedAgent.pendingScenario.teammatePositions)
-                                    {
-                                        Debug.Log(teammatePosition.ToString());
-                                    }
-
-                                    Debug.Log("opponentPositions: ");
-
-                                    foreach (var opponentPosition in selectedAgent.pendingScenario.opponentPositions)
-                                    {
-                                        Debug.Log(opponentPosition.ToString());
-                                    }
-                                    */// End testing code
-                                }
-
-                                agentsWithUserActions.Add(selectedAgent.GetComponent<AIComponent>());
-                                userActionsGUI.SetActive(true);
-                                coachMoveMode = !coachMoveMode;
-                            }
-                        }
-                    }
+                    case coachCommands.NONE:
+                        break;
+                    case coachCommands.MOVE:
+                        CoachMoveMode(ray, hit, selectedPlayer[0].GetComponent<AIComponent>());
+                        break;
+                    case coachCommands.KICK:
+                        CoachKickMode(ray, hit, selectedPlayer[0].GetComponent<AIComponent>());
+                        break;
                 }
             }
         }
         else // coachMode disabled, reset all agent material that has been changed
         {
-
-            if (_selection != null)
-            {
-                var selectionRenderer = _selection.GetComponent<Renderer>();
-                selectionRenderer.material = defaultMaterial;
-            }
-
-            _selection = null;
-
-            if (selectedPlayer[0] != null)
-            {
-                var selectionRenderer = selectedPlayer[0].GetComponent<Renderer>();
-                selectionRenderer.material = defaultMaterial;
-                Array.Clear(selectedPlayer, 0, 1);
-                userActionsGUI.SetActive(false);
-            }
+            CoachModeDisabledReset(_selection, selectedPlayer);
         }
-        ReadScenarios();
-    }
-
-
-    void ReadScenarios()
-    {
-        foreach (Scenario scenario in scenarios)
-        {  
-            if (scenario.teamTag == "purpleAgent")
-            {
-                //check if agentPosition matches
-                foreach (GameObject agent in purpleAgents)
-                {
-
-                    if (Mathf.Abs(agent.transform.position.x - scenario.agentPosition.x) < 5 && Mathf.Abs(agent.transform.position.z - scenario.agentPosition.z) < 5)
-                    {
-                        //check if all teammate positions matches
-                        foreach (GameObject teammate in purpleAgents)
-                        {
-                            bool teammateMatch = false;
-                            foreach (Vector3 teammatePosition in scenario.teammatePositions)
-                            {
-                                if (teammate.transform.position == agent.transform.position)
-                                {
-                                    teammateMatch = true;
-                                }
-                                if (Mathf.Abs(teammate.transform.position.x - teammatePosition.x) < 5 && Mathf.Abs(teammate.transform.position.z - teammatePosition.z) < 5)
-                                {
-                                    teammateMatch = true;
-                                }
-                            }
-                            if (teammateMatch == false)
-                            {
-                                break;
-                            }
-                        }
-                        //check if all opponent position matches
-                        foreach (GameObject opponent in blueAgents)
-                        {
-                            bool opponentMatch = false;
-                            foreach (Vector3 opponentPosition in scenario.opponentPositions)
-                            {
-                                if (Mathf.Abs(opponent.transform.position.x - opponentPosition.x) < 5 && Mathf.Abs(opponent.transform.position.z - opponentPosition.z) < 5)
-                                {
-                                    opponentMatch = true;
-                                }
-                            }
-                            if (opponentMatch == false)
-                            {
-                                break;
-                            }
-                        }
-                        //check if ball's position matches
-                        if(Mathf.Abs(ball.position.x - scenario.ballPosition.x)<5 && Mathf.Abs(ball.position.z - scenario.ballPosition.z) < 5)
-                        {
-                            agent.GetComponent<AIComponent>().userActions.Add(scenario.action);
-                            agent.GetComponent<AIComponent>().AddActionMove(scenario.actionParameter, waypoint);
-                            Debug.Log("found a same scenario(purple)");
-                        }
-                    }
-                }
-            }
-            if (scenario.teamTag == "blueAgent")
-            {
-                //check if agentPosition matches
-                foreach (GameObject agent in blueAgents)
-                {
-                    if (Mathf.Abs(agent.transform.position.x - scenario.agentPosition.x) < 5 && Mathf.Abs(agent.transform.position.z - scenario.agentPosition.z) < 5)
-                    {
-                        //check if all teammate positions matches
-                        foreach (GameObject teammate in blueAgents)
-                        {
-                            bool teammateMatch = false;
-                            foreach (Vector3 teammatePosition in scenario.teammatePositions)
-                            {
-                                if (teammate.transform.position == agent.transform.position)
-                                {
-                                    teammateMatch = true;
-                                }
-                                if (Mathf.Abs(teammate.transform.position.x - teammatePosition.x) < 5 && Mathf.Abs(teammate.transform.position.z - teammatePosition.z) < 5)
-                                {
-                                    teammateMatch = true;
-                                }
-                            }
-                            if (teammateMatch == false)
-                            {
-                                break;
-                            }
-                        }
-                        //check if all opponent position matches
-                        foreach (GameObject opponent in purpleAgents)
-                        {
-                            bool opponentMatch = false;
-                            foreach (Vector3 opponentPosition in scenario.opponentPositions)
-                            {
-                                if (Mathf.Abs(opponent.transform.position.x - opponentPosition.x) < 5 && Mathf.Abs(opponent.transform.position.z - opponentPosition.z) < 5)
-                                {
-                                    opponentMatch = true;
-                                }
-                            }
-                            if (opponentMatch == false)
-                            {
-                                break;
-                            }
-                        }
-                        //check if ball's position matches
-                        if (Mathf.Abs(ball.position.x - scenario.ballPosition.x) < 5 && Mathf.Abs(ball.position.z - scenario.ballPosition.z) < 5)
-                        {
-                            agent.GetComponent<AIComponent>().userActions.Add(scenario.action);
-                            agent.GetComponent<AIComponent>().AddActionMove(scenario.actionParameter, waypoint);
-                            Debug.Log("found a same scenario(blue)");
-                        }
-                    }
-                }
-            }
-        }
-        
     }
 }
