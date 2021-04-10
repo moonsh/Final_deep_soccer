@@ -38,7 +38,7 @@ public class BTForwardDribbling : BTNode
             }
             //Dribbling 
             context.navAgent.SetDestination(context.goal.position);
-            context.navAgent.speed = 8;
+            context.navAgent.speed = 6;
             if (Vector3.Angle(context.navAgent.transform.forward, context.goal.position - context.navAgent.transform.position) < 15)
             {
                 float distanceToGoal = Mathf.Sqrt(((context.goal.position.z - context.navAgent.transform.position.z) * (context.goal.position.z - context.navAgent.transform.position.z))
