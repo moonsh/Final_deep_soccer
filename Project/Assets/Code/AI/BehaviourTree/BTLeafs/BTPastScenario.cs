@@ -49,10 +49,18 @@ public class BTPastScenario : BTNode
                     //check if ball's position matches
                     if (Mathf.Abs(context.ball.position.x - scenario.ballPosition.x) < 5 && Mathf.Abs(context.ball.position.z - scenario.ballPosition.z) < 5)
                     {
-                        if(context.pastScenarios.Count == 0)
+                        bool sameScene = false;
+                        foreach(Scenario past in context.pastScenarios)
+                        {
+                            if(past == scenario)
+                            {
+                                sameScene = true;
+                            }
+                                                      
+                        }
+                        if(sameScene==false)
                         {
                             context.pastScenarios.Add(scenario);
-                            Debug.Log(1);
                         }
                     }
                 }
@@ -71,7 +79,7 @@ public class BTPastScenario : BTNode
                 {
                     // Action completed; remove marker, actions, and log scenario.
                     //Debug.Log("Test: agent has reached destination."); //
-                    context.pastScenarios.Clear();
+                    context.pastScenarios.Remove(context.pastScenarios[0]);
                 }
                 
             }
@@ -82,7 +90,7 @@ public class BTPastScenario : BTNode
                     if (context.ball.GetComponent<SoccerBallController>().owner.name.Equals(context.rb.name))
                     {
 
-                        context.pastScenarios.Clear();
+                        context.pastScenarios.Remove(context.pastScenarios[0]);
 
                     }
                     else if (context.ball.GetComponent<SoccerBallController>().owner.tag.Equals(context.rb.tag))
@@ -130,7 +138,7 @@ public class BTPastScenario : BTNode
                 {
                     context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 5000f);
                 }
-                context.pastScenarios.Clear();
+                context.pastScenarios.Remove(context.pastScenarios[0]);
             }
             else
             {
