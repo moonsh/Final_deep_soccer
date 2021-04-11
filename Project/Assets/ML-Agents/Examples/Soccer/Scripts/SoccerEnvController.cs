@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.MLAgents;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SoccerEnvController : MonoBehaviour
 {
@@ -42,7 +44,8 @@ public class SoccerEnvController : MonoBehaviour
 
     [Range(0,100)]
     public int stealProbability = 50;
-
+    public Text purpleScore;
+    public Text blueScore;
     private SoccerSettings m_SoccerSettings;
 
 
@@ -113,7 +116,7 @@ public class SoccerEnvController : MonoBehaviour
                     if(ball.GetComponent<SoccerBallController>().owner.tag != item.Agent.gameObject.tag & Timer > WaitTime)
                     {
                         Timer = 0f;
-                        int temp = Random.Range(0, 100);
+                        int temp = UnityEngine.Random.Range(0, 100);
                         if(temp < stealProbability)
                         {
                             ball.GetComponent<SoccerBallController>().owner = item.Agent.gameObject;
@@ -147,11 +150,13 @@ public class SoccerEnvController : MonoBehaviour
         {
             m_BlueAgentGroup.AddGroupReward(1 - m_ResetTimer / MaxEnvironmentSteps);
             m_PurpleAgentGroup.AddGroupReward(-1);
+            purpleScore.text = (Int16.Parse(purpleScore.text) +1).ToString();
         }
         else
         {
             m_PurpleAgentGroup.AddGroupReward(1 - m_ResetTimer / MaxEnvironmentSteps);
             m_BlueAgentGroup.AddGroupReward(-1);
+            blueScore.text = (Int16.Parse(blueScore.text) + 1).ToString();
         }
         m_PurpleAgentGroup.EndGroupEpisode();
         m_BlueAgentGroup.EndGroupEpisode();

@@ -9,13 +9,14 @@ public class CoachController : MonoBehaviour
     public static bool coachMode;
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
     public static List<Scenario> scenarios = new List<Scenario>();
+    public static float countTime;
     public enum coachCommands
     {
         NONE,
         MOVE,
         KICK,
     }
-
+    public GameObject BlackBoard;
     [SerializeField] private string agentTag = "purpleAgent";
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
@@ -265,6 +266,7 @@ public class CoachController : MonoBehaviour
         cancelUserActionsGUI.SetActive(false);
         coachMode = false;
         currentCommand = coachCommands.NONE;
+        BlackBoard.SetActive(false);
     }
 
     // Update is called once per frame
@@ -321,6 +323,7 @@ public class CoachController : MonoBehaviour
                         _selection = selectedPlayer[0];
                         Array.Clear(selectedPlayer, 0, 1);
                         userActionsGUI.SetActive(false);
+                        BlackBoard.SetActive(false);
                     }
                     else
                     {
@@ -329,6 +332,7 @@ public class CoachController : MonoBehaviour
                     break;
                 default:
                     userActionsGUI.SetActive(true);
+                    BlackBoard.SetActive(true);
                     currentCommand = coachCommands.NONE;
                     break;
             }
@@ -378,6 +382,8 @@ public class CoachController : MonoBehaviour
                                 {
                                     selectedPlayer[0] = selection;
                                     userActionsGUI.SetActive(true);
+                                    BlackBoard.SetActive(true);
+                                    BlackBoard.GetComponent<BlackBoard>().SeletectedAgent = selectedPlayer[0];
                                 }
                             }
                         }
@@ -423,5 +429,6 @@ public class CoachController : MonoBehaviour
         {
             CoachModeDisabledReset(_selection, selectedPlayer);
         }
+        countTime += Time.deltaTime;
     }
 }
