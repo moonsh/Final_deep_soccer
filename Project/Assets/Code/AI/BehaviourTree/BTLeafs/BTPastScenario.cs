@@ -10,9 +10,10 @@ public class BTPastScenario : BTNode
         List < Scenario > scenarios = CoachController.scenarios;
         foreach (Scenario scenario in scenarios)
         {
-            if (scenario.teamWithBall == context.rb.tag)
+            if (scenario.teamWithBall == context.rb.tag || scenario.teamWithBall == "None") 
             {
-                if(Mathf.Abs(context.navAgent.transform.position.x - scenario.agentPosition.x) < 3 && Mathf.Abs(context.navAgent.transform.position.z - scenario.agentPosition.z) < 3)
+                
+                if (Mathf.Abs(context.navAgent.transform.position.x - scenario.agentPosition.x) < 3 && Mathf.Abs(context.navAgent.transform.position.z - scenario.agentPosition.z) < 3)
                 {
                     //check if all teammate positions matches
                     foreach (GameObject teammate in context.teammates)
@@ -68,6 +69,7 @@ public class BTPastScenario : BTNode
         }
         if(context.pastScenarios.Count > 0)
         {
+            
             if(context.pastScenarios[0].action=="Move")
             {
                 var destination = context.pastScenarios[0].actionParameter;
