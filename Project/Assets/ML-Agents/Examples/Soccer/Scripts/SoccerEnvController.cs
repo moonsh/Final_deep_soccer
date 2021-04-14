@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.MLAgents;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class SoccerEnvController : MonoBehaviour
@@ -180,6 +181,7 @@ public class SoccerEnvController : MonoBehaviour
 
             item.Rb.velocity = Vector3.zero;
             item.Rb.angularVelocity = Vector3.zero;
+            item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
         }
 
         //Reset Ball
