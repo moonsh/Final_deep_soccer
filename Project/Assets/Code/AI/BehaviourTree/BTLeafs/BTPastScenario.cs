@@ -95,9 +95,7 @@ public class BTPastScenario : BTNode
                     }
                     else if (context.ball.GetComponent<SoccerBallController>().owner.tag.Equals(context.rb.tag))
                     {
-                        // Teammate has ball.  Action incomplete, do not save scenario.
-                        context.navAgent.GetComponent<AIComponent>().DestroyMarker(false);
-
+                       
                         if (context.userActions.Count == 0)
                         {
                             CoachController.agentsWithUserActions.Remove(context.navAgent.GetComponent<AIComponent>());

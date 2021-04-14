@@ -171,9 +171,12 @@ MonoBehaviour:
     type: 3}
   kickMarker: {fileID: 7647626226041207574, guid: 84ee02c65e46cf146b5ea8b7456018a8,
     type: 3}
+  defaultPurpleMaterial: {fileID: 2100000, guid: b0da1813c36914e678ba57f2790424e1,
+    type: 2}
+  defaultBlueMaterial: {fileID: 2100000, guid: c9fa44c2c3f8ce74ca39a3355ea42631, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 5c59bd36def9a4684be49a21cf201a2d, type: 2}
   highlightMaterial: {fileID: 2100000, guid: a1daf31cdf41e484ca9ac33a5c6f524a, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: b0da1813c36914e678ba57f2790424e1, type: 2}
+  defaultMaterial: {fileID: 0}
 --- !u!1 &108305303
 GameObject:
   m_ObjectHideFlags: 0

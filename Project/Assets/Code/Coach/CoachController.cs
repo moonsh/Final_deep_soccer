@@ -26,13 +26,15 @@ public class CoachController : MonoBehaviour
     [SerializeField] private GameObject moveWaypointMarker;
     [SerializeField] private GameObject goToBallMarker;
     [SerializeField] private GameObject kickMarker;
+    [SerializeField] private Material defaultPurpleMaterial;
+    [SerializeField] private Material defaultBlueMaterial;
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material highlightMaterial;
-    [SerializeField] private Material defaultMaterial;
 
     private Transform[] selectedPlayer = new Transform[1];
     private Transform _selection;
     private coachCommands currentCommand;
+    private Material defaultMaterial;
 
     public void ToggleCoachMode()
     {
@@ -76,71 +78,24 @@ public class CoachController : MonoBehaviour
                     {
                         var action = "GoToBall";
                         Vector3 actionParameter = hit.point; // destination in this scenario
-                        Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
-                        Vector3 ballPosition = selectedAgent.ball.position;
-                        GameObject[] teammates = selectedAgent.teammates;
-                        GameObject[] opponents = selectedAgent.opponents;
-                        HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
-                        HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
-                        bool ballPossessed = selectedAgent.ball.GetComponent<SoccerBallController>().owner;
-                        string teamWithBall;
-
-                        if (ballPossessed)
-                        {
-                            teamWithBall = selectedAgent.ball.GetComponent<SoccerBallController>().owner.tag;
-                        }
-                        else
-                        {
-                            teamWithBall = "None";
-                        }
-
-                        foreach (var teammate in teammates)
-                        {
-                            teammatePositions.Add(teammate.GetComponent<Transform>().position);
-                        }
-
-                        foreach (var opponent in opponents)
-                        {
-                            opponentPositions.Add(opponent.GetComponent<Transform>().position);
-                        }
-
                         selectedAgent.AddAction(action, goToBallMarker, actionParameter);
-                        selectedAgent.pendingScenarios.Add(new Scenario(action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions,ballPossessed, selectedAgent.tag));
+
+                        if (selectedAgent.pendingScenarios.Count == 0)
+                        {
+                            CreatePendingScenario(selectedAgent, action, actionParameter);
+                        }
                     }
                     else
                     {
                         var action = "Move"; // Movement scenario
                         Vector3 actionParameter = hit.point; // destination in this scenario
-                        Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
-                        Vector3 ballPosition = selectedAgent.ball.position;
-                        GameObject[] teammates = selectedAgent.teammates;
-                        GameObject[] opponents = selectedAgent.opponents;
-                        HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
-                        HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
-                        bool ballPossessed = selectedAgent.ball.GetComponent<SoccerBallController>().owner;
-                        string teamWithBall;
-
-                        if (ballPossessed)
-                        {
-                            teamWithBall = selectedAgent.ball.GetComponent<SoccerBallController>().owner.tag;
-                        }
-                        else
-                        {
-                            teamWithBall = "None";
-                        }
-
-                        foreach (var teammate in teammates)
-                        {
-                            teammatePositions.Add(teammate.GetComponent<Transform>().position);
-                        }
-
-                        foreach (var opponent in opponents)
-                        {
-                            opponentPositions.Add(opponent.GetComponent<Transform>().position);
-                        }
-
                         selectedAgent.AddAction(action, moveWaypointMarker, actionParameter);
-                        selectedAgent.pendingScenarios.Add(new Scenario(action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions, ballPossessed, selectedAgent.tag));
+
+                        if (selectedAgent.pendingScenarios.Count == 0)
+                        {
+                            CreatePendingScenario(selectedAgent, action, actionParameter);
+                        }
+
                         /*/ Testing code
                         Debug.Log("selectedAgent.pendingScenario: " + selectedAgent.pendingScenario.ToString());
                         Debug.Log("selectedAgent.pendingScenario.action: " + selectedAgent.pendingScenario.action);
@@ -161,8 +116,9 @@ public class CoachController : MonoBehaviour
                         */// End testing code
                     }
 
-                    agentsWithUserActions.Add(selectedAgent.GetComponent<AIComponent>());
+                    agentsWithUserActions.Add(selectedAgent);
                     userActionsGUI.SetActive(true);
+                    BlackBoard.SetActive(true);
                     currentCommand = coachCommands.NONE;
                 }
             }
@@ -181,64 +137,75 @@ public class CoachController : MonoBehaviour
                 {
                     string action = "Kick"; // Kick scenario
                     Vector3 actionParameter = hit.point; // Target direction in this scenario
-                    Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
-                    Vector3 ballPosition = selectedAgent.ball.position;
-                    GameObject[] teammates = selectedAgent.teammates;
-                    GameObject[] opponents = selectedAgent.opponents;
-                    HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
-                    HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
-                    bool ballPossessed = selectedAgent.ball.GetComponent<SoccerBallController>().owner;
-                    string teamWithBall;
-
-                    if (ballPossessed)
-                    {
-                        teamWithBall = selectedAgent.ball.GetComponent<SoccerBallController>().owner.tag;
-                    }
-                    else
-                    {
-                        teamWithBall = "None";
-                    }
-
-                    foreach (var teammate in teammates)
-                    {
-                        teammatePositions.Add(teammate.GetComponent<Transform>().position);
-                    }
-
-                    foreach (var opponent in opponents)
-                    {
-                        opponentPositions.Add(opponent.GetComponent<Transform>().position);
-                    }
-
                     selectedAgent.AddAction(action, kickMarker, actionParameter);
-                    selectedAgent.pendingScenarios.Add(new Scenario(action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions, ballPossessed, selectedAgent.tag));
-                    /*/ Testing code
-                    Debug.Log("selectedAgent.pendingScenario: " + selectedAgent.pendingScenario.ToString());
-                    Debug.Log("selectedAgent.pendingScenario.action: " + selectedAgent.pendingScenario.action);
-                    Debug.Log("selectedAgent.pendingScenario.actionParameter: " + selectedAgent.pendingScenario.actionParameter.ToString());
-                    Debug.Log("teammatePositions: ");
-
-                    foreach (var teammatePosition in selectedAgent.pendingScenario.teammatePositions)
-                    {
-                        Debug.Log(teammatePosition.ToString());
-                    }
-
-                    Debug.Log("opponentPositions: ");
-
-                    foreach (var opponentPosition in selectedAgent.pendingScenario.opponentPositions)
-                    {
-                        Debug.Log(opponentPosition.ToString());
-                    }
-                    */// End testing code
-
-                    agentsWithUserActions.Add(selectedAgent.GetComponent<AIComponent>());
+                    agentsWithUserActions.Add(selectedAgent);
                     userActionsGUI.SetActive(true);
+                    BlackBoard.SetActive(true);
                     currentCommand = coachCommands.NONE;
                 }
             }
         }
     }
 
-    private void CoachModeDisabledReset(Transform _selection, Transform[] selectedPlayer)
+
+    private void CoachModeDisabledReset()
+    {
+        ResetMaterials();
+        currentCommand = coachCommands.NONE;
+    }
+
+    private void CreatePendingScenario(AIComponent selectedAgent, string action, Vector3 actionParameter)
+    {
+        Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
+        Vector3 ballPosition = selectedAgent.ball.position;
+        GameObject[] teammates = selectedAgent.teammates;
+        GameObject[] opponents = selectedAgent.opponents;
+        HashSet<Vector3> teammatePositions = new HashSet<Vector3>();
+        HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
+        bool ballPossessed = selectedAgent.ball.GetComponent<SoccerBallController>().owner;
+        string teamWithBall;
+
+        if (ballPossessed)
+        {
+            teamWithBall = selectedAgent.ball.GetComponent<SoccerBallController>().owner.tag;
+        }
+        else
+        {
+            teamWithBall = "None";
+        }
+
+        foreach (var teammate in teammates)
+        {
+            teammatePositions.Add(teammate.GetComponent<Transform>().position);
+        }
+
+        foreach (var opponent in opponents)
+        {
+            opponentPositions.Add(opponent.GetComponent<Transform>().position);
+        }
+
+        selectedAgent.pendingScenarios.Add(new Scenario(action, actionParameter, agentPosition,
+        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall));
+    }
+
+    public void ToggleTeamSelection()
+    {
+        ResetMaterials();
+
+        if (agentTag.Equals("purpleAgent"))
+        {
+            agentTag = "blueAgent";
+            goalTag = "blueGoal";
+            defaultMaterial = defaultBlueMaterial;
+        }
+        else
+        {
+            agentTag = "purpleAgent";
+            goalTag = "purpleGoal";
+            defaultMaterial = defaultPurpleMaterial;
+        }
+    }
+    public void ResetMaterials()
     {
         if (_selection != null)
         {
@@ -254,11 +221,9 @@ public class CoachController : MonoBehaviour
             selectionRenderer.material = defaultMaterial;
             Array.Clear(selectedPlayer, 0, 1);
             userActionsGUI.SetActive(false);
+            BlackBoard.SetActive(false);
         }
-
-        currentCommand = coachCommands.NONE;
     }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -266,6 +231,7 @@ public class CoachController : MonoBehaviour
         cancelUserActionsGUI.SetActive(false);
         coachMode = false;
         currentCommand = coachCommands.NONE;
+        defaultMaterial = defaultPurpleMaterial;
         BlackBoard.SetActive(false);
     }
 
@@ -311,6 +277,10 @@ public class CoachController : MonoBehaviour
         else
         {
             cancelUserActionsGUI.SetActive(true);
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            ToggleTeamSelection();
         }
 
         if (Input.GetButtonDown("Cancel"))
@@ -406,29 +376,35 @@ public class CoachController : MonoBehaviour
                         {
                             Array.Clear(selectedPlayer, 0, 1);
                             userActionsGUI.SetActive(false);
+                            BlackBoard.SetActive(false);
                         }
 
                         _selection = selection;
                     }
                 }
 
-                switch (currentCommand)
+                if (selectedPlayer[0] != null)
                 {
-                    case coachCommands.NONE:
-                        break;
-                    case coachCommands.MOVE:
-                        CoachMoveMode(ray, hit, selectedPlayer[0].GetComponent<AIComponent>());
-                        break;
-                    case coachCommands.KICK:
-                        CoachKickMode(ray, hit, selectedPlayer[0].GetComponent<AIComponent>());
-                        break;
+                    switch (currentCommand)
+                    {
+                        case coachCommands.NONE:
+                            break;
+                        case coachCommands.MOVE:
+                            CoachMoveMode(ray, hit, selectedPlayer[0].GetComponent<AIComponent>());
+                            break;
+                        case coachCommands.KICK:
+                            CoachKickMode(ray, hit, selectedPlayer[0].GetComponent<AIComponent>());
+                            break;
+                    }
                 }
             }
         }
         else // coachMode disabled, reset all agent material that has been changed
         {
-            CoachModeDisabledReset(_selection, selectedPlayer);
+            CoachModeDisabledReset();
         }
         countTime += Time.deltaTime;
     }
+
+    
 }

@@ -82,7 +82,7 @@ public class AIComponent : MonoBehaviour, IEventSource
         userActionMarkers.Add(newWaypoint);
     }*/
 
-    public void DestroyMarker(bool actionComplete)
+    public void DestroyMarker()
     {
         Destroy(userActionMarkers[0]);
         userActionMarkers.RemoveAt(0);
@@ -90,21 +90,22 @@ public class AIComponent : MonoBehaviour, IEventSource
         if (userActionMarkers.Count == 0)
         {
             userActionPath.positionCount = 0;
+            CoachController.agentsWithUserActions.Remove(this);
         }
 
+        // Special case checks.
+        // Check to see if the marker action type creates a pending scenario, then remove it.
+        if (userActions[0].Equals("Move") || userActions[0].Equals("GoToBall"))
+        {
+            pendingScenarios.RemoveAt(0);
+        }
+        // Check to see if the marker action type is of "GoToBall" to disable ballMarker.
         if (userActions[0].Equals("GoToBall"))
         {
             ballMarkerVisible = false;
         }
 
         userActions.RemoveAt(0);
-
-        if (actionComplete)
-        {
-            CoachController.scenarios.Add(pendingScenarios[0]);
-        }
-
-        pendingScenarios.RemoveAt(0);
     }
 
     public void ClearAllActions()

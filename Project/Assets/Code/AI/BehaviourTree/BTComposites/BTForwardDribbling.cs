@@ -45,11 +45,11 @@ public class BTForwardDribbling : BTNode
                 + ((context.goal.position.x - context.navAgent.transform.position.x) * (context.goal.position.x - context.navAgent.transform.position.x)));
                 if (distanceToGoal < 20f)
                 {
-                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position - context.navAgent.transform.position , 200f * distanceToGoal);
+                    context.navAgent.GetComponent<AgentSoccer>().Kick((context.goal.position - context.navAgent.transform.position).normalized , 200f * distanceToGoal);
                 }
                 else
                 {
-                    context.navAgent.GetComponent<AgentSoccer>().Kick(context.goal.position - context.navAgent.transform.position, 50f);
+                    context.navAgent.GetComponent<AgentSoccer>().Kick((context.goal.position - context.navAgent.transform.position).normalized, 50f);
                 }
             }
         }
