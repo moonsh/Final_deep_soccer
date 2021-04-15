@@ -15,6 +15,7 @@ public class BTPastScenario : BTNode
                 
                 if (Mathf.Abs(context.navAgent.transform.position.x - scenario.agentPosition.x) < 3 && Mathf.Abs(context.navAgent.transform.position.z - scenario.agentPosition.z) < 3)
                 {
+                    bool allConditionFit = true;
                     //check if all teammate positions matches
                     foreach (GameObject teammate in context.teammates)
                     {
@@ -28,6 +29,7 @@ public class BTPastScenario : BTNode
                         }
                         if (teammateMatch == false)
                         {
+                            allConditionFit = false;
                             break;
                         }
                     }
@@ -44,26 +46,31 @@ public class BTPastScenario : BTNode
                         }
                         if (opponentMatch == false)
                         {
+                            allConditionFit = false;
                             break;
                         }
                     }
-                    //check if ball's position matches
-                    if (Mathf.Abs(context.ball.position.x - scenario.ballPosition.x) < 5 && Mathf.Abs(context.ball.position.z - scenario.ballPosition.z) < 5)
+                    if(allConditionFit)
                     {
-                        bool sameScene = false;
-                        foreach(Scenario past in context.pastScenarios)
+                        //check if ball's position matches
+                        if (Mathf.Abs(context.ball.position.x - scenario.ballPosition.x) < 5 && Mathf.Abs(context.ball.position.z - scenario.ballPosition.z) < 5)
                         {
-                            if(past == scenario)
+                            bool sameScene = false;
+                            foreach (Scenario past in context.pastScenarios)
                             {
-                                sameScene = true;
+                                if (past == scenario)
+                                {
+                                    sameScene = true;
+                                }
+
                             }
-                                                      
-                        }
-                        if(sameScene==false)
-                        {
-                            context.pastScenarios.Add(scenario);
+                            if (sameScene == false)
+                            {
+                                context.pastScenarios.Add(scenario);
+                            }
                         }
                     }
+                    
                 }
             }
         }

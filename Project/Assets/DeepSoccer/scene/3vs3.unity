@@ -1255,7 +1255,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &819281772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3323,6 +3323,21 @@ PrefabInstance:
       propertyPath: m_Drag
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 521643791691763785, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Text
+      value: P2
+      objectReference: {fileID: 0}
+    - target: {fileID: 946557930567229529, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Text
+      value: P3
+      objectReference: {fileID: 0}
+    - target: {fileID: 946557930567229529, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 72
+      objectReference: {fileID: 0}
     - target: {fileID: 1913986581814561543, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_Enabled
@@ -3336,7 +3351,7 @@ PrefabInstance:
     - target: {fileID: 2476861627691932691, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_Text
-      value: B
+      value: B1
       objectReference: {fileID: 0}
     - target: {fileID: 3342564525306026304, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
@@ -3357,6 +3372,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3635978006685099326, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Text
+      value: P1
       objectReference: {fileID: 0}
     - target: {fileID: 3857077391142220771, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
@@ -3451,7 +3471,7 @@ PrefabInstance:
     - target: {fileID: 5013610814605456820, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_Text
-      value: B
+      value: B2
       objectReference: {fileID: 0}
     - target: {fileID: 5879755687027228565, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
@@ -3636,7 +3656,7 @@ PrefabInstance:
     - target: {fileID: 6807146524663505158, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_Text
-      value: F
+      value: B3
       objectReference: {fileID: 0}
     - target: {fileID: 7032398398444023486, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
