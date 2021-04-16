@@ -105,8 +105,13 @@ public class BTFowardPass : BTNode
         }
         if (Vector3.Angle(context.navAgent.transform.forward, teammatePos - context.navAgent.transform.position) < 15)
         {
-            
-            context.navAgent.GetComponent<AgentSoccer>().Kick((teammatePos - context.navAgent.transform.position).normalized, 250f * distance1);
+
+            if(distance1<5)
+                context.navAgent.GetComponent<AgentSoccer>().Kick((teammatePos - context.navAgent.transform.position).normalized, 400f * distance1);
+            else if(distance1<10)
+                context.navAgent.GetComponent<AgentSoccer>().Kick((teammatePos - context.navAgent.transform.position).normalized, 300f * distance1);
+            else
+                context.navAgent.GetComponent<AgentSoccer>().Kick((teammatePos - context.navAgent.transform.position).normalized, 220f * distance1);
         }
         return BTResult.SUCCESS;
     }

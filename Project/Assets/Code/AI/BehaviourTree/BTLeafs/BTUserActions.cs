@@ -190,7 +190,9 @@ public class BTUserActions : BTNode
 
                 if (possession)
                 {
-                    context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 5000f);
+                    float distance = Mathf.Sqrt(((target.z - agentPosition.z) * (target.z - agentPosition.z))
+                        + ((target.x - agentPosition.x) * (target.x - agentPosition.x)));
+                    context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 200f * distance);
                     CreateAndLogScenario(action, direction);
                 }
 

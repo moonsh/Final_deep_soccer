@@ -47,7 +47,7 @@ public class BTForwardSupporting : BTNode
                 }
                 else
                 {
-                    dest = new Vector3(closestTeammatePos.x + 7 * objectBetween, 0, closestTeammatePos.z - 7 * objectBetween);
+                    dest = new Vector3(closestTeammatePos.x + 5 * objectBetween, 0, closestTeammatePos.z - 5 * objectBetween);
                     if (context.navAgent.transform.position.z < -20f)
                     {
                         dest = new Vector3(1.2f + 3 * objectBetween, 0, -38.7f - 2 * objectBetween);
@@ -77,7 +77,7 @@ public class BTForwardSupporting : BTNode
                 }
                 else
                 {
-                    dest = new Vector3(closestTeammatePos.x - 7 * objectBetween, 0, closestTeammatePos.z - 7 * objectBetween);
+                    dest = new Vector3(closestTeammatePos.x - 5 * objectBetween, 0, closestTeammatePos.z - 5 * objectBetween);
                     if (context.navAgent.transform.position.z < -20f)
                     {
                         dest = new Vector3(-1.2f - 3 * objectBetween, 0, -38.7f - 2 * objectBetween);
@@ -103,11 +103,11 @@ public class BTForwardSupporting : BTNode
                 }
                 if (context.navAgent.tag == "purpleAgent")
                 {
-                    dest = new Vector3(closestTeammatePos.x + 7 * objectBetween, 0, closestTeammatePos.z - 15 * objectBetween);
+                    dest = new Vector3(closestTeammatePos.x + 7 * objectBetween, 0, closestTeammatePos.z - 10 * objectBetween);
                 }
                 else
                 {
-                    dest = new Vector3(closestTeammatePos.x + 7 * objectBetween, 0, closestTeammatePos.z + 15 * objectBetween);
+                    dest = new Vector3(closestTeammatePos.x + 7 * objectBetween, 0, closestTeammatePos.z + 10 * objectBetween);
                     
                 }
             }
@@ -126,11 +126,11 @@ public class BTForwardSupporting : BTNode
                 }
                 if (context.navAgent.tag == "purpleAgent")
                 {
-                    dest = new Vector3(closestTeammatePos.x - 7 * objectBetween, 0, closestTeammatePos.z - 15 * objectBetween);  
+                    dest = new Vector3(closestTeammatePos.x - 7 * objectBetween, 0, closestTeammatePos.z - 10 * objectBetween);  
                 }
                 else
                 {
-                    dest = new Vector3(closestTeammatePos.x - 7 * objectBetween, 0, closestTeammatePos.z + 15 * objectBetween);
+                    dest = new Vector3(closestTeammatePos.x - 7 * objectBetween, 0, closestTeammatePos.z + 10 * objectBetween);
                 }
 
             }

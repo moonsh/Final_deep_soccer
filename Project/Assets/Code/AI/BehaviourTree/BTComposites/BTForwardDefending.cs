@@ -6,6 +6,7 @@ public class BTForwardDefending : BTNode
 {
     public override BTResult Execute()
     {
+        context.navAgent.speed = 10;
         if (context.navAgent.name.Contains("Forward"))
         {
             bool isClosest = true;
@@ -25,8 +26,27 @@ public class BTForwardDefending : BTNode
             }
             if (isClosest)
             {
-                context.navAgent.SetDestination(context.ball.position);
-                context.navAgent.speed = 10;
+                if (context.navAgent.tag == "blueAgent")
+                {
+                    Vector3 destination = new Vector3(context.ball.position.x, context.ball.position.y, context.ball.position.z + 5);
+                    context.navAgent.SetDestination(destination);
+                }
+                else
+                {
+                    Vector3 destination = new Vector3(context.ball.position.x, context.ball.position.y, context.ball.position.z - 5);
+                    context.navAgent.SetDestination(destination);
+                }
+                if (distance1 < 7)
+                {
+                    if (context.navAgent.tag == "blueAgent" && (context.navAgent.transform.position.z > context.ball.position.z))
+                    {
+                        context.navAgent.SetDestination(context.ball.position);
+                    }
+                    else if (context.navAgent.tag == "purpleAgent" && (context.navAgent.transform.position.z < context.ball.position.z))
+                    {
+                        context.navAgent.SetDestination(context.ball.position);
+                    }
+                }
             }
             else
             {
@@ -49,8 +69,8 @@ public class BTForwardDefending : BTNode
                         dest = new Vector3(closestTeammatePos.x + 7 * objectBetween, 0, closestTeammatePos.z + 7 * objectBetween);
                     }
                     else
-                    {
-                        dest = new Vector3(closestTeammatePos.x + 7 * objectBetween, 0, closestTeammatePos.z - 7 * objectBetween);
+                    {  
+                        dest = new Vector3(closestTeammatePos.x + 5 * objectBetween, 0, closestTeammatePos.z - 5 * objectBetween);
                     }
                 }
                 else
@@ -72,7 +92,7 @@ public class BTForwardDefending : BTNode
                     }
                     else
                     {
-                        dest = new Vector3(closestTeammatePos.x - 7 * objectBetween, 0, closestTeammatePos.z - 7 * objectBetween);
+                        dest = new Vector3(closestTeammatePos.x - 5 * objectBetween, 0, closestTeammatePos.z - 5 * objectBetween);
                     }
 
                 }
@@ -85,9 +105,30 @@ public class BTForwardDefending : BTNode
             context.navAgent.speed = 10;
             float distance = Mathf.Sqrt(((context.goal.position.z - context.ball.transform.position.z) * (context.goal.position.z - context.ball.transform.position.z))
                 + ((context.goal.position.x - context.ball.transform.position.x) * (context.goal.position.x - context.ball.transform.position.x)));
-            if (distance < 15)
+            if (distance < 20)
             {
-                context.navAgent.SetDestination(context.ball.position);
+                if(context.navAgent.tag == "blueAgent")
+                {
+                    Vector3 destination = new Vector3(context.ball.position.x, context.ball.position.y, context.ball.position.z + 5);
+                    context.navAgent.SetDestination(destination);
+                }
+                else
+                {
+                    Vector3 destination = new Vector3(context.ball.position.x, context.ball.position.y, context.ball.position.z - 5);
+                    context.navAgent.SetDestination(destination);
+                }
+                if(distance <7)
+                {
+                    if(context.navAgent.tag == "blueAgent"&& (context.navAgent.transform.position.z > context.ball.position.z))
+                    {
+                        context.navAgent.SetDestination(context.ball.position);
+                    }
+                    else if (context.navAgent.tag == "purpleAgent" && (context.navAgent.transform.position.z < context.ball.position.z))
+                    {
+                        context.navAgent.SetDestination(context.ball.position);
+                    }
+                }
+                
             }
             else
             {
