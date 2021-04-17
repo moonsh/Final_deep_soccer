@@ -193,7 +193,7 @@ public class BTUserActions : BTNode
                     float distance = Mathf.Sqrt(((target.z - agentPosition.z) * (target.z - agentPosition.z))
                         + ((target.x - agentPosition.x) * (target.x - agentPosition.x)));
                     context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 200f * distance);
-                    CreateAndLogScenario(action, direction);
+                    CreateAndLogScenario(action, target);
                 }
 
                 context.navAgent.GetComponent<AIComponent>().DestroyMarker();

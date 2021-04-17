@@ -21,7 +21,6 @@ public class BTFowardPass : BTNode
                     if (hit.collider.tag != context.navAgent.tag)
                     {
                         cannotPassAgents.Add(teammate);
-                        Debug.DrawRay(context.navAgent.transform.position, direction_to_agent * hit.distance, Color.yellow);
                     }
 
                 }
@@ -45,7 +44,6 @@ public class BTFowardPass : BTNode
                         {
                             passback = false;
                             cannotPassAgents.Add(teammate);
-                            Debug.DrawRay(context.navAgent.transform.position, direction_to_agent * hit.distance, Color.yellow);
                         }
 
                     }
@@ -64,7 +62,6 @@ public class BTFowardPass : BTNode
                         if (hit.collider.tag != context.navAgent.tag)
                         {
                             cannotPassAgents.Add(teammate);
-                            Debug.DrawRay(context.navAgent.transform.position, direction_to_agent * hit.distance, Color.yellow);
                         }
 
                     }
