@@ -12,48 +12,58 @@ public class BTPastScenario : BTNode
         {
             if (scenario.teamWithBall == context.rb.tag || scenario.teamWithBall == "None") 
             {
-                
-                if (Mathf.Abs(context.navAgent.transform.position.x - scenario.agentPosition.x) < 3 && Mathf.Abs(context.navAgent.transform.position.z - scenario.agentPosition.z) < 3)
+                bool allConditionFit = true;
+                //check if agent's position matches
+                if ((Mathf.Abs(context.navAgent.transform.position.x - scenario.agentPosition.x) < BlackBoard2.agentR && Mathf.Abs(context.navAgent.transform.position.z - scenario.agentPosition.z) < BlackBoard2.agentR) ||!BlackBoard2.agentPosition)
                 {
-                    bool allConditionFit = true;
-                    //check if all teammate positions matches
-                    foreach (GameObject teammate in context.teammates)
+                    
+                    //check if ball's position matches
+                    if ((Mathf.Abs(context.ball.position.x - scenario.ballPosition.x) < BlackBoard2.soccerR && Mathf.Abs(context.ball.position.z - scenario.ballPosition.z) < BlackBoard2.soccerR) || !BlackBoard2.soccerPosition)
                     {
-                        bool teammateMatch = false;
-                        foreach (Vector3 teammatePosition in scenario.teammatePositions)
+                        
+                        //check if all teammate positions matches
+                        if (BlackBoard2.teamPosition)
                         {
-                            if (Mathf.Abs(teammate.transform.position.x - teammatePosition.x) < 5 && Mathf.Abs(teammate.transform.position.z - teammatePosition.z) < 5)
+                            
+                            foreach (GameObject teammate in context.teammates)
                             {
-                                teammateMatch = true;
+                                bool teammateMatch = false;
+                                foreach (Vector3 teammatePosition in scenario.teammatePositions)
+                                {
+                                    if (Mathf.Abs(teammate.transform.position.x - teammatePosition.x) < BlackBoard2.teamR && Mathf.Abs(teammate.transform.position.z - teammatePosition.z) < BlackBoard2.teamR)
+                                    {
+                                        teammateMatch = true;
+                                    }
+                                }
+                                if (teammateMatch == false)
+                                {
+                                    allConditionFit = false;
+                                    break;
+                                }
                             }
                         }
-                        if (teammateMatch == false)
+                        if (BlackBoard2.oppoPosition)
                         {
-                            allConditionFit = false;
-                            break;
-                        }
-                    }
-                    //check if all opponent position matches
-                    foreach (GameObject opponent in context.opponents)
-                    {
-                        bool opponentMatch = false;
-                        foreach (Vector3 opponentPosition in scenario.opponentPositions)
-                        {
-                            if (Mathf.Abs(opponent.transform.position.x - opponentPosition.x) < 5 && Mathf.Abs(opponent.transform.position.z - opponentPosition.z) < 5)
+                            
+                            //check if all opponent position matches
+                            foreach (GameObject opponent in context.opponents)
                             {
-                                opponentMatch = true;
+                                bool opponentMatch = false;
+                                foreach (Vector3 opponentPosition in scenario.opponentPositions)
+                                {
+                                    if (Mathf.Abs(opponent.transform.position.x - opponentPosition.x) < BlackBoard2.oppoR && Mathf.Abs(opponent.transform.position.z - opponentPosition.z) < BlackBoard2.oppoR)
+                                    {
+                                        opponentMatch = true;
+                                    }
+                                }
+                                if (opponentMatch == false)
+                                {
+                                    allConditionFit = false;
+                                    break;
+                                }
                             }
                         }
-                        if (opponentMatch == false)
-                        {
-                            allConditionFit = false;
-                            break;
-                        }
-                    }
-                    if(allConditionFit)
-                    {
-                        //check if ball's position matches
-                        if (Mathf.Abs(context.ball.position.x - scenario.ballPosition.x) < 5 && Mathf.Abs(context.ball.position.z - scenario.ballPosition.z) < 5)
+                        if (allConditionFit)
                         {
                             bool sameScene = false;
                             foreach (Scenario past in context.pastScenarios)
@@ -70,7 +80,6 @@ public class BTPastScenario : BTNode
                             }
                         }
                     }
-                    
                 }
             }
         }

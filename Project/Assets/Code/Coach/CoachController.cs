@@ -17,6 +17,7 @@ public class CoachController : MonoBehaviour
         KICK,
     }
     public GameObject BlackBoard;
+    public GameObject BlackBoard2;
     [SerializeField] private string agentTag = "purpleAgent";
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
@@ -35,7 +36,7 @@ public class CoachController : MonoBehaviour
     private Transform _selection;
     private coachCommands currentCommand;
     private Material defaultMaterial;
-
+    private int count;
     public void ToggleCoachMode()
     {
         coachMode = !coachMode;
@@ -222,6 +223,7 @@ public class CoachController : MonoBehaviour
             Array.Clear(selectedPlayer, 0, 1);
             userActionsGUI.SetActive(false);
             BlackBoard.SetActive(false);
+            BlackBoard2.SetActive(false);
         }
     }
     // Start is called before the first frame update
@@ -238,6 +240,11 @@ public class CoachController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(count<1)
+        {
+            BlackBoard2.SetActive(false);
+        }
+        count++;
         /*if (scenarios.Count > 0) // Debugging code.
         {
             Debug.Log("Saved scenarios detected.");
@@ -294,6 +301,7 @@ public class CoachController : MonoBehaviour
                         Array.Clear(selectedPlayer, 0, 1);
                         userActionsGUI.SetActive(false);
                         BlackBoard.SetActive(false);
+                        BlackBoard2.SetActive(false);
                     }
                     else
                     {
@@ -377,6 +385,7 @@ public class CoachController : MonoBehaviour
                             Array.Clear(selectedPlayer, 0, 1);
                             userActionsGUI.SetActive(false);
                             BlackBoard.SetActive(false);
+                            BlackBoard2.SetActive(false);
                         }
 
                         _selection = selection;

@@ -36,7 +36,7 @@ public class BTForwardDefending : BTNode
                     Vector3 destination = new Vector3(context.ball.position.x, context.ball.position.y, context.ball.position.z - 5);
                     context.navAgent.SetDestination(destination);
                 }
-                if (distance1 < 7)
+                if (distance1 < 10)
                 {
                     if (context.navAgent.tag == "blueAgent" && (context.navAgent.transform.position.z > context.ball.position.z))
                     {
@@ -117,7 +117,7 @@ public class BTForwardDefending : BTNode
                     Vector3 destination = new Vector3(context.ball.position.x, context.ball.position.y, context.ball.position.z - 5);
                     context.navAgent.SetDestination(destination);
                 }
-                if(distance <7)
+                if(distance <10)
                 {
                     if(context.navAgent.tag == "blueAgent"&& (context.navAgent.transform.position.z > context.ball.position.z))
                     {
