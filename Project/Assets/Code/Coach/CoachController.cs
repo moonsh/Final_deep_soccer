@@ -37,6 +37,7 @@ public class CoachController : MonoBehaviour
     private coachCommands currentCommand;
     private Material defaultMaterial;
     private int count;
+
     public void ToggleCoachMode()
     {
         coachMode = !coachMode;
@@ -359,6 +360,16 @@ public class CoachController : MonoBehaviour
                                 if (selectedPlayer[0] == null)
                                 {
                                     selectedPlayer[0] = selection;
+                                    var selection_x = selection.transform.position.x;
+                                    var selection_z = selection.transform.position.z;
+                                    if (selection_z <= 0)
+                                    {
+                                        userActionsGUI.transform.position = new Vector3(selection.transform.position.x, 75, selection.transform.position.z + 10);
+                                    }
+                                    else
+                                    {
+                                        userActionsGUI.transform.position = new Vector3(selection.transform.position.x, 75, selection.transform.position.z - 10);
+                                    }
                                     userActionsGUI.SetActive(true);
                                     BlackBoard.SetActive(true);
                                     BlackBoard.GetComponent<BlackBoard>().SeletectedAgent = selectedPlayer[0];
