@@ -630,6 +630,13 @@ MonoBehaviour:
     fovDistance: 10
   eventHandler:
     canHandleEvents: 1
+  rb: {fileID: 0}
+  goal: {fileID: 0}
+  ball: {fileID: 0}
+  opponents: []
+  teammates: []
+  userActions: []
+  userActionMarkers: []
 --- !u!114 &5957863238698654162
 MonoBehaviour:
   m_ObjectHideFlags: 0

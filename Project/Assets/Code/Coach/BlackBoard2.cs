@@ -58,7 +58,7 @@ public class BlackBoard2 : MonoBehaviour
         soccerR = int.Parse(soccerRange.text);
         teamR = int.Parse(teamRange.text);
         oppoR = int.Parse(oppoRange.text);
-        if(!agentPosition&& !soccerPosition&& !teamPosition && !oppoPosition)
+        if(!agentPosition && !soccerPosition && !teamPosition && !oppoPosition)
         {
             agentPos.isOn = true;
         }

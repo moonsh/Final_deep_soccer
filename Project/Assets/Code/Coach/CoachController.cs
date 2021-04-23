@@ -8,6 +8,7 @@ public class CoachController : MonoBehaviour
 {
     public static bool coachMode;
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
+    public static HashSet<AIComponent> agentsUsingPastScenario = new HashSet<AIComponent>();
     public static List<Scenario> scenarios = new List<Scenario>();
     public static float countTime;
     public enum coachCommands
@@ -22,6 +23,8 @@ public class CoachController : MonoBehaviour
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
     [SerializeField] private string goalTag = "purpleGoal";
+    [SerializeField] private GameObject purpleTeam;
+    [SerializeField] private GameObject blueTeam;
     [SerializeField] private GameObject userActionsGUI;
     [SerializeField] private GameObject cancelUserActionsGUI;
     [SerializeField] private GameObject moveWaypointMarker;

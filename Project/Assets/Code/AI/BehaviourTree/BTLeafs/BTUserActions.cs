@@ -62,7 +62,7 @@ public class BTUserActions : BTNode
             Debug.Log("Warning: no pending scenarios. This is an ERROR.");
         }
 
-        context.navAgent.GetComponent<AIComponent>().DestroyMarker();
+        context.contextOwner.DestroyMarker();
     }
 
     public override BTResult Execute()
@@ -138,7 +138,7 @@ public class BTUserActions : BTNode
                     else if (context.ball.GetComponent<SoccerBallController>().owner.tag.Equals(context.rb.tag))
                     {
                         // Teammate has ball.  Action incomplete, remove marker and pending scenario.
-                        context.navAgent.GetComponent<AIComponent>().DestroyMarker();
+                        context.contextOwner.DestroyMarker();
 
                         // Check to see if the subsequent action is another movement, and if so create a pending scenario.
                         if (context.userActions.Count > 0)
@@ -196,7 +196,7 @@ public class BTUserActions : BTNode
                     CreateAndLogScenario(action, target);
                 }
 
-                context.navAgent.GetComponent<AIComponent>().DestroyMarker();
+                context.contextOwner.DestroyMarker();
 
                 // Check to see if the subsequent action is another movement, and if so create a pending scenario.
                 if (context.userActions.Count > 0)
