@@ -8,6 +8,7 @@ public class CoachController : MonoBehaviour
 {
     public static bool coachMode;
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
+    public static HashSet<AIComponent> agentsUsingPastScenario = new HashSet<AIComponent>();
     public static List<Scenario> scenarios = new List<Scenario>();
     public static float countTime;
     public enum coachCommands
