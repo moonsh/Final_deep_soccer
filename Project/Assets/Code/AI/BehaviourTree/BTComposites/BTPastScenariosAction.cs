@@ -18,7 +18,11 @@ public class BTPastScenariosAction : BTNode
                 // Action completed; remove marker, actions, and log scenario.
                 //Debug.Log("Test: agent has reached destination."); //
                 context.pastScenarios.Remove(context.pastScenarios[0]);
-                CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                if(context.pastScenarios.Count == 0)
+                {
+                    CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                }
+                
             }
         }
         else if (context.pastScenarios[0].action == "GoToBall")
@@ -29,14 +33,20 @@ public class BTPastScenariosAction : BTNode
                 {
 
                     context.pastScenarios.Remove(context.pastScenarios[0]);
-                    CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                    if (context.pastScenarios.Count == 0)
+                    {
+                        CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                    }
 
                 }
                 else if (context.ball.GetComponent<SoccerBallController>().owner.tag.Equals(context.rb.tag))
                 {
 
                     context.pastScenarios.Remove(context.pastScenarios[0]);
-                    CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                    if (context.pastScenarios.Count == 0)
+                    {
+                        CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                    }
                 }
                 else // Opponent has ball.  Action executing.
                 {
@@ -75,7 +85,10 @@ public class BTPastScenariosAction : BTNode
                 context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 200f * distance);
             }
             context.pastScenarios.Remove(context.pastScenarios[0]);
-            CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+            if (context.pastScenarios.Count == 0)
+            {
+                CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+            }
         }
         else
         {
