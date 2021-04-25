@@ -313,11 +313,6 @@ public class CoachController : MonoBehaviour
             }
         }*/
 
-        foreach (var agent in agentsUsingPastScenario)
-        {
-            var indicator = Instantiate(agentScenarioIndicator, agent.transform.position, Quaternion.identity); // CONSIDER MOVING
-        }
-
         if (agentsWithUserActions.Count == 0)
         {
             cancelUserActionsGUI.SetActive(false);
