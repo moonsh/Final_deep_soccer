@@ -449,6 +449,8 @@ MonoBehaviour:
   fieldTag: field
   ballTag: ball
   goalTag: purpleGoal
+  purpleTeam: {fileID: 647999690}
+  blueTeam: {fileID: 707268776}
   userActionsGUI: {fileID: 1812004443}
   cancelUserActionsGUI: {fileID: 2102221902}
   moveWaypointMarker: {fileID: 4432901689736327115, guid: 20bca7d96f1c62d48abe099fa2923fec,
@@ -2492,6 +2494,12 @@ MonoBehaviour:
   soccerRange: {fileID: 721764093}
   teamRange: {fileID: 25378587}
   oppoRange: {fileID: 1975927372}
+--- !u!1 &647999690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 380739796312154461, guid: 83b78873ec0e58e4fa366823f8a296a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1656709003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &653975613 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7984417537717172990, guid: 83b78873ec0e58e4fa366823f8a296a7,
@@ -2646,6 +2654,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 696510503}
   m_CullTransparentMesh: 0
+--- !u!1 &707268776 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6669311205511405839, guid: 83b78873ec0e58e4fa366823f8a296a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1656709003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &713771425
 GameObject:
   m_ObjectHideFlags: 0
