@@ -1,5 +1,7 @@
 // Anthony Tiongson (ast119)
 
+using System;
+
 public class BTUserActionsAssert : BTNode
 {
     public override BTResult Execute()
@@ -10,6 +12,7 @@ public class BTUserActionsAssert : BTNode
         }
         else
         {
+            Array.Clear(context.scenarioQueue, 0, 1); // Override any pending Scenario.
             return BTResult.SUCCESS;
         }
     }

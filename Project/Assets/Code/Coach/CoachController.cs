@@ -9,7 +9,7 @@ public class CoachController : MonoBehaviour
     public static bool coachMode;
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
     public static HashSet<AIComponent> agentsUsingPastScenario = new HashSet<AIComponent>();
-    public static List<Scenario> scenarios = new List<Scenario>();
+    public static Dictionary<string, Scenario> scenarios = new Dictionary<string, Scenario>();
     public static float countTime;
     public enum coachCommands
     {
@@ -33,11 +33,12 @@ public class CoachController : MonoBehaviour
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material highlightMaterial;
 
-    private Transform[] selectedPlayer = new Transform[1];
+    private Transform selectedPlayer;
     private Transform _selection;
     private coachCommands currentCommand;
     private Material defaultMaterial;
     private int count;
+
     public void ToggleCoachMode()
     {
         coachMode = !coachMode;
@@ -57,10 +58,9 @@ public class CoachController : MonoBehaviour
     {
         foreach (var agent in agentsWithUserActions)
         {
-            agent.GetComponent<AIComponent>().ClearAllActions();
+            agent.GetComponent<AIComponent>().RemoveAllActions();
         }
 
-        agentsWithUserActions.Clear();
         currentCommand = coachCommands.NONE;
     }
 
@@ -74,28 +74,37 @@ public class CoachController : MonoBehaviour
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
+                    var label = "Move"; // REMOVE, replace with user inputted label
+                    var labelSuffix = 2;
+
+                    while (CoachController.scenarios.ContainsKey(label))
+                    {
+                        label = label + labelSuffix.ToString();
+                        labelSuffix++;
+                    }
+
                     //Debug.Log("Attempting to assign a new destination for the chosen agent.");
 
                     if (selection.CompareTag(ballTag))
                     {
                         var action = "GoToBall";
                         Vector3 actionParameter = hit.point; // destination in this scenario
-                        selectedAgent.AddAction(action, goToBallMarker, actionParameter);
+                        selectedAgent.AddAction(label, action, goToBallMarker, actionParameter);
 
                         if (selectedAgent.pendingScenarios.Count == 0)
                         {
-                            CreatePendingScenario(selectedAgent, action, actionParameter);
+                            CreatePendingScenario(selectedAgent, label, action, actionParameter);
                         }
                     }
                     else
                     {
                         var action = "Move"; // Movement scenario
                         Vector3 actionParameter = hit.point; // destination in this scenario
-                        selectedAgent.AddAction(action, moveWaypointMarker, actionParameter);
+                        selectedAgent.AddAction(label, action, moveWaypointMarker, actionParameter);
 
                         if (selectedAgent.pendingScenarios.Count == 0)
                         {
-                            CreatePendingScenario(selectedAgent, action, actionParameter);
+                            CreatePendingScenario(selectedAgent, label, action, actionParameter);
                         }
 
                         /*/ Testing code
@@ -137,9 +146,18 @@ public class CoachController : MonoBehaviour
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
+                    var label = "Kick"; // REMOVE, replace with user inputted label
+                    var labelSuffix = 2;
+
+                    while (CoachController.scenarios.ContainsKey(label))
+                    {
+                        label = label + labelSuffix.ToString();
+                        labelSuffix++;
+                    }
+
                     string action = "Kick"; // Kick scenario
                     Vector3 actionParameter = hit.point; // Target direction in this scenario
-                    selectedAgent.AddAction(action, kickMarker, actionParameter);
+                    selectedAgent.AddAction(label, action, kickMarker, actionParameter);
                     agentsWithUserActions.Add(selectedAgent);
                     userActionsGUI.SetActive(true);
                     BlackBoard.SetActive(true);
@@ -156,7 +174,7 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.NONE;
     }
 
-    private void CreatePendingScenario(AIComponent selectedAgent, string action, Vector3 actionParameter)
+    private void CreatePendingScenario(AIComponent selectedAgent, string label, string action, Vector3 actionParameter)
     {
         Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
         Vector3 ballPosition = selectedAgent.ball.position;
@@ -186,8 +204,8 @@ public class CoachController : MonoBehaviour
             opponentPositions.Add(opponent.GetComponent<Transform>().position);
         }
 
-        selectedAgent.pendingScenarios.Add(new Scenario(action, actionParameter, agentPosition,
-        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall));
+        selectedAgent.pendingScenarios.Add((label, new Scenario(action, actionParameter, agentPosition,
+        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall)));
     }
 
     public void ToggleTeamSelection()
@@ -207,6 +225,7 @@ public class CoachController : MonoBehaviour
             defaultMaterial = defaultPurpleMaterial;
         }
     }
+
     public void ResetMaterials()
     {
         if (_selection != null)
@@ -217,16 +236,17 @@ public class CoachController : MonoBehaviour
 
         _selection = null;
 
-        if (selectedPlayer[0] != null)
+        if (selectedPlayer != null)
         {
-            var selectionRenderer = selectedPlayer[0].GetComponent<Renderer>();
+            var selectionRenderer = selectedPlayer.GetComponent<Renderer>();
             selectionRenderer.material = defaultMaterial;
-            Array.Clear(selectedPlayer, 0, 1);
+            selectedPlayer = null;
             userActionsGUI.SetActive(false);
             BlackBoard.SetActive(false);
             BlackBoard2.SetActive(false);
         }
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -241,11 +261,13 @@ public class CoachController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(count<1)
+        if (count < 1)
         {
             BlackBoard2.SetActive(false);
         }
+
         count++;
+
         /*if (scenarios.Count > 0) // Debugging code.
         {
             Debug.Log("Saved scenarios detected.");
@@ -286,6 +308,7 @@ public class CoachController : MonoBehaviour
         {
             cancelUserActionsGUI.SetActive(true);
         }
+
         if (Input.GetButtonDown("Fire2"))
         {
             ToggleTeamSelection();
@@ -296,10 +319,10 @@ public class CoachController : MonoBehaviour
             switch (currentCommand)
             {
                 case coachCommands.NONE:
-                    if (selectedPlayer[0])
+                    if (selectedPlayer != null)
                     {
-                        _selection = selectedPlayer[0];
-                        Array.Clear(selectedPlayer, 0, 1);
+                        _selection = selectedPlayer;
+                        selectedPlayer = null;
                         userActionsGUI.SetActive(false);
                         BlackBoard.SetActive(false);
                         BlackBoard2.SetActive(false);
@@ -323,7 +346,7 @@ public class CoachController : MonoBehaviour
             {
                 var selectionRenderer = _selection.GetComponent<Renderer>();
 
-                if (Array.IndexOf(selectedPlayer, _selection) != 0)
+                if (selectedPlayer != _selection)
                 {
                     selectionRenderer.material = defaultMaterial;
                 }
@@ -338,7 +361,7 @@ public class CoachController : MonoBehaviour
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (selectedPlayer[0] == null)
+            if (selectedPlayer == null)
             {
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -350,19 +373,26 @@ public class CoachController : MonoBehaviour
 
                         if (selectionRenderer != null)
                         {
-                            if (Array.IndexOf(selectedPlayer, selection) != 0)
-                            {
-                                selectionRenderer.material = highlightMaterial;
-                            }
+                            selectionRenderer.material = highlightMaterial;
 
                             if (Input.GetButtonDown("Fire1"))
                             {
-                                if (selectedPlayer[0] == null)
+                                if (selectedPlayer == null)
                                 {
-                                    selectedPlayer[0] = selection;
+                                    selectedPlayer = selection;
+                                    var selection_x = selection.transform.position.x;
+                                    var selection_z = selection.transform.position.z;
+                                    if (selection_z <= 0)
+                                    {
+                                        userActionsGUI.transform.position = new Vector3(selection.transform.position.x, 75, selection.transform.position.z + 10);
+                                    }
+                                    else
+                                    {
+                                        userActionsGUI.transform.position = new Vector3(selection.transform.position.x, 75, selection.transform.position.z - 10);
+                                    }
                                     userActionsGUI.SetActive(true);
                                     BlackBoard.SetActive(true);
-                                    BlackBoard.GetComponent<BlackBoard>().SeletectedAgent = selectedPlayer[0];
+                                    BlackBoard.GetComponent<BlackBoard>().SeletectedAgent = selectedPlayer;
                                 }
                             }
                         }
@@ -377,13 +407,13 @@ public class CoachController : MonoBehaviour
                 {
                     var selection = hit.transform;
 
-                    if (selectedPlayer[0] == selection)
+                    if (selectedPlayer == selection)
                     {
                         var selectionRenderer = selection.GetComponent<Renderer>();
 
                         if (Input.GetButtonDown("Fire1"))
                         {
-                            Array.Clear(selectedPlayer, 0, 1);
+                            selectedPlayer = null;
                             userActionsGUI.SetActive(false);
                             BlackBoard.SetActive(false);
                             BlackBoard2.SetActive(false);
@@ -393,17 +423,17 @@ public class CoachController : MonoBehaviour
                     }
                 }
 
-                if (selectedPlayer[0] != null)
+                if (selectedPlayer != null)
                 {
                     switch (currentCommand)
                     {
                         case coachCommands.NONE:
                             break;
                         case coachCommands.MOVE:
-                            CoachMoveMode(ray, hit, selectedPlayer[0].GetComponent<AIComponent>());
+                            CoachMoveMode(ray, hit, selectedPlayer.GetComponent<AIComponent>());
                             break;
                         case coachCommands.KICK:
-                            CoachKickMode(ray, hit, selectedPlayer[0].GetComponent<AIComponent>());
+                            CoachKickMode(ray, hit, selectedPlayer.GetComponent<AIComponent>());
                             break;
                     }
                 }
