@@ -7745,7 +7745,7 @@ PrefabInstance:
     - target: {fileID: 7133652918564735153, guid: 43a1068495ff9f04e98e1e642b9a824d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ClearAllUSerActions
+      value: ClearAllUserActions
       objectReference: {fileID: 0}
     - target: {fileID: 7133652918570776933, guid: 43a1068495ff9f04e98e1e642b9a824d,
         type: 3}

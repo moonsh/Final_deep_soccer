@@ -57,7 +57,7 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.KICK;
     }
 
-    public void ClearAllUSerActions()
+    public void ClearAllUserActions()
     {
         foreach (var agent in agentsWithUserActions)
         {

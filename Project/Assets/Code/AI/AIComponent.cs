@@ -126,7 +126,9 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     public void RemoveAllActions()
     {
-        foreach ((string label, string action, GameObject marker) in userActions)
+        var count = userActions.Count;
+
+        for (var i = 0; i < count; i++)
         {
             RemoveAction();
         }
