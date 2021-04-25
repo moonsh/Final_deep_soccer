@@ -107,7 +107,10 @@ public class AIComponent : MonoBehaviour, IEventSource
         // Check to see if the marker action type creates a pending scenario, then remove it.
         if (userActions[0].Item2.Equals("Move") || userActions[0].Item2.Equals("GoToBall"))
         {
-            pendingScenarios.RemoveAt(0);
+            if (pendingScenarios.Count > 0)
+            {
+                pendingScenarios.RemoveAt(0);
+            }
         }
         // Check to see if the marker action type is of "GoToBall" to disable ballMarker.
         if (userActions[0].Item2.Equals("GoToBall"))
@@ -217,7 +220,7 @@ public class AIComponent : MonoBehaviour, IEventSource
             agentScenarioIndicator.transform.position = transform.position;
         }
 
-        if (userActions.Count > 0)
+        if (userActions.Count > 0 && userActions[0].Item3 != null)
         {
             int lengthOfLineRenderer = userActions.Count + 1;
             LineRenderer userActionPath = GetComponent<LineRenderer>();

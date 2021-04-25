@@ -59,9 +59,12 @@ public class CoachController : MonoBehaviour
 
     public void ClearAllUserActions()
     {
-        foreach (var agent in agentsWithUserActions)
+        AIComponent[] currentAgentsWithUserActions = new AIComponent[agentsWithUserActions.Count];
+        agentsWithUserActions.CopyTo(currentAgentsWithUserActions);
+
+        foreach (var agent in currentAgentsWithUserActions)
         {
-            agent.GetComponent<AIComponent>().RemoveAllActions();
+            agent.RemoveAllActions();
         }
 
         currentCommand = coachCommands.NONE;
@@ -77,14 +80,7 @@ public class CoachController : MonoBehaviour
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    var label = "Move"; // REMOVE, replace with user inputted label
-                    var labelSuffix = 2;
-
-                    while (CoachController.scenarios.ContainsKey(label))
-                    {
-                        label = label + labelSuffix.ToString();
-                        labelSuffix++;
-                    }
+                    var pendingLabel = "Move"; // REMOVE, replace with user inputted label
 
                     //Debug.Log("Attempting to assign a new destination for the chosen agent.");
 
@@ -92,22 +88,22 @@ public class CoachController : MonoBehaviour
                     {
                         var action = "GoToBall";
                         Vector3 actionParameter = hit.point; // destination in this scenario
-                        selectedAgent.AddAction(label, action, goToBallMarker, actionParameter);
+                        selectedAgent.AddAction(pendingLabel, action, goToBallMarker, actionParameter);
 
                         if (selectedAgent.pendingScenarios.Count == 0)
                         {
-                            CreatePendingScenario(selectedAgent, label, action, actionParameter);
+                            CreatePendingScenario(selectedAgent, pendingLabel, action, actionParameter);
                         }
                     }
                     else
                     {
                         var action = "Move"; // Movement scenario
                         Vector3 actionParameter = hit.point; // destination in this scenario
-                        selectedAgent.AddAction(label, action, moveWaypointMarker, actionParameter);
+                        selectedAgent.AddAction(pendingLabel, action, moveWaypointMarker, actionParameter);
 
                         if (selectedAgent.pendingScenarios.Count == 0)
                         {
-                            CreatePendingScenario(selectedAgent, label, action, actionParameter);
+                            CreatePendingScenario(selectedAgent, pendingLabel, action, actionParameter);
                         }
 
                         /*/ Testing code
@@ -199,12 +195,12 @@ public class CoachController : MonoBehaviour
 
         foreach (var teammate in teammates)
         {
-            teammatePositions.Add(teammate.GetComponent<Transform>().position);
+            teammatePositions.Add(teammate.transform.position);
         }
 
         foreach (var opponent in opponents)
         {
-            opponentPositions.Add(opponent.GetComponent<Transform>().position);
+            opponentPositions.Add(opponent.transform.position);
         }
 
         selectedAgent.pendingScenarios.Add((label, new Scenario(action, actionParameter, agentPosition,

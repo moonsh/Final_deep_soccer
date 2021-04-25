@@ -12,7 +12,7 @@ public class BTUserActionsAssert : BTNode
         }
         else
         {
-            context.pastScenario = null; // Override any pending Scenario.
+            context.pastScenario = null; // Override any past Scenario.
             return BTResult.SUCCESS;
         }
     }

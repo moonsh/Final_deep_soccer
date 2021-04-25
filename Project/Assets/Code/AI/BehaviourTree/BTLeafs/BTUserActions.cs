@@ -41,8 +41,17 @@ public class BTUserActions : BTNode
 
     private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)
     {
+        var newLabel = label;
+        var labelSuffix = 2;
+
+        while (CoachController.scenarios.ContainsKey(newLabel))
+        {
+            newLabel = label + labelSuffix.ToString();
+            labelSuffix++;
+        }
+
         Scenario scenario = CreateScenario(action, actionParameter, actionParameterSecondary);
-        CoachController.scenarios.Add(label, scenario);
+        CoachController.scenarios.Add(newLabel, scenario);
     }
 
     private void CreatePendingScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)
@@ -55,12 +64,13 @@ public class BTUserActions : BTNode
     {
         if (context.pendingScenarios.Count > 0)
         {
-            var label = context.pendingScenarios[0].Item1;
+            var pendingLabel = context.pendingScenarios[0].Item1;
             var labelSuffix = 2;
+            string label = pendingLabel;
 
             while (CoachController.scenarios.ContainsKey(label))
             {
-                label = label + labelSuffix.ToString();
+                label = pendingLabel + labelSuffix.ToString();
                 labelSuffix++;
             }
 
@@ -71,7 +81,7 @@ public class BTUserActions : BTNode
             Debug.Log("Warning: no pending scenarios. This is an ERROR.");
         }
 
-        context.navAgent.GetComponent<AIComponent>().RemoveAction();
+        context.contextOwner.RemoveAction();
     }
 
     public override BTResult Execute()
@@ -97,16 +107,16 @@ public class BTUserActions : BTNode
                     LogPendingScenario();
 
                     // Check to see if the subsequent action is another movement, and if so create a pending scenario.
-                    if (context.userActions.Count > 0)
+                    if (context.userActions.Count > 1)
                     {
-                        var pendingLabel = context.userActions[0].Item1;
-                        var pendingAction = context.userActions[0].Item2;
+                        var pendingLabel = context.userActions[1].Item1;
+                        var pendingAction = context.userActions[1].Item2;
 
                         if (pendingAction.Equals("Move") ||
                         pendingAction.Equals("GoToBall"))/* ||
                         pendingAction.Equals("PursuePlayer"))*/
                         {
-                            var pendingActionParameter = context.userActions[0].Item3.transform.position;
+                            var pendingActionParameter = context.userActions[1].Item3.transform.position;
                             CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
                         }
                     }
