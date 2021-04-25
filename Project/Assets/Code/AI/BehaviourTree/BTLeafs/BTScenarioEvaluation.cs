@@ -73,12 +73,12 @@ public class BTScenarioEvaluation : BTNode
 
                             if (allConditionFit)
                             {
-                                if (context.scenarioQueue[0] == null)
+                                if (context.pastScenario == null)
                                 {
                                     CoachController.agentsUsingPastScenario.Add(context.contextOwner);
                                 }
 
-                                context.scenarioQueue[0] = scenario;
+                                context.pastScenario = scenario;
                                 break;
                             }
                         }

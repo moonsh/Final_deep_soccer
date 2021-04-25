@@ -6,7 +6,7 @@ public class BTScenarioAssert : BTNode
 {
     public override BTResult Execute()
     {
-        if (context.scenarioQueue[0] != null)
+        if (context.pastScenario != null)
         {
             Debug.Log("BTScenarioAssert: existing scenario detected.");
             return BTResult.SUCCESS;

@@ -23,11 +23,14 @@ public class CoachController : MonoBehaviour
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
     [SerializeField] private string goalTag = "purpleGoal";
+    [SerializeField] private GameObject purpleTeam;
+    [SerializeField] private GameObject blueTeam;
     [SerializeField] private GameObject userActionsGUI;
     [SerializeField] private GameObject cancelUserActionsGUI;
     [SerializeField] private GameObject moveWaypointMarker;
     [SerializeField] private GameObject goToBallMarker;
     [SerializeField] private GameObject kickMarker;
+    [SerializeField] private GameObject agentScenarioIndicator;
     [SerializeField] private Material defaultPurpleMaterial;
     [SerializeField] private Material defaultBlueMaterial;
     [SerializeField] private Material selectedMaterial;
@@ -256,6 +259,16 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.NONE;
         defaultMaterial = defaultPurpleMaterial;
         BlackBoard.SetActive(false);
+
+        foreach (var agent in purpleTeam.GetComponentsInChildren<AIComponent>())
+        {
+            agent.CreateAgentScenarioIndicator(Instantiate(agentScenarioIndicator, agent.transform.position, Quaternion.identity, agent.transform));
+        }
+
+        foreach (var agent in blueTeam.GetComponentsInChildren<AIComponent>())
+        {
+            agent.CreateAgentScenarioIndicator(Instantiate(agentScenarioIndicator, agent.transform.position, Quaternion.identity, agent.transform));
+        }
     }
 
     // Update is called once per frame
@@ -299,6 +312,11 @@ public class CoachController : MonoBehaviour
                 count++;
             }
         }*/
+
+        foreach (var agent in agentsUsingPastScenario)
+        {
+            var indicator = Instantiate(agentScenarioIndicator, agent.transform.position, Quaternion.identity); // CONSIDER MOVING
+        }
 
         if (agentsWithUserActions.Count == 0)
         {

@@ -21,7 +21,7 @@ public class AIComponent : MonoBehaviour, IEventSource
     public GameObject[] teammates;
     public List<(string, string, GameObject)> userActions = new List<(string, string, GameObject)>();
     public List<(string, Scenario)> pendingScenarios = new List<(string, Scenario)>();
-    public Scenario[] scenarioQueue = new Scenario[1];
+    public Scenario pastScenario;
     //public List<Vector3> userActionMoves = new List<Vector3>();
     //public CoachController coachController;
     //public RefereeController refereeController;
@@ -34,6 +34,7 @@ public class AIComponent : MonoBehaviour, IEventSource
     BTContext aiContext;
     LineRenderer userActionPath;
     GameObject ballMarker;
+    GameObject agentScenarioIndicator;
     bool ballMarkerVisible;
     //BTContext aiCoachContext;
     //BTContext aiRefereeContext;
@@ -93,6 +94,11 @@ public class AIComponent : MonoBehaviour, IEventSource
         userActionMarkers.Add(newWaypoint);
     }*/
 
+    public void CreateAgentScenarioIndicator(GameObject _agentScenarioIndicator)
+    {
+        agentScenarioIndicator = _agentScenarioIndicator;
+    }
+
     public void RemoveAction()
     {
         Destroy(userActions[0].Item3);
@@ -132,7 +138,7 @@ public class AIComponent : MonoBehaviour, IEventSource
         animatorController = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         aiContext = new BTContext(this, goal, ball, animatorController, navAgent,
-            rb, opponents, teammates, userActions, pendingScenarios, scenarioQueue);
+            rb, opponents, teammates, userActions, pendingScenarios, pastScenario);
 
         /*navAgent = GetComponent<NavMeshAgent>();
         animatorController = GetComponent<Animator>();
@@ -189,10 +195,24 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     void Update()
     {
+        if (pastScenario == null)
+        {
+            Destroy(agentScenarioIndicator);
+        }
+        else
+        {
+            agentScenarioIndicator.transform.position = transform.position;
+        }
+
         if (ballMarkerVisible)
         {
             var markerOffset = new Vector3(ball.position.x, 1, ball.position.z);
             ballMarker.transform.position = markerOffset;
+        }
+
+        if (pastScenario != null)
+        {
+            agentScenarioIndicator.transform.position = transform.position;
         }
 
         if (userActions.Count > 0)
