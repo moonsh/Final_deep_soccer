@@ -6,7 +6,7 @@ public class BTScenarioEvaluation : BTNode
 {
     public override BTResult Execute()
     {
-        Debug.Log("Evaluating for existing scenario for agent " + context.rb.name + "...");
+        Debug.Log("BTScenarioEvaluation (" + context.rb.name + "): evaluating for existing scenario...");
 
         if (context.userActions.Count == 0)
         {
@@ -73,6 +73,8 @@ public class BTScenarioEvaluation : BTNode
 
                             if (allConditionFit)
                             {
+                                Debug.Log("BTScenarioEvaluation (" + context.rb.name + "): all conditions fit, SCENARIO DETECTED .");
+
                                 if (context.pastScenario == null)
                                 {
                                     CoachController.agentsUsingPastScenario.Add(context.contextOwner);
@@ -80,6 +82,10 @@ public class BTScenarioEvaluation : BTNode
 
                                 context.pastScenario = scenario;
                                 break;
+                            }
+                            else
+                            {
+                                Debug.Log("BTScenarioEvaluation (" + context.rb.name + "): scenario not detected.");
                             }
                         }
                     }

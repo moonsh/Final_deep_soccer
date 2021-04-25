@@ -12,7 +12,7 @@ public class BTScenarioAssert : BTNode
             return BTResult.SUCCESS;
         }
 
-        Debug.Log("BTScenarioAssert: game state not detected in scenarios.");
+        Debug.Log("BTScenarioAssert: game state was not detected in evaluation.");
         return BTResult.FAILURE;
     }
 }

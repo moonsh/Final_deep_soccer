@@ -200,13 +200,15 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     void Update()
     {
-        if (pastScenario == null)
+        if (pastScenario != null)
         {
             Destroy(agentScenarioIndicator);
         }
         else
         {
-            agentScenarioIndicator.transform.position = transform.position;
+            var location = transform.position;
+            var textOffset = new Vector3(location.x, 70, location.z);
+            agentScenarioIndicator.transform.position = textOffset;
         }
 
         if (ballMarkerVisible)
