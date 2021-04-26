@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,7 +22,7 @@ public class AIComponent : MonoBehaviour, IEventSource
     public GameObject[] teammates;
     public List<(string, string, GameObject)> userActions = new List<(string, string, GameObject)>();
     public List<(string, Scenario)> pendingScenarios = new List<(string, Scenario)>();
-    public Scenario pastScenario;
+    public Tuple<string, Scenario> pastScenario;
     //public List<Vector3> userActionMoves = new List<Vector3>();
     //public CoachController coachController;
     //public RefereeController refereeController;
@@ -35,7 +36,9 @@ public class AIComponent : MonoBehaviour, IEventSource
     LineRenderer userActionPath;
     GameObject ballMarker;
     GameObject agentScenarioIndicator;
+    GameObject agentScenarioIndicatorObject;
     bool ballMarkerVisible;
+    bool agentScenarioIndicatorVisible;
     //BTContext aiCoachContext;
     //BTContext aiRefereeContext;
 
@@ -86,6 +89,11 @@ public class AIComponent : MonoBehaviour, IEventSource
         }
     }
 
+    public void AttachAgentScenarioIndicatorObject(GameObject _agentScenarioindicatorObject)
+    {
+        agentScenarioIndicatorObject = _agentScenarioindicatorObject;
+    }
+
     /*public void AddActionMove(Vector3 destination, GameObject waypoint)
     {
         Vector3 markerOffset = new Vector3(destination.x, 1, destination.z);
@@ -94,9 +102,20 @@ public class AIComponent : MonoBehaviour, IEventSource
         userActionMarkers.Add(newWaypoint);
     }*/
 
-    public void CreateAgentScenarioIndicator(GameObject _agentScenarioIndicator)
+    public void CreateAgentScenarioIndicator(string label)
     {
-        agentScenarioIndicator = _agentScenarioIndicator;
+        var textRotation = Quaternion.identity;
+        textRotation.eulerAngles = new Vector3(90, 0, 90);
+        var location = transform.position;
+        var textOffset = new Vector3(location.x, 70, location.z);
+        agentScenarioIndicator = Instantiate(agentScenarioIndicatorObject, textOffset, textRotation);
+        agentScenarioIndicator.GetComponentInChildren<TextMeshProUGUI>().text = label;
+        agentScenarioIndicatorVisible = true;
+    }
+
+    public bool IsAgentScenarioIndicatorVisible()
+    {
+        return agentScenarioIndicatorVisible;
     }
 
     public void RemoveAction()
@@ -125,6 +144,12 @@ public class AIComponent : MonoBehaviour, IEventSource
             userActionPath.positionCount = 0;
             CoachController.agentsWithUserActions.Remove(this);
         }
+    }
+
+    public void RemoveAgentScenarioIndicator()
+    {
+        agentScenarioIndicatorVisible = false;
+        Destroy(agentScenarioIndicator);
     }
 
     public void RemoveAllActions()
@@ -177,6 +202,7 @@ public class AIComponent : MonoBehaviour, IEventSource
     private void Start()
     {
         ballMarkerVisible = false;
+        agentScenarioIndicatorVisible = false;
         sensorySystem.Initialize(this, navAgent);
         eventHandler.Initialize(this, animatorController, navAgent);
         BehaviourTreeRuntimeData.RegisterAgentContext(behaviourTreeType, aiContext);
@@ -200,11 +226,7 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     void Update()
     {
-        if (pastScenario != null)
-        {
-            Destroy(agentScenarioIndicator);
-        }
-        else
+        if (agentScenarioIndicatorVisible)
         {
             var location = transform.position;
             var textOffset = new Vector3(location.x, 70, location.z);
@@ -215,11 +237,6 @@ public class AIComponent : MonoBehaviour, IEventSource
         {
             var markerOffset = new Vector3(ball.position.x, 1, ball.position.z);
             ballMarker.transform.position = markerOffset;
-        }
-
-        if (pastScenario != null)
-        {
-            agentScenarioIndicator.transform.position = transform.position;
         }
 
         if (userActions.Count > 0 && userActions[0].Item3 != null)

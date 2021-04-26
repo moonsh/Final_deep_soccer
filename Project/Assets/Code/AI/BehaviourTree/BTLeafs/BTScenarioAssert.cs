@@ -8,8 +8,15 @@ public class BTScenarioAssert : BTNode
     {
         if (context.pastScenario != null)
         {
-            //Debug.Log("BTScenarioAssert: existing scenario detected for agent (" + context.contextOwner.name + ").");
-            return BTResult.SUCCESS;
+            if (context.pastScenario.Item2 != null)
+            {
+                //Debug.Log("BTScenarioAssert: existing scenario detected for agent (" + context.contextOwner.name + ").");
+                return BTResult.SUCCESS;
+            }
+        }
+        else
+        {
+            Debug.Log("BTScenarioAssert: context.pastScenario.Item2 is null.");
         }
 
         //Debug.Log("BTScenarioAssert: game state was not detected in evaluation.");

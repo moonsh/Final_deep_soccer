@@ -256,21 +256,14 @@ public class CoachController : MonoBehaviour
         defaultMaterial = defaultPurpleMaterial;
         BlackBoard.SetActive(false);
 
-        var textRotation = Quaternion.identity;
-        textRotation.eulerAngles = new Vector3(90, 0, 90);
-
         foreach (var agent in purpleTeam.GetComponentsInChildren<AIComponent>())
         {
-            var location = agent.transform.position;
-            var textOffset = new Vector3(location.x, 70, location.z);
-            agent.CreateAgentScenarioIndicator(Instantiate(agentScenarioIndicator, textOffset, textRotation));
+            agent.AttachAgentScenarioIndicatorObject(agentScenarioIndicator);
         }
 
         foreach (var agent in blueTeam.GetComponentsInChildren<AIComponent>())
         {
-            var location = agent.transform.position;
-            var textOffset = new Vector3(location.x, 70, location.z);
-            agent.CreateAgentScenarioIndicator(Instantiate(agentScenarioIndicator, textOffset, textRotation));
+            agent.AttachAgentScenarioIndicatorObject(agentScenarioIndicator);
         }
     }
 
@@ -459,8 +452,7 @@ public class CoachController : MonoBehaviour
         {
             CoachModeDisabledReset();
         }
+
         countTime += Time.deltaTime;
     }
-
-    
 }

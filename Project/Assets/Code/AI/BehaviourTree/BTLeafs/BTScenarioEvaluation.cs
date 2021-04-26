@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,14 +9,12 @@ public class BTScenarioEvaluation : BTNode
     {
         if (context.userActions.Count == 0)
         {
-            Dictionary<string, Scenario> scenarios = CoachController.scenarios;
-
-            foreach (var entry in scenarios)
+            foreach (var entry in CoachController.scenarios)
             {
                 string label = entry.Key;
                 Scenario scenario = entry.Value;
                 bool allConditionFit = true;
-                Debug.Log("BTScenarioEvaluation (" + label + "): checking to see if current game state matches...");
+                //Debug.Log("BTScenarioEvaluation (" + label + "): checking to see if current game state matches...");
 
                 //check if agent's position matches
                 if ((Mathf.Abs(context.navAgent.transform.position.x - scenario.agentPosition.x) < BlackBoard2.agentR && Mathf.Abs(context.navAgent.transform.position.z - scenario.agentPosition.z) < BlackBoard2.agentR) || !BlackBoard2.agentPosition)
@@ -75,15 +74,17 @@ public class BTScenarioEvaluation : BTNode
                         if (allConditionFit)
                         {
                             Debug.Log("BTScenarioEvaluation (" + label + "): all conditions fit.");
-                            if (context.pastScenario == null)
+                            if (context.pastScenario != null)
                             {
-                                CoachController.agentsUsingPastScenario.Add(context.contextOwner);
+                                if (context.pastScenario.Item2 == null)
+                                {
+                                    CoachController.agentsUsingPastScenario.Add(context.contextOwner);
+                                }
                             }
 
-                            context.pastScenario = scenario;
+                            context.pastScenario = new Tuple<string, Scenario>(label, scenario);
                             break;
                         }
-
                     }
                 }
             }
