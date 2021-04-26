@@ -107,7 +107,7 @@ public class BTUserActions : BTNode
                     LogPendingScenario();
 
                     // Check to see if the subsequent action is another movement, and if so create a pending scenario.
-                    if (context.userActions.Count > 1)
+                    if (context.userActions.Count > 0)
                     {
                         var pendingLabel = context.userActions[1].Item1;
                         var pendingAction = context.userActions[1].Item2;
