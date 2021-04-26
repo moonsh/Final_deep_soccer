@@ -80,13 +80,12 @@ public class CoachController : MonoBehaviour
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    var pendingLabel = "Move"; // REMOVE, replace with user inputted label
-
                     //Debug.Log("Attempting to assign a new destination for the chosen agent.");
 
                     if (selection.CompareTag(ballTag))
                     {
                         var action = "GoToBall";
+                        var pendingLabel = action; // Default label
                         Vector3 actionParameter = hit.point; // destination in this scenario
                         selectedAgent.AddAction(pendingLabel, action, goToBallMarker, actionParameter);
 
@@ -98,6 +97,7 @@ public class CoachController : MonoBehaviour
                     else
                     {
                         var action = "Move"; // Movement scenario
+                        var pendingLabel = action; // Default label
                         Vector3 actionParameter = hit.point; // destination in this scenario
                         selectedAgent.AddAction(pendingLabel, action, moveWaypointMarker, actionParameter);
 
@@ -145,7 +145,8 @@ public class CoachController : MonoBehaviour
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    var label = "Kick"; // REMOVE, replace with user inputted label
+                    string action = "Kick"; // Kick scenario
+                    var label = action; // Default label
                     var labelSuffix = 2;
 
                     while (CoachController.scenarios.ContainsKey(label))
@@ -154,7 +155,6 @@ public class CoachController : MonoBehaviour
                         labelSuffix++;
                     }
 
-                    string action = "Kick"; // Kick scenario
                     Vector3 actionParameter = hit.point; // Target direction in this scenario
                     selectedAgent.AddAction(label, action, kickMarker, actionParameter);
                     agentsWithUserActions.Add(selectedAgent);
