@@ -7,7 +7,7 @@ public class BTUserActions : BTNode
 {
     private Scenario CreateScenario(string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)
     {
-        Vector3 agentPosition = context.rb.position;
+        Vector3 agentPosition = context.navAgent.transform.position;
         Vector3 ballPosition = context.ball.position;
         GameObject[] teammates = context.teammates;
         GameObject[] opponents = context.opponents;
@@ -39,36 +39,56 @@ public class BTUserActions : BTNode
             teammatePositions, opponentPositions, ballPossessed, teamWithBall);
     }
 
-    private void CreateAndLogScenario(string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)
+    private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)
     {
+        var newLabel = label;
+        var labelSuffix = 2;
+
+        while (CoachController.scenarios.ContainsKey(newLabel))
+        {
+            newLabel = label + labelSuffix.ToString();
+            labelSuffix++;
+        }
+
         Scenario scenario = CreateScenario(action, actionParameter, actionParameterSecondary);
-        CoachController.scenarios.Add(scenario);
+        CoachController.scenarios.Add(newLabel, scenario);
     }
 
-    private void CreatePendingScenario(string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)
+    private void CreatePendingScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)
     {
         Scenario scenario = CreateScenario(action, actionParameter, actionParameterSecondary);
-        context.pendingScenarios.Add(scenario);
+        context.pendingScenarios.Add((label, scenario));
     }
 
     private void LogPendingScenario()
     {
         if (context.pendingScenarios.Count > 0)
         {
-            CoachController.scenarios.Add(context.pendingScenarios[0]);
+            var pendingLabel = context.pendingScenarios[0].Item1;
+            var labelSuffix = 2;
+            string label = pendingLabel;
+
+            while (CoachController.scenarios.ContainsKey(label))
+            {
+                label = pendingLabel + labelSuffix.ToString();
+                labelSuffix++;
+            }
+
+            CoachController.scenarios.Add(label, context.pendingScenarios[0].Item2);
         }
         else
         {
             Debug.Log("Warning: no pending scenarios. This is an ERROR.");
         }
 
-        context.navAgent.GetComponent<AIComponent>().DestroyMarker();
+        context.contextOwner.RemoveAction();
     }
 
     public override BTResult Execute()
     {
         //Debug.Log("context.userActions.Count: " + context.userActions.Count);
-        string action = context.userActions[0];
+        var label = context.userActions[0].Item1;
+        var action = context.userActions[0].Item2;
 
         switch (action)
         {
@@ -76,7 +96,7 @@ public class BTUserActions : BTNode
             // "Move", "GoToBall", and "PursuePlayer" (not implemented) are movement actions.
             // The pending scenario data is taken the initial moment the agent receives the movement action.
             case "Move":
-                var destination = context.userActionMarkers[0].transform.position;
+                var destination = context.userActions[0].Item3.transform.position;
                 //Debug.Log("Current destination: " + destination.ToString());
 
                 if ((context.navAgent.GetComponent<Transform>().position.x < destination.x + 2 && context.navAgent.GetComponent<Transform>().position.x > destination.x - 2) &&
@@ -87,16 +107,17 @@ public class BTUserActions : BTNode
                     LogPendingScenario();
 
                     // Check to see if the subsequent action is another movement, and if so create a pending scenario.
-                    if (context.userActions.Count > 0)
+                    if (context.userActions.Count > 1)
                     {
-                        var pendingAction = context.userActions[0];
+                        var pendingLabel = context.userActions[1].Item1;
+                        var pendingAction = context.userActions[1].Item2;
 
                         if (pendingAction.Equals("Move") ||
                         pendingAction.Equals("GoToBall"))/* ||
                         pendingAction.Equals("PursuePlayer"))*/
                         {
-                            var pendingActionParameter = context.userActionMarkers[0].transform.position;
-                            CreatePendingScenario(pendingAction, pendingActionParameter);
+                            var pendingActionParameter = context.userActions[1].Item3.transform.position;
+                            CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
                         }
                     }
 
@@ -122,14 +143,15 @@ public class BTUserActions : BTNode
                         // Check to see if the subsequent action is another movement, and if so create a pending scenario.
                         if (context.userActions.Count > 0)
                         {
-                            var pendingAction = context.userActions[0];
+                            var pendingLabel = context.userActions[0].Item1;
+                            var pendingAction = context.userActions[0].Item2;
 
                             if (pendingAction.Equals("Move") ||
                             pendingAction.Equals("GoToBall"))/* ||
                         pendingAction.Equals("PursuePlayer"))*/
                             {
-                                var pendingActionParameter = context.userActionMarkers[0].transform.position;
-                                CreatePendingScenario(pendingAction, pendingActionParameter);
+                                var pendingActionParameter = context.userActions[0].Item3.transform.position;
+                                CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
                             }
                         }
 
@@ -138,19 +160,20 @@ public class BTUserActions : BTNode
                     else if (context.ball.GetComponent<SoccerBallController>().owner.tag.Equals(context.rb.tag))
                     {
                         // Teammate has ball.  Action incomplete, remove marker and pending scenario.
-                        context.navAgent.GetComponent<AIComponent>().DestroyMarker();
+                        context.navAgent.GetComponent<AIComponent>().RemoveAction();
 
                         // Check to see if the subsequent action is another movement, and if so create a pending scenario.
                         if (context.userActions.Count > 0)
                         {
-                            var pendingAction = context.userActions[0];
+                            var pendingLabel = context.userActions[0].Item1;
+                            var pendingAction = context.userActions[0].Item2;
 
                             if (pendingAction.Equals("Move") ||
                             pendingAction.Equals("GoToBall"))/* ||
                         pendingAction.Equals("PursuePlayer"))*/
                             {
-                                var pendingActionParameter = context.userActionMarkers[0].transform.position;
-                                CreatePendingScenario(pendingAction, pendingActionParameter);
+                                var pendingActionParameter = context.userActions[0].Item3.transform.position;
+                                CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
                             }
                         }
 
@@ -174,7 +197,7 @@ public class BTUserActions : BTNode
             /*case "PursuePlayer": // Follow an opposing agent.
                 break;*/
             case "Kick":
-                var target = context.userActionMarkers[0].transform.position;
+                var target = context.userActions[0].Item3.transform.position;
                 var agentPosition = context.rb.transform.position;
                 var direction = (target - agentPosition) / Vector3.Distance(agentPosition, target);
                 bool possession;
@@ -193,22 +216,23 @@ public class BTUserActions : BTNode
                     float distance = Mathf.Sqrt(((target.z - agentPosition.z) * (target.z - agentPosition.z))
                         + ((target.x - agentPosition.x) * (target.x - agentPosition.x)));
                     context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 200f * distance);
-                    CreateAndLogScenario(action, target);
+                    CreateAndLogScenario(label, action, target);
                 }
 
-                context.navAgent.GetComponent<AIComponent>().DestroyMarker();
+                context.navAgent.GetComponent<AIComponent>().RemoveAction();
 
                 // Check to see if the subsequent action is another movement, and if so create a pending scenario.
                 if (context.userActions.Count > 0)
                 {
-                    var pendingAction = context.userActions[0];
+                    var pendingLabel = context.userActions[0].Item1;
+                    var pendingAction = context.userActions[0].Item2;
 
                     if (pendingAction.Equals("Move") ||
                     pendingAction.Equals("GoToBall"))/* ||
                         pendingAction.Equals("PursuePlayer"))*/
                     {
-                        var pendingActionParameter = context.userActionMarkers[0].transform.position;
-                        CreatePendingScenario(pendingAction, pendingActionParameter);
+                        var pendingActionParameter = context.userActions[0].Item3.transform.position;
+                        CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
                     }
                 }
 

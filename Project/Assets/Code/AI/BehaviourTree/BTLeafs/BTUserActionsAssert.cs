@@ -1,5 +1,7 @@
 // Anthony Tiongson (ast119)
 
+using System;
+
 public class BTUserActionsAssert : BTNode
 {
     public override BTResult Execute()
@@ -10,6 +12,7 @@ public class BTUserActionsAssert : BTNode
         }
         else
         {
+            context.pastScenario = null; // Override any past Scenario.
             return BTResult.SUCCESS;
         }
     }

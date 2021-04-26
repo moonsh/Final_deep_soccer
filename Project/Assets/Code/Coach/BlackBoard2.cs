@@ -29,10 +29,14 @@ public class BlackBoard2 : MonoBehaviour
         soccerPosition = true;
         teamPosition = true;
         oppoPosition = true;
-        agentRange.text = "3";
+        agentRange.text = "5";
         soccerRange.text = "5";
         teamRange.text = "5";
         oppoRange.text = "5";
+        agentR = 5;
+        soccerR = 5;
+        teamR = 5;
+        oppoR = 5;
     }
 
     void Update()

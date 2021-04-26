@@ -19,10 +19,9 @@ public class AIComponent : MonoBehaviour, IEventSource
     public Transform ball;
     public GameObject[] opponents; //forward opponents //??
     public GameObject[] teammates;
-    public List<string> userActions = new List<string>();
-    public List<GameObject> userActionMarkers = new List<GameObject>();
-    public List<Scenario> pendingScenarios = new List<Scenario>();
-    public List<Scenario> pastScenarios = new List<Scenario>();
+    public List<(string, string, GameObject)> userActions = new List<(string, string, GameObject)>();
+    public List<(string, Scenario)> pendingScenarios = new List<(string, Scenario)>();
+    public Scenario pastScenario;
     //public List<Vector3> userActionMoves = new List<Vector3>();
     //public CoachController coachController;
     //public RefereeController refereeController;
@@ -35,15 +34,16 @@ public class AIComponent : MonoBehaviour, IEventSource
     BTContext aiContext;
     LineRenderer userActionPath;
     GameObject ballMarker;
+    GameObject agentScenarioIndicator;
     bool ballMarkerVisible;
     //BTContext aiCoachContext;
     //BTContext aiRefereeContext;
 
-    public void AddAction(string userAction, GameObject marker,
+    public void AddAction(string label, string userAction, GameObject marker,
         Vector3? actionParameter = null)
     {
-        userActions.Add(userAction);
- 
+        GameObject newMarker;
+
         switch (userAction)
         {
             case "Move":
@@ -51,7 +51,7 @@ public class AIComponent : MonoBehaviour, IEventSource
                 var markerOffset = new Vector3(destination.x, 1, destination.z);
                 var newWaypoint = Instantiate(marker, markerOffset, Quaternion.identity);
                 newWaypoint.layer = LayerMask.NameToLayer("Ignore Raycast");
-                userActionMarkers.Add(newWaypoint);
+                newMarker = newWaypoint;
                 break;
             case "GoToBall":
                 ballMarkerVisible = true;
@@ -60,7 +60,7 @@ public class AIComponent : MonoBehaviour, IEventSource
                 markerRotation.eulerAngles = new Vector3(90, 45, 0);
                 ballMarker = Instantiate(marker, markerOffset, markerRotation);
                 ballMarker.layer = LayerMask.NameToLayer("Ignore Raycast");
-                userActionMarkers.Add(ballMarker);
+                newMarker = ballMarker;
                 break;
             case "Kick":
                 var point = (Vector3)actionParameter;
@@ -69,8 +69,20 @@ public class AIComponent : MonoBehaviour, IEventSource
                 markerRotation.eulerAngles = new Vector3(90, 0, 0);
                 var kickDirection = Instantiate(marker, markerOffset, markerRotation);
                 kickDirection.layer = LayerMask.NameToLayer("Ignore Raycast"); ;
-                userActionMarkers.Add(kickDirection);
+                newMarker = kickDirection;
                 break;
+            default:
+                newMarker = null;
+                break;
+        }
+
+        if (newMarker != null)
+        {
+            userActions.Add((label, userAction, newMarker));
+        }
+        else
+        {
+            Debug.Log("AIComponent error with AddAction: null newMarker.");
         }
     }
 
@@ -82,45 +94,47 @@ public class AIComponent : MonoBehaviour, IEventSource
         userActionMarkers.Add(newWaypoint);
     }*/
 
-    public void DestroyMarker()
+    public void CreateAgentScenarioIndicator(GameObject _agentScenarioIndicator)
     {
-        Destroy(userActionMarkers[0]);
-        userActionMarkers.RemoveAt(0);
+        agentScenarioIndicator = _agentScenarioIndicator;
+    }
 
-        if (userActionMarkers.Count == 0)
-        {
-            userActionPath.positionCount = 0;
-            CoachController.agentsWithUserActions.Remove(this);
-        }
+    public void RemoveAction()
+    {
+        Destroy(userActions[0].Item3);
 
         // Special case checks.
         // Check to see if the marker action type creates a pending scenario, then remove it.
-        if (userActions[0].Equals("Move") || userActions[0].Equals("GoToBall"))
+        if (userActions[0].Item2.Equals("Move") || userActions[0].Item2.Equals("GoToBall"))
         {
-            pendingScenarios.RemoveAt(0);
+            if (pendingScenarios.Count > 0)
+            {
+                pendingScenarios.RemoveAt(0);
+            }
         }
         // Check to see if the marker action type is of "GoToBall" to disable ballMarker.
-        if (userActions[0].Equals("GoToBall"))
+        if (userActions[0].Item2.Equals("GoToBall"))
         {
             ballMarkerVisible = false;
         }
 
         userActions.RemoveAt(0);
+
+        if (userActions.Count == 0)
+        {
+            userActionPath.positionCount = 0;
+            CoachController.agentsWithUserActions.Remove(this);
+        }
     }
 
-    public void ClearAllActions()
+    public void RemoveAllActions()
     {
-        ballMarkerVisible = false;
-        userActions.Clear();
-        pendingScenarios.Clear();
+        var count = userActions.Count;
 
-        foreach (GameObject marker in userActionMarkers)
+        for (var i = 0; i < count; i++)
         {
-            Destroy(marker);
+            RemoveAction();
         }
-
-        userActionMarkers.Clear();
-        userActionPath.positionCount = 0;
     }
 
     private void Awake()
@@ -129,7 +143,7 @@ public class AIComponent : MonoBehaviour, IEventSource
         animatorController = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         aiContext = new BTContext(this, goal, ball, animatorController, navAgent,
-            rb, opponents, teammates, userActions, userActionMarkers, pendingScenarios, pastScenarios);
+            rb, opponents, teammates, userActions, pendingScenarios, pastScenario);
 
         /*navAgent = GetComponent<NavMeshAgent>();
         animatorController = GetComponent<Animator>();
@@ -186,15 +200,31 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     void Update()
     {
+        if (pastScenario != null)
+        {
+            Destroy(agentScenarioIndicator);
+        }
+        else
+        {
+            var location = transform.position;
+            var textOffset = new Vector3(location.x, 70, location.z);
+            agentScenarioIndicator.transform.position = textOffset;
+        }
+
         if (ballMarkerVisible)
         {
             var markerOffset = new Vector3(ball.position.x, 1, ball.position.z);
             ballMarker.transform.position = markerOffset;
         }
 
-        if (userActionMarkers.Count > 0)
+        if (pastScenario != null)
         {
-            int lengthOfLineRenderer = userActionMarkers.Count + 1;
+            agentScenarioIndicator.transform.position = transform.position;
+        }
+
+        if (userActions.Count > 0 && userActions[0].Item3 != null)
+        {
+            int lengthOfLineRenderer = userActions.Count + 1;
             LineRenderer userActionPath = GetComponent<LineRenderer>();
             userActionPath.startWidth = 0.1f;
             userActionPath.endWidth = 0.1f;
@@ -205,12 +235,12 @@ public class AIComponent : MonoBehaviour, IEventSource
 
             for (int i = 0; i < lengthOfLineRenderer - 1; i++)
             {
-                string action = userActions[i];
+                string action = userActions[i].Item2;
 
                 switch (action)
                 {
                     case "Move":
-                        var destination = userActionMarkers[i].gameObject.transform.position;
+                        var destination = userActions[i].Item3.transform.position;
                         points[i + 1] = new Vector3(destination.x, 1, destination.z);
                         break;
                     case "GoToBall":
@@ -218,7 +248,7 @@ public class AIComponent : MonoBehaviour, IEventSource
                         points[i + 1] = new Vector3(destination.x, 1, destination.z);
                         break;
                     case "Kick":
-                        var target = userActionMarkers[i].gameObject.transform.position;
+                        var target = userActions[i].Item3.transform.position;
                         points[i + 1] = new Vector3(target.x, 1, target.z);
                         break;
                 }
