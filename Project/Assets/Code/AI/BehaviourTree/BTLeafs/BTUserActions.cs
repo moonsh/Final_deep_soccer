@@ -141,14 +141,14 @@ public class BTUserActions : BTNode
                         LogPendingScenario();
 
                         // Check to see if the subsequent action is another movement, and if so create a pending scenario.
-                        if (context.userActions.Count > 0)
+                        if (context.userActions.Count > 1)
                         {
                             var pendingLabel = context.userActions[0].Item1;
                             var pendingAction = context.userActions[0].Item2;
 
                             if (pendingAction.Equals("Move") ||
-                            pendingAction.Equals("GoToBall"))/* ||
-                        pendingAction.Equals("PursuePlayer"))*/
+                                pendingAction.Equals("GoToBall"))/* ||
+                                pendingAction.Equals("PursuePlayer"))*/
                             {
                                 var pendingActionParameter = context.userActions[0].Item3.transform.position;
                                 CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
@@ -163,7 +163,7 @@ public class BTUserActions : BTNode
                         context.navAgent.GetComponent<AIComponent>().RemoveAction();
 
                         // Check to see if the subsequent action is another movement, and if so create a pending scenario.
-                        if (context.userActions.Count > 0)
+                        if (context.userActions.Count > 1)
                         {
                             var pendingLabel = context.userActions[0].Item1;
                             var pendingAction = context.userActions[0].Item2;
@@ -222,7 +222,7 @@ public class BTUserActions : BTNode
                 context.navAgent.GetComponent<AIComponent>().RemoveAction();
 
                 // Check to see if the subsequent action is another movement, and if so create a pending scenario.
-                if (context.userActions.Count > 0)
+                if (context.userActions.Count > 1)
                 {
                     var pendingLabel = context.userActions[0].Item1;
                     var pendingAction = context.userActions[0].Item2;

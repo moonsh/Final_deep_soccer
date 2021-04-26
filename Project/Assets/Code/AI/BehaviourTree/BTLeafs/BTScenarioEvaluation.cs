@@ -14,7 +14,7 @@ public class BTScenarioEvaluation : BTNode
             {
                 Scenario scenario = entry.Value;
 
-                Debug.Log("BTScenarioEvaluation: scenarios detected");
+                Debug.Log("BTScenarioEvaluation (" + scenario.ToString() + "): checking to see if current game state matches...");
 
                 if (scenario.teamWithBall == context.rb.tag || scenario.teamWithBall == "None")
                 {
@@ -77,7 +77,7 @@ public class BTScenarioEvaluation : BTNode
 
                             if (allConditionFit)
                             {
-                                Debug.Log("BTScenarioEvaluation: all condition fit");
+                                Debug.Log("BTScenarioEvaluation (" + scenario.ToString() + "): all condition fit");
                                 if (context.pastScenario == null)
                                 {
                                     CoachController.agentsUsingPastScenario.Add(context.contextOwner);
