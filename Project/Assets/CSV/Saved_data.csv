@@ -1,0 +1,3 @@
+Label,Action,Action Paramater,Agent Position,Ball Position,Teammate Position,Teammate Position,Opponent Position,Opponent Position,Opponent Position,Ball Possessed,Team With Ball,Reward
+GoToBall,GoToBall,"(-0.3, 1.4, -0.1)","(3.8, 0.2, -10.8)","(0.0, 0.7, 0.0)","(14.4, 0.2, -10.8)","(-4.4, 0.2, -10.8)","(-5.7, 0.2, 23.3)","(17.3, 0.2, 20.8)","(11.1, 0.2, 8.4)",False,None,0
+

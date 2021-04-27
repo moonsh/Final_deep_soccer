@@ -28,6 +28,7 @@ public class CoachController : MonoBehaviour
     [SerializeField] private string goalTag = "purpleGoal";
     [SerializeField] private GameObject purpleTeam;
     [SerializeField] private GameObject blueTeam;
+    [SerializeField] private GameObject scenariosGUI;
     [SerializeField] private GameObject saveScenariosButton;
     [SerializeField] private GameObject clearScenariosButton;
     [SerializeField] private GameObject userActionsGUI;
@@ -75,7 +76,7 @@ public class CoachController : MonoBehaviour
     public void SaveScenarios()
     {
         List<string[]> rowData = new List<string[]>();
-        string filePath = @"/SavedScenarios.csv";
+        string filePath = GetPath();
         string[] rowDataTemp = new string[13];
         rowDataTemp[0] = "Label";
         rowDataTemp[1] = "Action";
@@ -94,20 +95,21 @@ public class CoachController : MonoBehaviour
 
         foreach (var entry in scenarios)
         {
+            rowDataTemp = new string[13];
             var label = entry.Key;
             var scenario = entry.Value;
             List<Vector3> teammatePositions = scenario.teammatePositions.ToList();
             List<Vector3> opponentPositions = scenario.opponentPositions.ToList();
             rowDataTemp[0] = label;
             rowDataTemp[1] = scenario.action;
-            rowDataTemp[2] = scenario.actionParameter.ToString();
-            rowDataTemp[3] = scenario.agentPosition.ToString();
-            rowDataTemp[4] = scenario.ballPosition.ToString();
-            rowDataTemp[5] = teammatePositions[0].ToString();
-            rowDataTemp[6] = teammatePositions[1].ToString();
-            rowDataTemp[7] = opponentPositions[0].ToString();
-            rowDataTemp[8] = opponentPositions[1].ToString();
-            rowDataTemp[9] = opponentPositions[2].ToString();
+            rowDataTemp[2] = "\"" + scenario.actionParameter.ToString() + "\"";
+            rowDataTemp[3] = "\"" + scenario.agentPosition.ToString() + "\"";
+            rowDataTemp[4] = "\"" + scenario.ballPosition.ToString() + "\"";
+            rowDataTemp[5] = "\"" + teammatePositions[0].ToString() + "\"";
+            rowDataTemp[6] = "\"" + teammatePositions[1].ToString() + "\"";
+            rowDataTemp[7] = "\"" + opponentPositions[0].ToString() + "\"";
+            rowDataTemp[8] = "\"" + opponentPositions[1].ToString() + "\"";
+            rowDataTemp[9] = "\"" + opponentPositions[2].ToString() + "\"";
             rowDataTemp[10] = scenario.ballPossessed.ToString();
             rowDataTemp[11] = scenario.teamWithBall;
             rowDataTemp[12] = scenario.reward.ToString();
@@ -134,6 +136,7 @@ public class CoachController : MonoBehaviour
         StreamWriter outStream = File.CreateText(filePath);
         outStream.WriteLine(sb);
         outStream.Close();
+        rowData.Clear();
     }
 
     public void SetCommandModeKick()
@@ -244,6 +247,7 @@ public class CoachController : MonoBehaviour
 
     private void CoachModeDisabledReset()
     {
+        scenariosGUI.SetActive(false);
         ResetMaterials();
         currentCommand = coachCommands.NONE;
     }
@@ -282,7 +286,21 @@ public class CoachController : MonoBehaviour
         ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d)));
     }
 
-    private void ResetMaterials()
+    // Following method is used to retrive the relative path as device platform
+    private string GetPath()
+    {
+#if UNITY_EDITOR
+        return Application.dataPath + "/CSV/" + "Saved_data.csv";
+#elif UNITY_ANDROID
+        return Application.persistentDataPath+"Saved_data.csv";
+#elif UNITY_IPHONE
+        return Application.persistentDataPath+"/"+"Saved_data.csv";
+#else
+        return Application.dataPath +"/"+"Saved_data.csv";
+#endif
+    }
+
+private void ResetMaterials()
     {
         if (_selection != null)
         {
@@ -306,6 +324,22 @@ public class CoachController : MonoBehaviour
     private void ToggleCoachMode()
     {
         coachMode = !coachMode;
+
+        if (coachMode)
+        {
+            scenariosGUI.SetActive(true);
+
+            if (scenarios.Count > 0)
+            {
+                saveScenariosButton.SetActive(true);
+                clearScenariosButton.SetActive(true);
+            }
+            else
+            {
+                saveScenariosButton.SetActive(false);
+                clearScenariosButton.SetActive(false);
+            }
+        }
     }
 
     private void ToggleTeamSelection()
@@ -329,6 +363,7 @@ public class CoachController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        scenariosGUI.SetActive(false);
         userActionsGUI.SetActive(false);
         cancelAllUsersActionsButton.SetActive(false);
         coachMode = false;

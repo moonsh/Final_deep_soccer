@@ -452,6 +452,7 @@ MonoBehaviour:
   goalTag: purpleGoal
   purpleTeam: {fileID: 647999690}
   blueTeam: {fileID: 707268776}
+  scenariosGUI: {fileID: 1470404842}
   saveScenariosButton: {fileID: 266400415}
   clearScenariosButton: {fileID: 660365931}
   userActionsGUI: {fileID: 1812004443}
@@ -5246,6 +5247,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 39260104}
     m_Modifications:
+    - target: {fileID: 7133652918564735153, guid: 43a1068495ff9f04e98e1e642b9a824d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 39260105}
+    - target: {fileID: 7133652918564735153, guid: 43a1068495ff9f04e98e1e642b9a824d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CancelAllUsersActions
+      objectReference: {fileID: 0}
     - target: {fileID: 7133652918570776933, guid: 43a1068495ff9f04e98e1e642b9a824d,
         type: 3}
       propertyPath: m_LocalPosition.x
