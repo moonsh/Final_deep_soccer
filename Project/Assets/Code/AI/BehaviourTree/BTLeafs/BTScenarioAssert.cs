@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+// Anthony Tiongson (ast119)
+
 using UnityEngine;
 
 public class BTScenarioAssert : BTNode

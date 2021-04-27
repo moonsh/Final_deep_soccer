@@ -1,6 +1,6 @@
+// Anthony Tiongson (ast119)
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BTScenarioEvaluation : BTNode
