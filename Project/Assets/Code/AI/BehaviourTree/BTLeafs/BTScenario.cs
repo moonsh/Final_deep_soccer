@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BTScenario : BTNode
@@ -10,6 +7,14 @@ public class BTScenario : BTNode
         if (!context.contextOwner.IsAgentScenarioIndicatorVisible())
         {
             context.contextOwner.CreateAgentScenarioIndicator(context.pastScenario.Item1);
+        }
+        else
+        {
+            if (context.contextOwner.GetAgentScenarioIndicatorValue() != context.pastScenario.Item1)
+            {
+                context.contextOwner.RemoveAgentScenarioIndicator();
+                context.contextOwner.CreateAgentScenarioIndicator(context.pastScenario.Item1);
+            }
         }
 
         if (context.pastScenario.Item2.action == "Move")
@@ -23,10 +28,9 @@ public class BTScenario : BTNode
                 (context.navAgent.GetComponent<Transform>().position.z < destination.z + 2 && context.navAgent.GetComponent<Transform>().position.z > destination.z - 2))
             {
                 // Action completed
-                //Debug.Log("Test: agent has reached destination."); //
-                context.pastScenario = null;
+                //Debug.Log("Test: agent has reached destination.");
                 context.contextOwner.RemoveAgentScenarioIndicator();
-                CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                context.pastScenario = null;
             }
         }
         else if (context.pastScenario.Item2.action == "GoToBall")
@@ -35,15 +39,13 @@ public class BTScenario : BTNode
             {
                 if (context.ball.GetComponent<SoccerBallController>().owner.name.Equals(context.rb.name))
                 {
-                    context.pastScenario = null;
                     context.contextOwner.RemoveAgentScenarioIndicator();
-                    CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                    context.pastScenario = null;
                 }
                 else if (context.ball.GetComponent<SoccerBallController>().owner.tag.Equals(context.rb.tag))
                 {
-                    context.pastScenario = null;
                     context.contextOwner.RemoveAgentScenarioIndicator();
-                    CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+                    context.pastScenario = null;
                 }
                 else // Opponent has ball.  Action executing.
                 {
@@ -80,9 +82,8 @@ public class BTScenario : BTNode
                 context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 200f * distance);
             }
 
-            context.pastScenario = null;
             context.contextOwner.RemoveAgentScenarioIndicator();
-            CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
+            context.pastScenario = null;
         }
         else
         {
