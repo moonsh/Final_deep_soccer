@@ -28,6 +28,8 @@ public class CoachController : MonoBehaviour
     [SerializeField] private string goalTag = "purpleGoal";
     [SerializeField] private GameObject purpleTeam;
     [SerializeField] private GameObject blueTeam;
+    [SerializeField] private GameObject saveScenariosButton;
+    [SerializeField] private GameObject clearScenariosButton;
     [SerializeField] private GameObject userActionsGUI;
     [SerializeField] private GameObject cancelUserActionsButton;
     [SerializeField] private GameObject cancelAllUsersActionsButton;
@@ -46,21 +48,6 @@ public class CoachController : MonoBehaviour
     private Material defaultMaterial;
     private int count;
 
-    public void SetCommandModeKick()
-    {
-        currentCommand = coachCommands.KICK;
-    }
-
-    public void SetCommandModeMove()
-    {
-        currentCommand = coachCommands.MOVE;
-    }
-
-    public void ToggleCoachMode()
-    {
-        coachMode = !coachMode;
-    }
-
     public void CancelAllUsersActions()
     {
         AIComponent[] currentAgentsWithUserActions = new AIComponent[agentsWithUserActions.Count];
@@ -78,6 +65,85 @@ public class CoachController : MonoBehaviour
     {
         selectedPlayer.GetComponent<AIComponent>().RemoveAllActions();
         currentCommand = coachCommands.NONE;
+    }
+
+    public void ClearScenarios()
+    {
+        scenarios.Clear();
+    }
+
+    public void SaveScenarios()
+    {
+        List<string[]> rowData = new List<string[]>();
+        string filePath = @"/SavedScenarios.csv";
+        string[] rowDataTemp = new string[13];
+        rowDataTemp[0] = "Label";
+        rowDataTemp[1] = "Action";
+        rowDataTemp[2] = "Action Paramater";
+        rowDataTemp[3] = "Agent Position";
+        rowDataTemp[4] = "Ball Position";
+        rowDataTemp[5] = "Teammate Position";
+        rowDataTemp[6] = "Teammate Position";
+        rowDataTemp[7] = "Opponent Position";
+        rowDataTemp[8] = "Opponent Position";
+        rowDataTemp[9] = "Opponent Position";
+        rowDataTemp[10] = "Ball Possessed";
+        rowDataTemp[11] = "Team With Ball";
+        rowDataTemp[12] = "Reward";
+        rowData.Add(rowDataTemp);
+
+        foreach (var entry in scenarios)
+        {
+            var label = entry.Key;
+            var scenario = entry.Value;
+            List<Vector3> teammatePositions = scenario.teammatePositions.ToList();
+            List<Vector3> opponentPositions = scenario.opponentPositions.ToList();
+            rowDataTemp[0] = label;
+            rowDataTemp[1] = scenario.action;
+            rowDataTemp[2] = scenario.actionParameter.ToString();
+            rowDataTemp[3] = scenario.agentPosition.ToString();
+            rowDataTemp[4] = scenario.ballPosition.ToString();
+            rowDataTemp[5] = teammatePositions[0].ToString();
+            rowDataTemp[6] = teammatePositions[1].ToString();
+            rowDataTemp[7] = opponentPositions[0].ToString();
+            rowDataTemp[8] = opponentPositions[1].ToString();
+            rowDataTemp[9] = opponentPositions[2].ToString();
+            rowDataTemp[10] = scenario.ballPossessed.ToString();
+            rowDataTemp[11] = scenario.teamWithBall;
+            rowDataTemp[12] = scenario.reward.ToString();
+            rowData.Add(rowDataTemp);
+        }
+
+        string[][] output = new string[rowData.Count][];
+
+        for (int i = 0; i < output.Length; i++)
+        {
+            output[i] = rowData[i];
+        }
+
+        int length = output.GetLength(0);
+        string delimiter = ",";
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < length; i++)
+        {
+            sb.AppendLine(string.Join(delimiter, output[i]));
+        }
+
+        StreamWriter outStream = File.CreateText(filePath);
+        outStream.WriteLine(sb);
+        outStream.Close();
+    }
+
+    public void SetCommandModeKick()
+    {
+        currentCommand = coachCommands.KICK;
+    }
+
+    public void SetCommandModeMove()
+    {
+        currentCommand = coachCommands.MOVE;
     }
 
     private void CoachKickMode(Ray ray, RaycastHit hit, AIComponent selectedAgent)
@@ -216,89 +282,7 @@ public class CoachController : MonoBehaviour
         ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d)));
     }
 
-    public void SaveScenarios(Dictionary<string, Scenario> scenarios)
-    {
-        List<string[]> rowData = new List<string[]>();
-        string filePath = @"/SavedScenarios.csv";
-        string[] rowDataTemp = new string[13];
-        rowDataTemp[0] = "Label";
-        rowDataTemp[1] = "Action";
-        rowDataTemp[2] = "Action Paramater";
-        rowDataTemp[3] = "Agent Position";
-        rowDataTemp[4] = "Ball Position";
-        rowDataTemp[5] = "Teammate Position";
-        rowDataTemp[6] = "Teammate Position";
-        rowDataTemp[7] = "Opponent Position";
-        rowDataTemp[8] = "Opponent Position";
-        rowDataTemp[9] = "Opponent Position";
-        rowDataTemp[10] = "Ball Possessed";
-        rowDataTemp[11] = "Team With Ball";
-        rowDataTemp[12] = "Reward";
-        rowData.Add(rowDataTemp);
-
-        foreach (var entry in scenarios)
-        {
-            var label = entry.Key;
-            var scenario = entry.Value;
-            List<Vector3> teammatePositions = scenario.teammatePositions.ToList();
-            List<Vector3> opponentPositions = scenario.opponentPositions.ToList();
-            rowDataTemp[0] = label;
-            rowDataTemp[1] = scenario.action;
-            rowDataTemp[2] = scenario.actionParameter.ToString();
-            rowDataTemp[3] = scenario.agentPosition.ToString();
-            rowDataTemp[4] = scenario.ballPosition.ToString();
-            rowDataTemp[5] = teammatePositions[0].ToString();
-            rowDataTemp[6] = teammatePositions[1].ToString();
-            rowDataTemp[7] = opponentPositions[0].ToString();
-            rowDataTemp[8] = opponentPositions[1].ToString();
-            rowDataTemp[9] = opponentPositions[2].ToString();
-            rowDataTemp[10] = scenario.ballPossessed.ToString();
-            rowDataTemp[11] = scenario.teamWithBall;
-            rowDataTemp[12] = scenario.reward.ToString();
-            rowData.Add(rowDataTemp);
-        }
-
-        string[][] output = new string[rowData.Count][];
-
-        for (int i = 0; i < output.Length; i++)
-        {
-            output[i] = rowData[i];
-        }
-
-        int length = output.GetLength(0);
-        string delimiter = ",";
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < length; i++)
-        {
-            sb.AppendLine(string.Join(delimiter, output[i]));
-        }
-
-        StreamWriter outStream = File.CreateText(filePath);
-        outStream.WriteLine(sb);
-        outStream.Close();
-    }
-
-    public void ToggleTeamSelection()
-    {
-        ResetMaterials();
-
-        if (agentTag.Equals("purpleAgent"))
-        {
-            agentTag = "blueAgent";
-            goalTag = "blueGoal";
-            defaultMaterial = defaultBlueMaterial;
-        }
-        else
-        {
-            agentTag = "purpleAgent";
-            goalTag = "purpleGoal";
-            defaultMaterial = defaultPurpleMaterial;
-        }
-    }
-
-    public void ResetMaterials()
+    private void ResetMaterials()
     {
         if (_selection != null)
         {
@@ -316,6 +300,29 @@ public class CoachController : MonoBehaviour
             userActionsGUI.SetActive(false);
             BlackBoard.SetActive(false);
             BlackBoard2.SetActive(false);
+        }
+    }
+
+    private void ToggleCoachMode()
+    {
+        coachMode = !coachMode;
+    }
+
+    private void ToggleTeamSelection()
+    {
+        ResetMaterials();
+
+        if (agentTag.Equals("purpleAgent"))
+        {
+            agentTag = "blueAgent";
+            goalTag = "blueGoal";
+            defaultMaterial = defaultBlueMaterial;
+        }
+        else
+        {
+            agentTag = "purpleAgent";
+            goalTag = "purpleGoal";
+            defaultMaterial = defaultPurpleMaterial;
         }
     }
 
