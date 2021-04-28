@@ -227,10 +227,11 @@ public class CoachController : MonoBehaviour
                     string action = "Kick"; // Kick scenario
                     var label = action; // Default label
                     var labelSuffix = 2;
+                    var newLabel = label;
 
-                    while (CoachController.scenarios.ContainsKey(label))
+                    while (CoachController.scenarios.ContainsKey(newLabel))
                     {
-                        label = label + labelSuffix.ToString();
+                        newLabel = label + labelSuffix.ToString();
                         labelSuffix++;
                     }
 
