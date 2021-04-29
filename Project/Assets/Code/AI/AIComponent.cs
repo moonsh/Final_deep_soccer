@@ -113,11 +113,6 @@ public class AIComponent : MonoBehaviour, IEventSource
         agentScenarioIndicatorVisible = true;
     }
 
-    public string GetAgentScenarioIndicatorValue()
-    {
-        return agentScenarioIndicator.GetComponentInChildren<TextMeshProUGUI>().text;
-    }
-
     public bool IsAgentScenarioIndicatorVisible()
     {
         return agentScenarioIndicatorVisible;
@@ -155,7 +150,6 @@ public class AIComponent : MonoBehaviour, IEventSource
     {
         agentScenarioIndicatorVisible = false;
         Destroy(agentScenarioIndicator);
-        CoachController.agentsUsingPastScenario.Remove(this);
     }
 
     public void RemoveAllActions()

@@ -1,9 +1,7 @@
 // Anthony Tiongson (ast119)
 
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 public class CoachController : MonoBehaviour
@@ -21,22 +19,14 @@ public class CoachController : MonoBehaviour
     }
     public GameObject BlackBoard;
     public GameObject BlackBoard2;
-    public GameObject ActionSequenceBoard;
-    public GameObject ActionConditionBoard;
-    public static GameObject asb;
-    public static GameObject acb;
     [SerializeField] private string agentTag = "purpleAgent";
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
     [SerializeField] private string goalTag = "purpleGoal";
     [SerializeField] private GameObject purpleTeam;
     [SerializeField] private GameObject blueTeam;
-    [SerializeField] private GameObject scenariosGUI;
-    [SerializeField] private GameObject saveScenariosButton;
-    [SerializeField] private GameObject clearScenariosButton;
     [SerializeField] private GameObject userActionsGUI;
-    [SerializeField] private GameObject cancelUserActionsButton;
-    [SerializeField] private GameObject cancelAllUsersActionsButton;
+    [SerializeField] private GameObject cancelUserActionsGUI;
     [SerializeField] private GameObject moveWaypointMarker;
     [SerializeField] private GameObject goToBallMarker;
     [SerializeField] private GameObject kickMarker;
@@ -52,14 +42,22 @@ public class CoachController : MonoBehaviour
     private Material defaultMaterial;
     private int count;
 
-   
-    public static void toActionCondition()
+    public void ToggleCoachMode()
     {
-        asb.SetActive(false);
-        acb.SetActive(true);
-        
+        coachMode = !coachMode;
     }
-    public void CancelAllUsersActions()
+
+    public void SetCommandModeMove()
+    {
+        currentCommand = coachCommands.MOVE;
+    }
+
+    public void SetCommandModeKick()
+    {
+        currentCommand = coachCommands.KICK;
+    }
+
+    public void ClearAllUserActions()
     {
         AIComponent[] currentAgentsWithUserActions = new AIComponent[agentsWithUserActions.Count];
         agentsWithUserActions.CopyTo(currentAgentsWithUserActions);
@@ -70,162 +68,6 @@ public class CoachController : MonoBehaviour
         }
 
         currentCommand = coachCommands.NONE;
-    }
-
-    public void CancelUserActions()
-    {
-        selectedPlayer.GetComponent<AIComponent>().RemoveAllActions();
-        currentCommand = coachCommands.NONE;
-    }
-
-    public void ClearScenarios()
-    {
-        scenarios.Clear();
-    }
-
-    public void LoadScenarios()
-    {
-
-    }
-
-    public void SaveScenarios()
-    {
-        string filename = "Saved_data.csv";
-        List<string[]> rowData = new List<string[]>();
-        string filePath = GetPath(filename);
-        string[] rowDataTemp = new string[29];
-        rowDataTemp[0] = "Label";
-        rowDataTemp[1] = "Action";
-        rowDataTemp[2] = "Action Paramater X";
-        rowDataTemp[3] = "Action Paramater Y";
-        rowDataTemp[4] = "Action Paramater Z";
-        rowDataTemp[5] = "Agent Position X";
-        rowDataTemp[6] = "Agent Position Y";
-        rowDataTemp[7] = "Agent Position Z";
-        rowDataTemp[8] = "Ball Position X";
-        rowDataTemp[9] = "Ball Position Y";
-        rowDataTemp[10] = "Ball Position Z";
-        rowDataTemp[11] = "Teammate1 Position X";
-        rowDataTemp[12] = "Teammate1 Position Y";
-        rowDataTemp[13] = "Teammate1 Position Z";
-        rowDataTemp[14] = "Teammat2 Position X";
-        rowDataTemp[15] = "Teammat2 Position Y";
-        rowDataTemp[16] = "Teammat2 Position Z";
-        rowDataTemp[17] = "Opponent1 Position X";
-        rowDataTemp[18] = "Opponent1 Position Y";
-        rowDataTemp[19] = "Opponent1 Position Z";
-        rowDataTemp[20] = "Opponent2 Position X";
-        rowDataTemp[21] = "Opponent2 Position Y";
-        rowDataTemp[22] = "Opponent2 Position Z";
-        rowDataTemp[23] = "Opponent3 Position X";
-        rowDataTemp[24] = "Opponent3 Position Y";
-        rowDataTemp[25] = "Opponent3 Position Z";
-        rowDataTemp[26] = "Ball Possessed";
-        rowDataTemp[27] = "Team With Ball";
-        rowDataTemp[28] = "Reward";
-        rowData.Add(rowDataTemp);
-
-        foreach (var entry in scenarios)
-        {
-            rowDataTemp = new string[29];
-            var label = entry.Key;
-            var scenario = entry.Value;
-            List<Vector3> teammatePositions = scenario.teammatePositions.ToList();
-            List<Vector3> opponentPositions = scenario.opponentPositions.ToList();
-            rowDataTemp[0] = label;
-            rowDataTemp[1] = scenario.action;
-            rowDataTemp[2] = scenario.actionParameter.x.ToString();
-            rowDataTemp[3] = scenario.actionParameter.y.ToString();
-            rowDataTemp[4] = scenario.actionParameter.z.ToString();
-            rowDataTemp[5] = scenario.agentPosition.x.ToString();
-            rowDataTemp[6] = scenario.agentPosition.y.ToString();
-            rowDataTemp[7] = scenario.agentPosition.z.ToString();
-            rowDataTemp[8] = scenario.ballPosition.x.ToString();
-            rowDataTemp[9] = scenario.ballPosition.y.ToString();
-            rowDataTemp[10] = scenario.ballPosition.z.ToString();
-            rowDataTemp[11] = teammatePositions[0].x.ToString();
-            rowDataTemp[12] = teammatePositions[0].y.ToString();
-            rowDataTemp[13] = teammatePositions[0].z.ToString();
-            rowDataTemp[14] = teammatePositions[1].x.ToString();
-            rowDataTemp[15] = teammatePositions[1].y.ToString();
-            rowDataTemp[16] = teammatePositions[1].z.ToString();
-            rowDataTemp[17] = opponentPositions[0].x.ToString();
-            rowDataTemp[18] = opponentPositions[0].y.ToString();
-            rowDataTemp[19] = opponentPositions[0].z.ToString();
-            rowDataTemp[20] = opponentPositions[1].x.ToString();
-            rowDataTemp[21] = opponentPositions[1].y.ToString();
-            rowDataTemp[22] = opponentPositions[1].z.ToString();
-            rowDataTemp[23] = opponentPositions[2].x.ToString();
-            rowDataTemp[24] = opponentPositions[2].y.ToString();
-            rowDataTemp[25] = opponentPositions[2].z.ToString();
-            rowDataTemp[26] = scenario.ballPossessed.ToString();
-            rowDataTemp[27] = scenario.teamWithBall;
-            rowDataTemp[28] = scenario.reward.ToString();
-            rowData.Add(rowDataTemp);
-        }
-
-        string[][] output = new string[rowData.Count][];
-
-        for (int i = 0; i < output.Length; i++)
-        {
-            output[i] = rowData[i];
-        }
-
-        int length = output.GetLength(0);
-        string delimiter = ",";
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < length; i++)
-        {
-            sb.AppendLine(string.Join(delimiter, output[i]));
-        }
-
-        StreamWriter outStream = File.CreateText(filePath);
-        outStream.WriteLine(sb);
-        outStream.Close();
-        rowData.Clear();
-    }
-
-    public void SetCommandModeKick()
-    {
-        currentCommand = coachCommands.KICK;
-    }
-
-    public void SetCommandModeMove()
-    {
-        currentCommand = coachCommands.MOVE;
-    }
-
-    private void CoachKickMode(Ray ray, RaycastHit hit, AIComponent selectedAgent)
-    {
-        if (Physics.Raycast(ray, out hit))
-        {
-            var selection = hit.transform;
-
-            if (selection.CompareTag(fieldTag) || selection.CompareTag(goalTag))
-            {
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    string action = "Kick"; // Kick scenario
-                    var label = action; // Default label
-                    var labelSuffix = 2;
-
-                    while (CoachController.scenarios.ContainsKey(label))
-                    {
-                        label = label + labelSuffix.ToString();
-                        labelSuffix++;
-                    }
-
-                    Vector3 actionParameter = hit.point; // Target direction in this scenario
-                    selectedAgent.AddAction(label, action, kickMarker, actionParameter);
-                    agentsWithUserActions.Add(selectedAgent);
-                    userActionsGUI.SetActive(true);
-                    BlackBoard.SetActive(true);
-                    currentCommand = coachCommands.NONE;
-                }
-            }
-        }
     }
 
     private void CoachMoveMode(Ray ray, RaycastHit hit, AIComponent selectedAgent)
@@ -293,9 +135,40 @@ public class CoachController : MonoBehaviour
         }
     }
 
+    private void CoachKickMode(Ray ray, RaycastHit hit, AIComponent selectedAgent)
+    {
+        if (Physics.Raycast(ray, out hit))
+        {
+            var selection = hit.transform;
+
+            if (selection.CompareTag(fieldTag) || selection.CompareTag(goalTag))
+            {
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    string action = "Kick"; // Kick scenario
+                    var label = action; // Default label
+                    var labelSuffix = 2;
+
+                    while (CoachController.scenarios.ContainsKey(label))
+                    {
+                        label = label + labelSuffix.ToString();
+                        labelSuffix++;
+                    }
+
+                    Vector3 actionParameter = hit.point; // Target direction in this scenario
+                    selectedAgent.AddAction(label, action, kickMarker, actionParameter);
+                    agentsWithUserActions.Add(selectedAgent);
+                    userActionsGUI.SetActive(true);
+                    BlackBoard.SetActive(true);
+                    currentCommand = coachCommands.NONE;
+                }
+            }
+        }
+    }
+
+
     private void CoachModeDisabledReset()
     {
-        scenariosGUI.SetActive(false);
         ResetMaterials();
         currentCommand = coachCommands.NONE;
     }
@@ -331,68 +204,10 @@ public class CoachController : MonoBehaviour
         }
 
         selectedAgent.pendingScenarios.Add((label, new Scenario(action, actionParameter, agentPosition,
-        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d)));
+        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall)));
     }
 
-    // Following method is used to retrive the relative path as device platform
-    private string GetPath(string filename)
-    {
-#if UNITY_EDITOR
-        return Application.dataPath + "/CSV/" + filename;
-#elif UNITY_ANDROID
-        return Application.persistentDataPath+filename;
-#elif UNITY_IPHONE
-        return Application.persistentDataPath+"/"+filename;
-#else
-        return Application.dataPath +"/"+filename;
-#endif
-    }
-
-private void ResetMaterials()
-    {
-        if (_selection != null)
-        {
-            var selectionRenderer = _selection.GetComponent<Renderer>();
-            selectionRenderer.material = defaultMaterial;
-        }
-
-        _selection = null;
-
-        if (selectedPlayer != null)
-        {
-            var selectionRenderer = selectedPlayer.GetComponent<Renderer>();
-            selectionRenderer.material = defaultMaterial;
-            selectedPlayer = null;
-            userActionsGUI.SetActive(false);
-            BlackBoard.SetActive(false);
-            BlackBoard2.SetActive(false);
-            ActionSequenceBoard.SetActive(false);
-            ActionConditionBoard.SetActive(false);
-        }
-    }
-
-    private void ToggleCoachMode()
-    {
-        coachMode = !coachMode;
-
-        if (coachMode)
-        {
-            scenariosGUI.SetActive(true);
-
-            if (scenarios.Count > 0)
-            {
-                saveScenariosButton.SetActive(true);
-                clearScenariosButton.SetActive(true);
-            }
-            else
-            {
-                saveScenariosButton.SetActive(false);
-                clearScenariosButton.SetActive(false);
-            }
-        }
-    }
-
-    private void ToggleTeamSelection()
+    public void ToggleTeamSelection()
     {
         ResetMaterials();
 
@@ -410,19 +225,37 @@ private void ResetMaterials()
         }
     }
 
+    public void ResetMaterials()
+    {
+        if (_selection != null)
+        {
+            var selectionRenderer = _selection.GetComponent<Renderer>();
+            selectionRenderer.material = defaultMaterial;
+        }
+
+        _selection = null;
+
+        if (selectedPlayer != null)
+        {
+            var selectionRenderer = selectedPlayer.GetComponent<Renderer>();
+            selectionRenderer.material = defaultMaterial;
+            selectedPlayer = null;
+            userActionsGUI.SetActive(false);
+            BlackBoard.SetActive(false);
+            BlackBoard2.SetActive(false);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        scenariosGUI.SetActive(false);
         userActionsGUI.SetActive(false);
-        cancelAllUsersActionsButton.SetActive(false);
+        cancelUserActionsGUI.SetActive(false);
         coachMode = false;
         currentCommand = coachCommands.NONE;
         defaultMaterial = defaultPurpleMaterial;
         BlackBoard.SetActive(false);
-        ActionSequenceBoard.SetActive(false);
-        ActionConditionBoard.SetActive(false);
-        BlackBoard2.SetActive(true);
+
         foreach (var agent in purpleTeam.GetComponentsInChildren<AIComponent>())
         {
             agent.AttachAgentScenarioIndicatorObject(agentScenarioIndicator);
@@ -432,8 +265,6 @@ private void ResetMaterials()
         {
             agent.AttachAgentScenarioIndicatorObject(agentScenarioIndicator);
         }
-        asb = ActionSequenceBoard;
-        acb = ActionConditionBoard;
     }
 
     // Update is called once per frame
@@ -480,11 +311,11 @@ private void ResetMaterials()
 
         if (agentsWithUserActions.Count == 0)
         {
-            cancelAllUsersActionsButton.SetActive(false);
+            cancelUserActionsGUI.SetActive(false);
         }
         else
         {
-            cancelAllUsersActionsButton.SetActive(true);
+            cancelUserActionsGUI.SetActive(true);
         }
 
         if (Input.GetButtonDown("Fire2"))
@@ -503,8 +334,6 @@ private void ResetMaterials()
                         selectedPlayer = null;
                         userActionsGUI.SetActive(false);
                         BlackBoard.SetActive(false);
-                        ActionConditionBoard.SetActive(false);
-                        ActionSequenceBoard.SetActive(false);
                         BlackBoard2.SetActive(false);
                     }
                     else
@@ -596,8 +425,6 @@ private void ResetMaterials()
                             selectedPlayer = null;
                             userActionsGUI.SetActive(false);
                             BlackBoard.SetActive(false);
-                            ActionConditionBoard.SetActive(false);
-                            ActionSequenceBoard.SetActive(false);
                             BlackBoard2.SetActive(false);
                         }
 
@@ -607,15 +434,6 @@ private void ResetMaterials()
 
                 if (selectedPlayer != null)
                 {
-                    if (agentsWithUserActions.Contains(selectedPlayer.GetComponent<AIComponent>()))
-                    {
-                        cancelUserActionsButton.SetActive(true);
-                    }
-                    else
-                    {
-                        cancelUserActionsButton.SetActive(false);
-                    }
-
                     switch (currentCommand)
                     {
                         case coachCommands.NONE:

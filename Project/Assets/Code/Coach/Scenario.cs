@@ -1,5 +1,4 @@
-// Anthony Tiongson (ast119)
-
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,12 +12,10 @@ public class Scenario
     public HashSet<Vector3> opponentPositions = new HashSet<Vector3>();
     public bool ballPossessed;
     public string teamWithBall;
-    public double reward;
 
     public Scenario(string _action, Vector3 _actionParameter,
         Vector3 _agentPosition, Vector3 _ballPosition,
-        HashSet<Vector3> _teammatePositions, HashSet<Vector3> _opponentPositions,
-        bool _ballPossessed, string _teamWithBall, double _reward)
+        HashSet<Vector3> _teammatePositions, HashSet<Vector3> _opponentPositions, bool _ballPossessed, string _teamWithBall)
     {
         action = _action;
         actionParameter = _actionParameter;
@@ -28,6 +25,5 @@ public class Scenario
         teammatePositions = _teammatePositions;
         opponentPositions = _opponentPositions;
         ballPossessed = _ballPossessed;
-        reward = _reward;
     }
 }
