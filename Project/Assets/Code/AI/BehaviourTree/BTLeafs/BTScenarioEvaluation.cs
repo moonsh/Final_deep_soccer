@@ -19,12 +19,12 @@ public class BTScenarioEvaluation : BTNode
                 //check if agent's position matches
                 if ((Mathf.Abs(context.navAgent.transform.position.x - scenario.agentPosition.x) < BlackBoard2.agentR && Mathf.Abs(context.navAgent.transform.position.z - scenario.agentPosition.z) < BlackBoard2.agentR) || !BlackBoard2.agentPosition)
                 {
-                    Debug.Log("BTScenarioEvaluation:" + context.rb.name + "agent's position matches");
+                    //Debug.Log("BTScenarioEvaluation:" + context.rb.name + "agent's position matches");
 
                     //check if ball's position matches
                     if ((Mathf.Abs(context.ball.position.x - scenario.ballPosition.x) < BlackBoard2.soccerR && Mathf.Abs(context.ball.position.z - scenario.ballPosition.z) < BlackBoard2.soccerR) || !BlackBoard2.soccerPosition)
                     {
-                        Debug.Log("BTScenarioEvaluation: ball's position matches");
+                        //Debug.Log("BTScenarioEvaluation: ball's position matches");
                         //check if all teammate positions matches
                         if (BlackBoard2.teamPosition)
                         {
@@ -73,7 +73,8 @@ public class BTScenarioEvaluation : BTNode
 
                         if (allConditionFit)
                         {
-                            Debug.Log("BTScenarioEvaluation (" + label + "): all conditions fit.");
+                            //Debug.Log("BTScenarioEvaluation (" + label + "): all conditions fit.");
+
                             if (context.pastScenario != null)
                             {
                                 if (context.pastScenario.Item2 == null)

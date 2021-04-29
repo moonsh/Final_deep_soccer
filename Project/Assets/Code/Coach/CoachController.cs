@@ -225,16 +225,7 @@ public class CoachController : MonoBehaviour
                 if (Input.GetButtonDown("Fire1"))
                 {
                     string action = "Kick"; // Kick scenario
-                    var label = action; // Default label
-                    var labelSuffix = 2;
-                    var newLabel = label;
-
-                    while (CoachController.scenarios.ContainsKey(newLabel))
-                    {
-                        newLabel = label + labelSuffix.ToString();
-                        labelSuffix++;
-                    }
-
+                    var label = action; // Default label, need to add user customized label
                     Vector3 actionParameter = hit.point; // Target direction in this scenario
                     selectedAgent.AddAction(label, action, kickMarker, actionParameter);
                     agentsWithUserActions.Add(selectedAgent);
@@ -370,7 +361,7 @@ public class CoachController : MonoBehaviour
         ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d)));
     }
 
-    // Following method is used to retrive the relative path as device platform
+    // Following method is used to retrieve the relative path in regards to device platform
     private string GetPath(string filename)
     {
 #if UNITY_EDITOR

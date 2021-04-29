@@ -14,12 +14,12 @@ public class BTScenarioAssert : BTNode
                 return BTResult.SUCCESS;
             }
 
-            Debug.Log("BTScenarioAssert: context.pastScenario exists but somehow context.pastScenario.Item2 is null ****ERROR****");
+            //Debug.Log("BTScenarioAssert: context.pastScenario exists but somehow context.pastScenario.Item2 is null ****ERROR****");
         }
-        else
+        /*else
         {
             Debug.Log("BTScenarioAssert: context.pastScenario is null.");
-        }
+        }*/
 
         //Debug.Log("BTScenarioAssert: game state was not detected in evaluation.");
         return BTResult.FAILURE;
