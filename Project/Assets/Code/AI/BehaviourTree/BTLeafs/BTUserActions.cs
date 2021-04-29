@@ -36,7 +36,7 @@ public class BTUserActions : BTNode
         }
 
         return new Scenario(action, actionParameter, agentPosition, ballPosition,
-            teammatePositions, opponentPositions, ballPossessed, teamWithBall);
+            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d);
     }
 
     private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)
@@ -109,14 +109,14 @@ public class BTUserActions : BTNode
                     // Check to see if the subsequent action is another movement, and if so create a pending scenario.
                     if (context.userActions.Count > 0)
                     {
-                        var pendingLabel = context.userActions[1].Item1;
-                        var pendingAction = context.userActions[1].Item2;
+                        var pendingLabel = context.userActions[0].Item1;
+                        var pendingAction = context.userActions[0].Item2;
 
                         if (pendingAction.Equals("Move") ||
                         pendingAction.Equals("GoToBall"))/* ||
                         pendingAction.Equals("PursuePlayer"))*/
                         {
-                            var pendingActionParameter = context.userActions[1].Item3.transform.position;
+                            var pendingActionParameter = context.userActions[0].Item3.transform.position;
                             CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
                         }
                     }
@@ -147,8 +147,8 @@ public class BTUserActions : BTNode
                             var pendingAction = context.userActions[0].Item2;
 
                             if (pendingAction.Equals("Move") ||
-                            pendingAction.Equals("GoToBall"))/* ||
-                        pendingAction.Equals("PursuePlayer"))*/
+                                pendingAction.Equals("GoToBall"))/* ||
+                                pendingAction.Equals("PursuePlayer"))*/
                             {
                                 var pendingActionParameter = context.userActions[0].Item3.transform.position;
                                 CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
@@ -222,7 +222,7 @@ public class BTUserActions : BTNode
                 context.navAgent.GetComponent<AIComponent>().RemoveAction();
 
                 // Check to see if the subsequent action is another movement, and if so create a pending scenario.
-                if (context.userActions.Count > 0)
+                if (context.userActions.Count > 1)
                 {
                     var pendingLabel = context.userActions[0].Item1;
                     var pendingAction = context.userActions[0].Item2;

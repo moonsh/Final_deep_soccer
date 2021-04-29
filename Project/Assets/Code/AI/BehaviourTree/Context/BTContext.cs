@@ -21,7 +21,7 @@ public class BTContext
     public GameObject threatOpponent; // What is this used for?
     public List<(string, string, GameObject)> userActions = new List<(string, string, GameObject)>();
     public List<(string, Scenario)> pendingScenarios = new List<(string, Scenario)>();
-    public Scenario pastScenario;
+    public Tuple<string, Scenario> pastScenario;
     /*public CoachController coachController;
     public RefereeController refereeController;*/
     public SmartTerrainPoint activeSmartTerrainPoint; // Consider removing.
@@ -34,7 +34,7 @@ public class BTContext
         Animator _animatorController, NavMeshAgent _navAgent, Rigidbody _rb,
         GameObject[] _opponents, GameObject[] _teammates,
         List<(string, string, GameObject)> _userActions,
-        List<(string, Scenario)> _pendingScenarios, Scenario _pastScenario)
+        List<(string, Scenario)> _pendingScenarios, Tuple<string, Scenario> _pastScenario)
     {
         contextOwner = _owner;
         goal = _goal;

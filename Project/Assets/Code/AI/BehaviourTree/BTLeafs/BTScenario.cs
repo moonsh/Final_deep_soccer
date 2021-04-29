@@ -1,15 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BTScenario : BTNode
 {
     public override BTResult Execute()
     {
-        if (context.pastScenario.action == "Move")
+        if (!context.contextOwner.IsAgentScenarioIndicatorVisible())
         {
-            var destination = context.pastScenario.actionParameter;
+            context.contextOwner.CreateAgentScenarioIndicator(context.pastScenario.Item1);
+        }
+        else
+        {
+            if (context.contextOwner.GetAgentScenarioIndicatorValue() != context.pastScenario.Item1)
+            {
+                context.contextOwner.RemoveAgentScenarioIndicator();
+                context.contextOwner.CreateAgentScenarioIndicator(context.pastScenario.Item1);
+            }
+        }
+
+        if (context.pastScenario.Item2.action == "Move")
+        {
+            var destination = context.pastScenario.Item2.actionParameter;
             //Debug.Log("Current destination: " + destination.ToString());
             context.navAgent.SetDestination(destination);
             context.navAgent.speed = 10;
@@ -17,27 +27,25 @@ public class BTScenario : BTNode
             if ((context.navAgent.GetComponent<Transform>().position.x < destination.x + 2 && context.navAgent.GetComponent<Transform>().position.x > destination.x - 2) &&
                 (context.navAgent.GetComponent<Transform>().position.z < destination.z + 2 && context.navAgent.GetComponent<Transform>().position.z > destination.z - 2))
             {
-                // Action completed; remove marker, actions, and log scenario.
-                //Debug.Log("Test: agent has reached destination."); //
+                // Action completed
+                //Debug.Log("Test: agent has reached destination.");
+                context.contextOwner.RemoveAgentScenarioIndicator();
                 context.pastScenario = null;
-
-                CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
             }
         }
-        else if (context.pastScenario.action == "GoToBall")
+        else if (context.pastScenario.Item2.action == "GoToBall")
         {
             if (context.ball.GetComponent<SoccerBallController>().owner)
             {
                 if (context.ball.GetComponent<SoccerBallController>().owner.name.Equals(context.rb.name))
                 {
+                    context.contextOwner.RemoveAgentScenarioIndicator();
                     context.pastScenario = null;
-
-                    CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
                 }
                 else if (context.ball.GetComponent<SoccerBallController>().owner.tag.Equals(context.rb.tag))
                 {
+                    context.contextOwner.RemoveAgentScenarioIndicator();
                     context.pastScenario = null;
-                    CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
                 }
                 else // Opponent has ball.  Action executing.
                 {
@@ -51,9 +59,9 @@ public class BTScenario : BTNode
                 context.navAgent.speed = 10;
             }
         }
-        else if (context.pastScenario.action == "Kick")
+        else if (context.pastScenario.Item2.action == "Kick")
         {
-            var target = context.pastScenario.actionParameter;
+            var target = context.pastScenario.Item2.actionParameter;
             var agentPosition = context.rb.transform.position;
             var direction = (target - agentPosition) / Vector3.Distance(agentPosition, target);
             bool possession;
@@ -74,13 +82,14 @@ public class BTScenario : BTNode
                 context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 200f * distance);
             }
 
+            context.contextOwner.RemoveAgentScenarioIndicator();
             context.pastScenario = null;
-            CoachController.agentsUsingPastScenario.Remove(context.contextOwner);
         }
         else
         {
             Debug.Log("WARNING: Unknown user action!");
         }
+
         return BTResult.SUCCESS;
     }
 }
