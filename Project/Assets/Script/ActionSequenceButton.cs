@@ -19,7 +19,6 @@ public class ActionSequenceButton : MonoBehaviour
         }
         CoachController.toActionCondition();
         GameObject.Find("ActionConditionBoard").GetComponent<ActionConditionBoard>().resetBoard();
-        GameObject.Find("ActionConditionBoard").GetComponent<ActionConditionBoard>().newScenarios = new Dictionary<string, Scenario>();
 
 
     }
