@@ -15,7 +15,7 @@ public class ActionSequenceButton : MonoBehaviour
         ActionConditionBoard.key= button.GetComponent<Button>().GetComponentInChildren<Text>().text;
         foreach (var b in ActionSequenceList.buttons)
         {
-            b.SetActive(false);
+            Destroy(b);
         }
         CoachController.toActionCondition();
         GameObject.Find("ActionConditionBoard").GetComponent<ActionConditionBoard>().resetBoard();

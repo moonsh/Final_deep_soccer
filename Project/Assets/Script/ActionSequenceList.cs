@@ -40,7 +40,7 @@ public class ActionSequenceList : MonoBehaviour
     {
         foreach(GameObject bt in buttons)
         {
-            bt.SetActive(false);
+            Destroy(bt);
         }
     }
 }
