@@ -1,6 +1,6 @@
+// Anthony Tiongson (ast119)
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BTScenarioEvaluation : BTNode
@@ -20,7 +20,7 @@ public class BTScenarioEvaluation : BTNode
                 if ((Mathf.Abs(context.navAgent.transform.position.x - scenario.agentPosition.x) < BlackBoard2.agentR && Mathf.Abs(context.navAgent.transform.position.z - scenario.agentPosition.z) < BlackBoard2.agentR) || !BlackBoard2.agentPosition)
                 {
                     Debug.Log("BTScenarioEvaluation:" + context.rb.name + "agent's position matches");
-
+                    
                     //check if ball's position matches
                     if ((Mathf.Abs(context.ball.position.x - scenario.ballPosition.x) < BlackBoard2.soccerR && Mathf.Abs(context.ball.position.z - scenario.ballPosition.z) < BlackBoard2.soccerR) || !BlackBoard2.soccerPosition)
                     {
