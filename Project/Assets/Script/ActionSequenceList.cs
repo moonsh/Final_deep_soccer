@@ -10,11 +10,13 @@ public class ActionSequenceList : MonoBehaviour
     public static LinkedList<GameObject> buttons = new LinkedList<GameObject>();
     public Button actionSequenceButton;
     public Button saveButton;
+    public Button deleteButton;
     int count = 0;
     void Start()
     {
         actionSequenceButton.onClick.AddListener(TaskOnClick);
         saveButton.onClick.AddListener(TaskOnClick);
+        deleteButton.onClick.AddListener(TaskOnClick);
     }
     // Update is called once per frame
     void Update()

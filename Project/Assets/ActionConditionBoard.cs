@@ -7,7 +7,8 @@ public class ActionConditionBoard : MonoBehaviour
 {
     public Text title;
     public GameObject acb;
-    public Button button;
+    public Button deleteButton;
+    public Button saveButton;
     public InputField agentPos;
     public InputField ballPos;
     public InputField teammatePos1;
@@ -21,9 +22,12 @@ public class ActionConditionBoard : MonoBehaviour
     private HashSet<Vector3> tpos = new HashSet<Vector3>();
     private HashSet<Vector3> opos = new HashSet<Vector3>();
     public static string key;
+    public Dictionary<string, Scenario> newScenarios = new Dictionary<string, Scenario>();
+    private string tKey;
     void Start()
     {
-        button.onClick.AddListener(TaskOnClick);
+        saveButton.onClick.AddListener(TaskOnClick);
+        deleteButton.onClick.AddListener(deleteElement);
     }
 
     // Update is called once per frame
@@ -46,6 +50,7 @@ public class ActionConditionBoard : MonoBehaviour
 
     public void resetBoard()
     {
+        
         title.text = key+" Conditions";
         foreach (var scenario in CoachController.scenarios)
         {
@@ -85,8 +90,13 @@ public class ActionConditionBoard : MonoBehaviour
                     count++;
                 }
             }
+            else
+            {
+                newScenarios.Add(scenario.Key, scenario.Value);
+            }
 
         }
+
     }
 
     void TaskOnClick()
@@ -103,8 +113,15 @@ public class ActionConditionBoard : MonoBehaviour
         
         currentScene = new Scenario(currentScene.action, currentScene.actionParameter, apos, bpos, tpos, opos, currentScene.ballPossessed, currentScene.teamWithBall, currentScene.reward);
         CoachController.scenarios[key] = currentScene;
+        newScenarios = new Dictionary<string, Scenario>();
         acb.SetActive(false);
     }
 
+    void deleteElement()
+    {
+        CoachController.scenarios = newScenarios;
+        newScenarios = new Dictionary<string, Scenario>();
+        acb.SetActive(false);
+    }
 
 }

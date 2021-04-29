@@ -3858,7 +3858,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &819281772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5249,7 +5249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -360, y: -150}
+  m_AnchoredPosition: {x: -345, y: -155}
   m_SizeDelta: {x: 140, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1284759908
@@ -6815,7 +6815,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -360, y: -180}
+  m_AnchoredPosition: {x: -345, y: -185}
   m_SizeDelta: {x: 140, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1553627923
@@ -9623,6 +9623,16 @@ PrefabInstance:
       propertyPath: title
       value: 
       objectReference: {fileID: 1309248066}
+    - target: {fileID: 6307445026906196747, guid: b0440fbffd1ca4644a8654409487ff3c,
+        type: 3}
+      propertyPath: saveButton
+      value: 
+      objectReference: {fileID: 749293600}
+    - target: {fileID: 6307445026906196747, guid: b0440fbffd1ca4644a8654409487ff3c,
+        type: 3}
+      propertyPath: deleteButton
+      value: 
+      objectReference: {fileID: 727791108}
     - target: {fileID: 6307445027142846794, guid: b0440fbffd1ca4644a8654409487ff3c,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -9712,6 +9722,11 @@ PrefabInstance:
       propertyPath: saveButton
       value: 
       objectReference: {fileID: 749293600}
+    - target: {fileID: 7853535665373952236, guid: 8fcba63ca4cd7a64299e893cbe08c3cd,
+        type: 3}
+      propertyPath: deleteButton
+      value: 
+      objectReference: {fileID: 727791108}
     - target: {fileID: 7853535665621922781, guid: 8fcba63ca4cd7a64299e893cbe08c3cd,
         type: 3}
       propertyPath: m_LocalPosition.x
