@@ -12,6 +12,8 @@ public class CoachController : MonoBehaviour
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
     public static HashSet<AIComponent> agentsUsingPastScenario = new HashSet<AIComponent>();
     public static Dictionary<string, Scenario> scenarios = new Dictionary<string, Scenario>();
+    public static List<List<string>> actionSequences = new List<List<string>>();
+    public static List<string> actionSequence = new List<string>();
     public static float countTime;
     public enum coachCommands
     {
@@ -81,15 +83,47 @@ public class CoachController : MonoBehaviour
     public void ClearScenarios()
     {
         scenarios.Clear();
+        actionSequence.Clear();
+        actionSequences.Clear();
+        CancelAllUsersActions();
     }
 
     public void LoadScenarios()
     {
+        string filename = "Saved_scenarios.csv";
+        string filePath = GetPath(filename);
+        var fileData = File.ReadAllText(filePath);
+        var lines = fileData.Split("\n"[0]);
+        //Debug.Log("CoachController: lines.Length - " + lines.Length.ToString());
+
+        for (int i = 1; i < (lines.Length - 2); i++)
+        {
+            var teammatePositions = new HashSet<Vector3>();
+            var opponentPositions = new HashSet<Vector3>();
+            var lineData = (lines[i].Trim()).Split(","[0]);
+            //Debug.Log("CoachController: lineData.Length - " + lineData.Length);
+            var label = lineData[0];
+            //Debug.Log("CoachController: label - " + label);
+            var action = lineData[1];
+            var actionParameter = new Vector3(float.Parse(lineData[2]), float.Parse(lineData[3]), float.Parse(lineData[4]));
+            var agentPosition = new Vector3(float.Parse(lineData[5]), float.Parse(lineData[6]), float.Parse(lineData[7]));
+            var ballPosition = new Vector3(float.Parse(lineData[8]), float.Parse(lineData[9]), float.Parse(lineData[10]));
+            teammatePositions.Add(new Vector3(float.Parse(lineData[11]), float.Parse(lineData[12]), float.Parse(lineData[13])));
+            teammatePositions.Add(new Vector3(float.Parse(lineData[14]), float.Parse(lineData[15]), float.Parse(lineData[16])));
+            opponentPositions.Add(new Vector3(float.Parse(lineData[17]), float.Parse(lineData[18]), float.Parse(lineData[19])));
+            opponentPositions.Add(new Vector3(float.Parse(lineData[20]), float.Parse(lineData[21]), float.Parse(lineData[22])));
+            opponentPositions.Add(new Vector3(float.Parse(lineData[23]), float.Parse(lineData[24]), float.Parse(lineData[25])));
+            var ballPossessed = bool.Parse(lineData[26]);
+            var teamWithBall = lineData[27];
+            var reward = double.Parse(lineData[28]);
+            CreateAndLogScenario(label, action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions,
+                ballPossessed, teamWithBall, reward);
+        }
     }
 
     public void SaveScenarios()
     {
-        string filename = "Saved_data.csv";
+        string filename = "Saved_scenarios.csv";
         List<string[]> rowData = new List<string[]>();
         string filePath = GetPath(filename);
         string[] rowDataTemp = new string[29];
@@ -163,27 +197,27 @@ public class CoachController : MonoBehaviour
             rowData.Add(rowDataTemp);
         }
 
-        string[][] output = new string[rowData.Count][];
+        WriteToCSV(filePath, rowData);
 
-        for (int i = 0; i < output.Length; i++)
+        filename = "Saved_actionSequences.csv";
+        rowData = new List<string[]>();
+        filePath = GetPath(filename);
+        //Debug.Log("CoachController: actionSequences.Count = " + actionSequences.Count.ToString());
+
+        for (var i = 0; i < actionSequences.Count; i++)
         {
-            output[i] = rowData[i];
+            rowDataTemp = new string[actionSequences[i].Count];
+            //Debug.Log("CoachController: actionSequences[" + i.ToString() + "].Count = " + actionSequences[i].Count.ToString());
+
+            for (var j = 0; j < actionSequences[i].Count; j++)
+            {
+                rowDataTemp[j] = actionSequences[i][j];
+            }
+
+            rowData.Add(rowDataTemp);
         }
 
-        int length = output.GetLength(0);
-        string delimiter = ",";
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < length; i++)
-        {
-            sb.AppendLine(string.Join(delimiter, output[i]));
-        }
-
-        StreamWriter outStream = File.CreateText(filePath);
-        outStream.WriteLine(sb);
-        outStream.Close();
-        rowData.Clear();
+        WriteToCSV(filePath, rowData);
     }
 
     public void SetCommandModeKick()
@@ -208,14 +242,6 @@ public class CoachController : MonoBehaviour
                 {
                     string action = "Kick"; // Kick scenario
                     var label = action; // Default label
-                    var labelSuffix = 2;
-
-                    while (CoachController.scenarios.ContainsKey(label))
-                    {
-                        label = label + labelSuffix.ToString();
-                        labelSuffix++;
-                    }
-
                     Vector3 actionParameter = hit.point; // Target direction in this scenario
                     selectedAgent.AddAction(label, action, kickMarker, actionParameter);
                     agentsWithUserActions.Add(selectedAgent);
@@ -299,6 +325,24 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.NONE;
     }
 
+    private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3 agentPosition,
+        Vector3 ballPosition, HashSet<Vector3> teammatePositions, HashSet<Vector3> opponentPositions, bool ballPossessed,
+        string teamWithBall, double reward, Vector3? actionParameterSecondary = null)
+    {
+        var newLabel = label;
+        var labelSuffix = 2;
+
+        while (CoachController.scenarios.ContainsKey(newLabel))
+        {
+            newLabel = label + labelSuffix.ToString();
+            labelSuffix++;
+        }
+
+        Scenario scenario = new Scenario(action, actionParameter, agentPosition, ballPosition,
+            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d);
+        scenarios.Add(newLabel, scenario);
+    }
+
     private void CreatePendingScenario(AIComponent selectedAgent, string label, string action, Vector3 actionParameter)
     {
         Vector3 agentPosition = selectedAgent.GetComponent<Transform>().position;
@@ -347,7 +391,7 @@ public class CoachController : MonoBehaviour
 #endif
     }
 
-private void ResetMaterials()
+    private void ResetMaterials()
     {
         if (_selection != null)
         {
@@ -409,43 +453,28 @@ private void ResetMaterials()
         }
     }
 
-    private void ToggleCoachMode()
+    private void WriteToCSV(string filePath, List<string[]> rowData)
     {
-        coachMode = !coachMode;
+        string[][] output = new string[rowData.Count][];
 
-        if (coachMode)
+        for (int i = 0; i < output.Length; i++)
         {
-            scenariosGUI.SetActive(true);
-
-            if (scenarios.Count > 0)
-            {
-                saveScenariosButton.SetActive(true);
-                clearScenariosButton.SetActive(true);
-            }
-            else
-            {
-                saveScenariosButton.SetActive(false);
-                clearScenariosButton.SetActive(false);
-            }
+            output[i] = rowData[i];
         }
-    }
 
-    private void ToggleTeamSelection()
-    {
-        ResetMaterials();
+        int length = output.GetLength(0);
+        string delimiter = ",";
 
-        if (agentTag.Equals("purpleAgent"))
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < length; i++)
         {
-            agentTag = "blueAgent";
-            goalTag = "blueGoal";
-            defaultMaterial = defaultBlueMaterial;
+            sb.AppendLine(string.Join(delimiter, output[i]));
         }
-        else
-        {
-            agentTag = "purpleAgent";
-            goalTag = "purpleGoal";
-            defaultMaterial = defaultPurpleMaterial;
-        }
+
+        StreamWriter outStream = File.CreateText(filePath);
+        outStream.WriteLine(sb);
+        outStream.Close();
     }
 
     // Start is called before the first frame update

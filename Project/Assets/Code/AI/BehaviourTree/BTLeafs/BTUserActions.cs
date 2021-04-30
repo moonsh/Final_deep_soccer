@@ -50,6 +50,7 @@ public class BTUserActions : BTNode
             labelSuffix++;
         }
 
+        CoachController.actionSequence.Add(newLabel);
         Scenario scenario = CreateScenario(action, actionParameter, actionParameterSecondary);
         CoachController.scenarios.Add(newLabel, scenario);
     }
@@ -74,6 +75,7 @@ public class BTUserActions : BTNode
                 labelSuffix++;
             }
 
+            CoachController.actionSequence.Add(label);
             CoachController.scenarios.Add(label, context.pendingScenarios[0].Item2);
         }
         else

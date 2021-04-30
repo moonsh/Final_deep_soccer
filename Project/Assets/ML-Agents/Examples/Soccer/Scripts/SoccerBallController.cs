@@ -43,15 +43,10 @@ public class SoccerBallController : MonoBehaviour
             transform.Rotate(owner.transform.right, 0.1f * 10f);
 
             if (owner.tag == "blueAgent")
+            {
                 envController.ResetScene();
-
-
+            }
         }
-
-
-
     }
-
-
 }
 
