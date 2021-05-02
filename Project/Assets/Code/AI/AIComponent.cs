@@ -76,6 +76,15 @@ public class AIComponent : MonoBehaviour, IEventSource
                 kickDirection.layer = LayerMask.NameToLayer("Ignore Raycast"); ;
                 newMarker = kickDirection;
                 break;
+            case "Pass":
+                point = (Vector3)actionParameter;
+                markerOffset = new Vector3(point.x, 1, point.z);
+                markerRotation = Quaternion.identity;
+                markerRotation.eulerAngles = new Vector3(90, 0, 0);
+                kickDirection = Instantiate(marker, markerOffset, markerRotation);
+                kickDirection.layer = LayerMask.NameToLayer("Ignore Raycast"); ;
+                newMarker = kickDirection;
+                break;
             default:
                 newMarker = null;
                 break;

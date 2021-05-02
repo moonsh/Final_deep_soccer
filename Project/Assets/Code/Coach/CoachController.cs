@@ -271,7 +271,7 @@ public class CoachController : MonoBehaviour
                     string action = "Pass"; // Kick scenario
                     var label = action; // Default label
                     Vector3 actionParameter = hit.point; // Target direction in this scenario
-                    selectedAgent.AddAction(label, action, kickMarker, actionParameter);
+                    selectedAgent.AddAction(label, action, passMarker, actionParameter);
                     agentsWithUserActions.Add(selectedAgent);
                     userActionsGUI.SetActive(true);
                     BlackBoard.SetActive(true);
@@ -702,6 +702,7 @@ public class CoachController : MonoBehaviour
                             ActionConditionBoard.SetActive(false);
                             ActionSequenceBoard.SetActive(false);
                             BlackBoard2.SetActive(false);
+                            currentCommand = coachCommands.NONE;
                         }
 
                         _selection = selection;
