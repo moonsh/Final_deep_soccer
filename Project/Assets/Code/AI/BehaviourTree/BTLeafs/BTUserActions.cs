@@ -239,8 +239,49 @@ public class BTUserActions : BTNode
                 }
 
                 return BTResult.SUCCESS;
+            case "Pass":
+                var targetTeammate = context.contextOwner.GetCurrentPassTarget();
+                target = targetTeammate.position;
+                agentPosition = context.rb.transform.position;
+                direction = (target - agentPosition) / Vector3.Distance(agentPosition, target);
+
+                if (context.ball.GetComponent<SoccerBallController>().owner)
+                {
+                    possession = context.ball.GetComponent<SoccerBallController>().owner.name.Equals(context.rb.name);
+                }
+                else
+                {
+                    possession = false;
+                }
+
+                if (possession)
+                {
+                    float distance = Mathf.Sqrt(((target.z - agentPosition.z) * (target.z - agentPosition.z))
+                        + ((target.x - agentPosition.x) * (target.x - agentPosition.x)));
+                    context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 200f * distance);
+                    CreateAndLogScenario(label, action, target);
+                }
+
+                context.navAgent.GetComponent<AIComponent>().RemoveAction();
+
+                // Check to see if the subsequent action is another movement, and if so create a pending scenario.
+                if (context.userActions.Count > 1)
+                {
+                    var pendingLabel = context.userActions[0].Item1;
+                    var pendingAction = context.userActions[0].Item2;
+
+                    if (pendingAction.Equals("Move") ||
+                    pendingAction.Equals("GoToBall"))/* ||
+                        pendingAction.Equals("PursuePlayer"))*/
+                    {
+                        var pendingActionParameter = context.userActions[0].Item3.transform.position;
+                        CreatePendingScenario(pendingLabel, pendingAction, pendingActionParameter);
+                    }
+                }
+
+                return BTResult.SUCCESS;
             default:
-                Debug.Log("WARNING: Unknown user action!");
+                Debug.Log("BTUserActions: WARNING, unknown user action!");
                 return BTResult.SUCCESS;
         }
     }

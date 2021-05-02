@@ -268,6 +268,7 @@ public class CoachController : MonoBehaviour
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
+                    selectedAgent.GetComponent<AIComponent>().SetTargetTeammate(selection.transform);
                     string action = "Pass"; // Kick scenario
                     var label = action; // Default label
                     Vector3 actionParameter = hit.point; // Target direction in this scenario
@@ -275,6 +276,7 @@ public class CoachController : MonoBehaviour
                     agentsWithUserActions.Add(selectedAgent);
                     userActionsGUI.SetActive(true);
                     BlackBoard.SetActive(true);
+                    selectedAgent.GetComponent<AIComponent>().ClearTargetTeammate();
                     currentCommand = coachCommands.NONE;
                 }
             }
