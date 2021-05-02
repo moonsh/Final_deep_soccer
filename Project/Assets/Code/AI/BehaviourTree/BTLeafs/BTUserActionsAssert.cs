@@ -13,6 +13,7 @@ public class BTUserActionsAssert : BTNode
         else
         {
             context.pastScenario = null; // Override any past Scenario.
+            context.contextOwner.RemoveAgentScenarioIndicator();
             return BTResult.SUCCESS;
         }
     }

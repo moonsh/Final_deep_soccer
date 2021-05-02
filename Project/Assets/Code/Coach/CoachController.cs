@@ -81,11 +81,23 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.NONE;
     }
 
+    public void ClearAllPastScenarioIndicators()
+    {
+        AIComponent[] currentAgentsUsingPastScenarios = new AIComponent[agentsUsingPastScenario.Count];
+        agentsUsingPastScenario.CopyTo(currentAgentsUsingPastScenarios);
+
+        foreach (var agent in currentAgentsUsingPastScenarios)
+        {
+            agent.RemoveAgentScenarioIndicator();
+        }
+    }
+
     public void ClearScenarios()
     {
         scenarios.Clear();
         actionSequence.Clear();
         actionSequences.Clear();
+        ClearAllPastScenarioIndicators();
         CancelAllUsersActions();
     }
 
@@ -511,7 +523,8 @@ public class CoachController : MonoBehaviour
         if (sceneReset)
         {
             CancelAllUsersActions();
-            sceneReset = !sceneReset;
+            ClearAllPastScenarioIndicators();
+            sceneReset = false;
         }
 
         if (count < 1)

@@ -37,7 +37,9 @@ public class AIComponent : MonoBehaviour, IEventSource
     GameObject ballMarker;
     GameObject agentScenarioIndicator;
     GameObject agentScenarioIndicatorObject;
+    Transform targetTeammate;
     bool ballMarkerVisible;
+    bool passMarkerVisible;
     bool agentScenarioIndicatorVisible;
     //BTContext aiCoachContext;
     //BTContext aiRefereeContext;
@@ -153,9 +155,12 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     public void RemoveAgentScenarioIndicator()
     {
-        agentScenarioIndicatorVisible = false;
-        Destroy(agentScenarioIndicator);
-        CoachController.agentsUsingPastScenario.Remove(this);
+        if (agentScenarioIndicatorVisible)
+        {
+            Destroy(agentScenarioIndicator);
+            CoachController.agentsUsingPastScenario.Remove(this);
+            agentScenarioIndicatorVisible = false;
+        }
     }
 
     public void RemoveAllActions()
@@ -208,6 +213,7 @@ public class AIComponent : MonoBehaviour, IEventSource
     private void Start()
     {
         ballMarkerVisible = false;
+        passMarkerVisible = false;
         agentScenarioIndicatorVisible = false;
         sensorySystem.Initialize(this, navAgent);
         eventHandler.Initialize(this, animatorController, navAgent);
@@ -232,6 +238,8 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     void Update()
     {
+        var currentBallPosition = ball.position;
+
         if (agentScenarioIndicatorVisible)
         {
             var location = transform.position;
@@ -241,7 +249,7 @@ public class AIComponent : MonoBehaviour, IEventSource
 
         if (ballMarkerVisible)
         {
-            var markerOffset = new Vector3(ball.position.x, 1, ball.position.z);
+            var markerOffset = new Vector3(currentBallPosition.x, 1, currentBallPosition.z);
             ballMarker.transform.position = markerOffset;
         }
 
@@ -267,11 +275,14 @@ public class AIComponent : MonoBehaviour, IEventSource
                         points[i + 1] = new Vector3(destination.x, 1, destination.z);
                         break;
                     case "GoToBall":
-                        destination = ball.position;
-                        points[i + 1] = new Vector3(destination.x, 1, destination.z);
+                        points[i + 1] = new Vector3(currentBallPosition.x, 1, currentBallPosition.z);
                         break;
                     case "Kick":
                         var target = userActions[i].Item3.transform.position;
+                        points[i + 1] = new Vector3(target.x, 1, target.z);
+                        break;
+                    case "Pass":
+                        target = targetTeammate.position;
                         points[i + 1] = new Vector3(target.x, 1, target.z);
                         break;
                 }
