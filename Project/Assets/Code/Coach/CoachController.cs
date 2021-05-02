@@ -43,6 +43,7 @@ public class CoachController : MonoBehaviour
     [SerializeField] private GameObject moveWaypointMarker;
     [SerializeField] private GameObject goToBallMarker;
     [SerializeField] private GameObject kickMarker;
+    [SerializeField] private GameObject passMarker;
     [SerializeField] private GameObject agentScenarioIndicator;
     [SerializeField] private Material defaultPurpleMaterial;
     [SerializeField] private Material defaultBlueMaterial;
@@ -254,6 +255,20 @@ public class CoachController : MonoBehaviour
                 if (Input.GetButtonDown("Fire1"))
                 {
                     string action = "Kick"; // Kick scenario
+                    var label = action; // Default label
+                    Vector3 actionParameter = hit.point; // Target direction in this scenario
+                    selectedAgent.AddAction(label, action, kickMarker, actionParameter);
+                    agentsWithUserActions.Add(selectedAgent);
+                    userActionsGUI.SetActive(true);
+                    BlackBoard.SetActive(true);
+                    currentCommand = coachCommands.NONE;
+                }
+            }
+            else if (selection.CompareTag(agentTag) && selection != selectedPlayer)
+            {
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    string action = "Pass"; // Kick scenario
                     var label = action; // Default label
                     Vector3 actionParameter = hit.point; // Target direction in this scenario
                     selectedAgent.AddAction(label, action, kickMarker, actionParameter);

@@ -468,6 +468,8 @@ MonoBehaviour:
     type: 3}
   kickMarker: {fileID: 7647626226041207574, guid: 84ee02c65e46cf146b5ea8b7456018a8,
     type: 3}
+  passMarker: {fileID: 448774159474556513, guid: d176c66807fcc9a4b8f362adb7180b2f,
+    type: 3}
   agentScenarioIndicator: {fileID: 8761759259508195531, guid: 88c9da2a0893c234a94d9f1411d8d6ef,
     type: 3}
   defaultPurpleMaterial: {fileID: 2100000, guid: b0da1813c36914e678ba57f2790424e1,
