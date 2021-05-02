@@ -195,6 +195,7 @@ public class SoccerEnvController : MonoBehaviour
             item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
         }
 
+        CoachController.sceneReset = true;
         CoachController.actionSequence.Clear();
         //Reset Ball
         ResetBall();

@@ -9,6 +9,7 @@ using UnityEngine;
 public class CoachController : MonoBehaviour
 {
     public static bool coachMode;
+    public static bool sceneReset;
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
     public static HashSet<AIComponent> agentsUsingPastScenario = new HashSet<AIComponent>();
     public static Dictionary<string, Scenario> scenarios = new Dictionary<string, Scenario>();
@@ -484,6 +485,7 @@ public class CoachController : MonoBehaviour
         userActionsGUI.SetActive(false);
         cancelAllUsersActionsButton.SetActive(false);
         coachMode = false;
+        sceneReset = false;
         currentCommand = coachCommands.NONE;
         defaultMaterial = defaultPurpleMaterial;
         BlackBoard.SetActive(false);
@@ -506,6 +508,12 @@ public class CoachController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (sceneReset)
+        {
+            CancelAllUsersActions();
+            sceneReset = !sceneReset;
+        }
+
         if (count < 1)
         {
             BlackBoard2.SetActive(false);
