@@ -35,7 +35,7 @@ public class Example_class : MonoBehaviour
     {
         float x;
         float y;
-        float z;
+//        float z;
 
         float angle = 20f;
 
@@ -58,7 +58,8 @@ public class Example_class : MonoBehaviour
 
         line = gameObject.GetComponent<LineRenderer>();
 
-        line.SetVertexCount(segments + 1);
+//        line.SetVertexCount(segments + 1);
+        line.positionCount = segments + 1;
         line.useWorldSpace = false;
         CreatePoints();
 

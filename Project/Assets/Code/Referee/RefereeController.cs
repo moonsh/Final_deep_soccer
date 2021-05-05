@@ -27,12 +27,12 @@ public class RefereeController : MonoBehaviour
     {
         if (CoachController.coachMode) // Pause game/enable coach mode.
         {
-            Debug.Log("Coach mode enabled.");
+//            Debug.Log("Coach mode enabled.");
             Time.timeScale = 0f;
         }
         else // Unpause game/disable coach mode.
         {
-            Debug.Log("Coach mode disabled.");
+//            Debug.Log("Coach mode disabled.");
             Time.timeScale = 1;
         }
     }
