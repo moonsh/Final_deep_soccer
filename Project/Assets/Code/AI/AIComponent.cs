@@ -35,6 +35,8 @@ public class AIComponent : MonoBehaviour, IEventSource
     BTContext aiContext;
     LineRenderer userActionPath;
     GameObject ballMarker;
+    Transform targetTeammate;
+    List<Tuple<Transform, GameObject>> passMarkers = new List<Tuple<Transform, GameObject>>();
     GameObject agentScenarioIndicator;
     GameObject agentScenarioIndicatorObject;
     bool ballMarkerVisible;
@@ -74,6 +76,16 @@ public class AIComponent : MonoBehaviour, IEventSource
                 kickDirection.layer = LayerMask.NameToLayer("Ignore Raycast"); ;
                 newMarker = kickDirection;
                 break;
+            case "Pass":
+                point = (Vector3)actionParameter;
+                markerOffset = new Vector3(point.x, 1, point.z);
+                markerRotation = Quaternion.identity;
+                markerRotation.eulerAngles = new Vector3(90, 0, 0);
+                var passMarker = Instantiate(marker, markerOffset, markerRotation);
+                passMarker.layer = LayerMask.NameToLayer("Ignore Raycast"); ;
+                newMarker = passMarker;
+                passMarkers.Add(new Tuple<Transform, GameObject>(targetTeammate, newMarker));
+                break;
             default:
                 newMarker = null;
                 break;
@@ -94,13 +106,10 @@ public class AIComponent : MonoBehaviour, IEventSource
         agentScenarioIndicatorObject = _agentScenarioindicatorObject;
     }
 
-    /*public void AddActionMove(Vector3 destination, GameObject waypoint)
+    public void ClearTargetTeammate()
     {
-        Vector3 markerOffset = new Vector3(destination.x, 1, destination.z);
-        userActionMoves.Add(destination);
-        var newWaypoint = Instantiate(waypoint, markerOffset, Quaternion.identity);
-        userActionMarkers.Add(newWaypoint);
-    }*/
+        targetTeammate = null;
+    }
 
     public void CreateAgentScenarioIndicator(string label)
     {
@@ -116,6 +125,11 @@ public class AIComponent : MonoBehaviour, IEventSource
     public string GetAgentScenarioIndicatorValue()
     {
         return agentScenarioIndicator.GetComponentInChildren<TextMeshProUGUI>().text;
+    }
+
+    public Transform GetCurrentPassTarget()
+    {
+        return passMarkers[0].Item1;
     }
 
     public bool IsAgentScenarioIndicatorVisible()
@@ -142,6 +156,11 @@ public class AIComponent : MonoBehaviour, IEventSource
             ballMarkerVisible = false;
         }
 
+        if (userActions[0].Item2.Equals("Pass"))
+        {
+            passMarkers.RemoveAt(0);
+        }
+
         userActions.RemoveAt(0);
 
         if (userActions.Count == 0)
@@ -153,9 +172,12 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     public void RemoveAgentScenarioIndicator()
     {
-        agentScenarioIndicatorVisible = false;
-        Destroy(agentScenarioIndicator);
-        CoachController.agentsUsingPastScenario.Remove(this);
+        if (agentScenarioIndicatorVisible)
+        {
+            Destroy(agentScenarioIndicator);
+            CoachController.agentsUsingPastScenario.Remove(this);
+            agentScenarioIndicatorVisible = false;
+        }
     }
 
     public void RemoveAllActions()
@@ -166,6 +188,11 @@ public class AIComponent : MonoBehaviour, IEventSource
         {
             RemoveAction();
         }
+    }
+
+    public void SetTargetTeammate(Transform teammate)
+    {
+        targetTeammate = teammate;
     }
 
     private void Awake()
@@ -232,6 +259,8 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     void Update()
     {
+        var currentBallPosition = ball.position;
+
         if (agentScenarioIndicatorVisible)
         {
             var location = transform.position;
@@ -241,8 +270,15 @@ public class AIComponent : MonoBehaviour, IEventSource
 
         if (ballMarkerVisible)
         {
-            var markerOffset = new Vector3(ball.position.x, 1, ball.position.z);
+            var markerOffset = new Vector3(currentBallPosition.x, 1, currentBallPosition.z);
             ballMarker.transform.position = markerOffset;
+        }
+
+        if (passMarkers.Count > 0)
+        {
+            var targetTeammatePosition = passMarkers[0].Item1.position;
+            var markerOffset = new Vector3(targetTeammatePosition.x, 1, targetTeammatePosition.z);
+            passMarkers[0].Item2.transform.position = markerOffset;
         }
 
         if (userActions.Count > 0 && userActions[0].Item3 != null)
@@ -255,6 +291,7 @@ public class AIComponent : MonoBehaviour, IEventSource
             userActionPath.useWorldSpace = true;
             var points = new Vector3[lengthOfLineRenderer];
             points[0] = this.transform.position;
+            int j = 0;
 
             for (int i = 0; i < lengthOfLineRenderer - 1; i++)
             {
@@ -267,12 +304,16 @@ public class AIComponent : MonoBehaviour, IEventSource
                         points[i + 1] = new Vector3(destination.x, 1, destination.z);
                         break;
                     case "GoToBall":
-                        destination = ball.position;
-                        points[i + 1] = new Vector3(destination.x, 1, destination.z);
+                        points[i + 1] = new Vector3(currentBallPosition.x, 1, currentBallPosition.z);
                         break;
                     case "Kick":
                         var target = userActions[i].Item3.transform.position;
                         points[i + 1] = new Vector3(target.x, 1, target.z);
+                        break;
+                    case "Pass":
+                        target = passMarkers[j].Item1.position;
+                        points[i + 1] = new Vector3(target.x, 1, target.z);
+                        j++;
                         break;
                 }
             }

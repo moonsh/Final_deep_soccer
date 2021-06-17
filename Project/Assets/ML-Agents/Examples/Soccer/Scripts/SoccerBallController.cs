@@ -26,7 +26,7 @@ public class SoccerBallController : MonoBehaviour
         }
         if(col.gameObject.tag == "wall")
         {
-            envController.ResetBall();
+            envController.ResetScene();
         }
     }
 
@@ -42,9 +42,11 @@ public class SoccerBallController : MonoBehaviour
                                                                                                  // Debug.Log(velocity);
             transform.Rotate(owner.transform.right, 0.1f * 10f);
 
+            if (owner.tag == "blueAgent")
+            {
+                envController.ResetScene();
+            }
         }
     }
-
-
 }
 

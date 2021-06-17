@@ -468,6 +468,8 @@ MonoBehaviour:
     type: 3}
   kickMarker: {fileID: 7647626226041207574, guid: 84ee02c65e46cf146b5ea8b7456018a8,
     type: 3}
+  passMarker: {fileID: 448774159474556513, guid: d176c66807fcc9a4b8f362adb7180b2f,
+    type: 3}
   agentScenarioIndicator: {fileID: 8761759259508195531, guid: 88c9da2a0893c234a94d9f1411d8d6ef,
     type: 3}
   defaultPurpleMaterial: {fileID: 2100000, guid: b0da1813c36914e678ba57f2790424e1,
@@ -7180,7 +7182,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1633157550}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 39260105}
+        m_MethodName: LoadScenarios
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1633157550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8153,7 +8166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee2d0a7dda27da43b2f3e4cac75dead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateRate: 0.5
+  updateRate: 0.01
   updateTimer: 0
 --- !u!4 &1672598981
 Transform:

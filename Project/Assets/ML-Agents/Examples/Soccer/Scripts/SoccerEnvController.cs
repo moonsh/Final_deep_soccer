@@ -20,7 +20,6 @@ public class SoccerEnvController : MonoBehaviour
         public Rigidbody Rb;
     }
 
-
     /// <summary>
     /// Max Academy steps before this platform resets
     /// </summary>
@@ -60,6 +59,7 @@ public class SoccerEnvController : MonoBehaviour
     private Vector3 calculate_distance_ball_agents;
     private float WaitTime = 3.0f;
     private float Timer = 0.0f;
+
     void Start()
     {
 
@@ -71,11 +71,13 @@ public class SoccerEnvController : MonoBehaviour
         m_PurpleAgentGroup = new SimpleMultiAgentGroup();
         ballRb = ball.GetComponent<Rigidbody>();
         m_BallStartingPos = new Vector3(ball.transform.position.x, ball.transform.position.y, ball.transform.position.z);
+
         foreach (var item in AgentsList)
         {
             item.StartingPos = item.Agent.transform.position;
             item.StartingRot = item.Agent.transform.rotation;
             item.Rb = item.Agent.GetComponent<Rigidbody>();
+
             if (item.Agent.team == Team.Blue)
             {
                 m_BlueAgentGroup.RegisterAgent(item.Agent);
@@ -85,6 +87,7 @@ public class SoccerEnvController : MonoBehaviour
                 m_PurpleAgentGroup.RegisterAgent(item.Agent);
             }
         }
+
         ResetScene();
     }
 
@@ -126,23 +129,22 @@ public class SoccerEnvController : MonoBehaviour
                 }
             }
         }
+
         Timer += Time.deltaTime;
 
         if(Mathf.Abs(ball.transform.position.z)>55f|| Mathf.Abs(ball.transform.position.x) > 37.5f)
         {
-            ResetBall();
+            //ResetBall();
+            ResetScene();
         }
     }
+
     public void ResetBall()
     {
         ball.GetComponent<SoccerBallController>().owner = null;
-
-        
-
         ball.transform.position = m_BallStartingPos ;
         ballRb.velocity = Vector3.zero;
         ballRb.angularVelocity = Vector3.zero;
-
     }
 
     public void GoalTouched(Team scoredTeam)
@@ -151,18 +153,29 @@ public class SoccerEnvController : MonoBehaviour
         {
             m_BlueAgentGroup.AddGroupReward(1 - m_ResetTimer / MaxEnvironmentSteps);
             m_PurpleAgentGroup.AddGroupReward(-1);
-            purpleScore.text = (Int16.Parse(purpleScore.text) +1).ToString();
+            //purpleScore.text = (Int16.Parse(purpleScore.text) +1).ToString();
+            //Debug.Log("SoccerEnvController: purple team has scored, resetting scene.");
+            //Debug.Log("SoccerEnvController: CoachController.actionSequence.Count = " + CoachController.actionSequence.Count);
+
+            if (CoachController.actionSequence.Count > 0)
+            {
+                List<string> actions = new List<string>(CoachController.actionSequence);
+                CoachController.actionSequences.Add(actions);
+                //Debug.Log("SoccerEnvController: CoachController.actionSequences.Count = " + CoachController.actionSequences.Count);
+                //Debug.Log("SoccerEnvController: recording successful action sequences.");
+            }
         }
         else
         {
             m_PurpleAgentGroup.AddGroupReward(1 - m_ResetTimer / MaxEnvironmentSteps);
             m_BlueAgentGroup.AddGroupReward(-1);
-            blueScore.text = (Int16.Parse(blueScore.text) + 1).ToString();
+            //blueScore.text = (Int16.Parse(blueScore.text) + 1).ToString();
         }
+
         m_PurpleAgentGroup.EndGroupEpisode();
         m_BlueAgentGroup.EndGroupEpisode();
         ResetScene();
-
+        //Debug.Log("SoccerEnvController: CoachController.actionSequences[0].Count = " + CoachController.actionSequences[0].Count);
     }
 
 
@@ -173,17 +186,17 @@ public class SoccerEnvController : MonoBehaviour
         //Reset Agents
         foreach (var item in AgentsList)
         {
-            
             var newStartPos = item.Agent.initialPos;
             var rot = item.Agent.rotSign ;
             var newRot = Quaternion.Euler(0, rot, 0);
             item.Agent.transform.SetPositionAndRotation(item.StartingPos, newRot);
-
             item.Rb.velocity = Vector3.zero;
             item.Rb.angularVelocity = Vector3.zero;
-            item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
+            //item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
         }
 
+        CoachController.sceneReset = true;
+        CoachController.actionSequence.Clear();
         //Reset Ball
         ResetBall();
     }
