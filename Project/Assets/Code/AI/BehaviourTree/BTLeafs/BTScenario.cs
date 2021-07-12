@@ -7,7 +7,7 @@ public class BTScenario : BTNode
         var label = context.pastScenario.Item1;
         var scenario = context.pastScenario.Item2;
         var action = scenario.action;
-        var actionParameter = scenario.actionParameter;
+        var actionParameter = scenario.relativeTarget;
 
         
 
@@ -27,7 +27,7 @@ public class BTScenario : BTNode
                     //Debug.Log("Test: agent has reached destination.");
                     context.contextOwner.RemoveAgentScenarioIndicator();
                     context.pastScenario = null;
-
+                
                     return BTResult.SUCCESS;
                 }
                 else // Action executing.
@@ -99,7 +99,7 @@ public class BTScenario : BTNode
 
                 context.contextOwner.RemoveAgentScenarioIndicator();
                 context.pastScenario = null;
-
+                
                 return BTResult.SUCCESS;
             case "Pass":
                 Transform targetTeammate = null;

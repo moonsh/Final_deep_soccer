@@ -15,6 +15,8 @@ public class Scenario
     public string teamWithBall;
     public double reward;
 
+    public Vector3 relativeTarget;
+
     public Scenario(string _action, Vector3 _actionParameter,
         Vector3 _agentPosition, Vector3 _ballPosition,
         HashSet<Vector3> _teammatePositions, HashSet<Vector3> _opponentPositions,

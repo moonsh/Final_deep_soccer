@@ -16,16 +16,17 @@ public class BTScenarioEvaluation : BTNode
                 string label = entry.Key;
                 Scenario scenario = entry.Value;
                 bool allConditionFit = true;
+                //the difference between agent's current position and agent's position in the scene
                 Vector3 diff = context.navAgent.transform.position - scenario.agentPosition;
+                //the expected position of ball based on diff
                 Vector3 expectedBallPos = context.ball.position - diff;
-
-                
-
+                //the expected position of teammates based on diff
                 HashSet<Vector3> expectedTeamPositions = new HashSet<Vector3>();
+                //the expected position of opponents based on diff
                 HashSet<Vector3> expectedOppoPositions = new HashSet<Vector3>();
                 foreach (GameObject teammate in context.teammates)
                 {
-                    expectedTeamPositions.Add(teammate.transform.position-diff);
+                    expectedTeamPositions.Add(teammate.transform.position - diff);
                 }
                 foreach (GameObject opponent in context.opponents)
                 {
@@ -83,9 +84,10 @@ public class BTScenarioEvaluation : BTNode
                             }
                         }
                     }
-
+                    
                     if (allConditionFit)
                     {
+                        Tuple<string, Scenario> pastScenario = context.pastScenario;
                         //Debug.Log("BTScenarioEvaluation (" + label + "): all conditions fit.");
                         //Debug.Log("diff:" + diff);
                         //Debug.Log("ballPos:" + context.ball.position);
@@ -98,8 +100,17 @@ public class BTScenarioEvaluation : BTNode
                                 CoachController.agentsUsingPastScenario.Add(context.contextOwner);
                             }
                         }
-
-                        context.pastScenario = new Tuple<string, Scenario>(label, scenario);
+                        if (Mathf.Abs(scenario.relativeTarget.z) < 55f || Mathf.Abs(scenario.relativeTarget.x) < 37.5f)
+                        {
+                            context.pastScenario = new Tuple<string, Scenario>(label, scenario);
+                        }
+                        if (pastScenario != context.pastScenario)
+                        {
+                            scenario.relativeTarget = scenario.actionParameter + diff;
+                            
+                        }
+                        
+                        
                         break;
                     }
                 }
