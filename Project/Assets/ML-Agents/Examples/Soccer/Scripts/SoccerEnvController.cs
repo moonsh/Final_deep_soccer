@@ -153,7 +153,7 @@ public class SoccerEnvController : MonoBehaviour
         {
             m_BlueAgentGroup.AddGroupReward(1 - m_ResetTimer / MaxEnvironmentSteps);
             m_PurpleAgentGroup.AddGroupReward(-1);
-            //purpleScore.text = (Int16.Parse(purpleScore.text) +1).ToString();
+            purpleScore.text = (Int16.Parse(purpleScore.text) +1).ToString();
             //Debug.Log("SoccerEnvController: purple team has scored, resetting scene.");
             //Debug.Log("SoccerEnvController: CoachController.actionSequence.Count = " + CoachController.actionSequence.Count);
 
@@ -169,7 +169,7 @@ public class SoccerEnvController : MonoBehaviour
         {
             m_PurpleAgentGroup.AddGroupReward(1 - m_ResetTimer / MaxEnvironmentSteps);
             m_BlueAgentGroup.AddGroupReward(-1);
-            //blueScore.text = (Int16.Parse(blueScore.text) + 1).ToString();
+            blueScore.text = (Int16.Parse(blueScore.text) + 1).ToString();
         }
 
         m_PurpleAgentGroup.EndGroupEpisode();
@@ -192,7 +192,7 @@ public class SoccerEnvController : MonoBehaviour
             item.Agent.transform.SetPositionAndRotation(item.StartingPos, newRot);
             item.Rb.velocity = Vector3.zero;
             item.Rb.angularVelocity = Vector3.zero;
-            //item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
+            item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
         }
 
         CoachController.sceneReset = true;

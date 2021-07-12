@@ -99,7 +99,7 @@ public class AgentSoccer : Agent
         var forwardAxis = act[0];
         var rightAxis = act[1];
         var rotateAxis = act[2];
-        var kick_action = act[2];
+        var kick_action = act[3];
 
         switch (forwardAxis)
         {
