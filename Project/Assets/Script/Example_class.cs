@@ -58,7 +58,11 @@ public class Example_class : MonoBehaviour
 
         line = gameObject.GetComponent<LineRenderer>();
 
+<<<<<<< HEAD
 //        line.SetVertexCount(segments + 1);
+=======
+//        line.SetVertexCount(segments + 1);
+>>>>>>> Jiazhao
         line.positionCount = segments + 1;
         line.useWorldSpace = false;
         CreatePoints();
