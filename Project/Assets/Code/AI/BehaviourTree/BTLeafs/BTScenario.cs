@@ -7,12 +7,7 @@ public class BTScenario : BTNode
         var label = context.pastScenario.Item1;
         var scenario = context.pastScenario.Item2;
         var action = scenario.action;
-<<<<<<< HEAD
-        var actionParameter = scenario.actionParameter;
-=======
         var actionParameter = scenario.relativeTarget;
->>>>>>> Jiazhao
-
         
 
         switch (action)
@@ -31,11 +26,7 @@ public class BTScenario : BTNode
                     //Debug.Log("Test: agent has reached destination.");
                     context.contextOwner.RemoveAgentScenarioIndicator();
                     context.pastScenario = null;
-<<<<<<< HEAD
 
-=======
-                
->>>>>>> Jiazhao
                     return BTResult.SUCCESS;
                 }
                 else // Action executing.
@@ -46,7 +37,7 @@ public class BTScenario : BTNode
                     context.navAgent.speed = 10;
 
                     return BTResult.SUCCESS;
-<<<<<<< HEAD
+
                 }
             case "GoToBall": // Pursue ball for ownership.
                 if (context.ball.GetComponent<SoccerBallController>().owner) // Ball is possessed.
@@ -75,36 +66,7 @@ public class BTScenario : BTNode
                         return BTResult.SUCCESS;
                     }
                 }
-=======
-                }
-            case "GoToBall": // Pursue ball for ownership.
-                if (context.ball.GetComponent<SoccerBallController>().owner) // Ball is possessed.
-                {
-                    if (context.ball.GetComponent<SoccerBallController>().owner.name.Equals(context.rb.name))
-                    {
-                        // Action completed; remove marker and past scenario.
-                        context.contextOwner.RemoveAgentScenarioIndicator();
-                        context.pastScenario = null;
 
-                        return BTResult.SUCCESS;
-                    }
-                    else if (context.ball.GetComponent<SoccerBallController>().owner.tag.Equals(context.rb.tag))
-                    {
-                        // Teammate has ball.  Action incomplete, remove marker and past scenario.
-                        context.contextOwner.RemoveAgentScenarioIndicator();
-                        context.pastScenario = null;
-
-                        return BTResult.SUCCESS;
-                    }
-                    else // Opponent has ball.  Action executing.
-                    {
-                        context.navAgent.SetDestination(context.ball.position);
-                        context.navAgent.speed = 10;
-
-                        return BTResult.SUCCESS;
-                    }
-                }
->>>>>>> Jiazhao
                 else // Ball is not possessed.  Action executing.
                 {
                     context.navAgent.SetDestination(context.ball.position);
@@ -138,11 +100,6 @@ public class BTScenario : BTNode
 
                 context.contextOwner.RemoveAgentScenarioIndicator();
                 context.pastScenario = null;
-<<<<<<< HEAD
-
-=======
-                
->>>>>>> Jiazhao
                 return BTResult.SUCCESS;
             case "Pass":
                 Transform targetTeammate = null;

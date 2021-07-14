@@ -26,16 +26,6 @@ public class BTScenarioEvaluation : BTNode
                 HashSet<Vector3> expectedOppoPositions = new HashSet<Vector3>();
                 foreach (GameObject teammate in context.teammates)
                 {
-<<<<<<< HEAD
-                    //Debug.Log("BTScenarioEvaluation:" + context.rb.name + "agent's position matches");
-
-                    //check if ball's position matches
-                    if ((Mathf.Abs(context.ball.position.x - scenario.ballPosition.x) < BlackBoard2.soccerR && Mathf.Abs(context.ball.position.z - scenario.ballPosition.z) < BlackBoard2.soccerR) || !BlackBoard2.soccerPosition)
-                    {
-                        //Debug.Log("BTScenarioEvaluation: ball's position matches");
-                        //check if all teammate positions matches
-                        if (BlackBoard2.teamPosition)
-=======
                     expectedTeamPositions.Add(teammate.transform.position - diff);
                 }
                 foreach (GameObject opponent in context.opponents)
@@ -53,7 +43,6 @@ public class BTScenarioEvaluation : BTNode
                     if (BlackBoard2.teamPosition)
                     {
                         foreach (Vector3 expectedTeammPos in expectedTeamPositions)
->>>>>>> Jiazhao
                         {
                             bool teammateMatch = false;
 
@@ -106,13 +95,7 @@ public class BTScenarioEvaluation : BTNode
                         //Debug.Log("sceneBallPos:" + scenario.ballPosition);
                         if (context.pastScenario != null)
                         {
-<<<<<<< HEAD
-                            //Debug.Log("BTScenarioEvaluation (" + label + "): all conditions fit.");
-
-                            if (context.pastScenario != null)
-=======
                             if (context.pastScenario.Item2 == null)
->>>>>>> Jiazhao
                             {
                                 CoachController.agentsUsingPastScenario.Add(context.contextOwner);
                             }
