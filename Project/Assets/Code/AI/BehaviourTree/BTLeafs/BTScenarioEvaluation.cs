@@ -1,11 +1,16 @@
 // Anthony Tiongson (ast119)
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BTScenarioEvaluation : BTNode
 {
+    Vector3 diff;
+    Vector3 expectedBallPos;
+    HashSet<Vector3> expectedTeamPositions;
+    HashSet<Vector3> expectedOppoPositions;
     public override BTResult Execute()
     {
         
@@ -17,23 +22,25 @@ public class BTScenarioEvaluation : BTNode
                 Scenario scenario = entry.Value;
                 bool allConditionFit = true;
                 //the difference between agent's current position and agent's position in the scene
-                Vector3 diff = context.navAgent.transform.position - scenario.agentPosition;
+                diff = context.navAgent.transform.position - scenario.agentPosition;
                 //the expected position of ball based on diff
-                Vector3 expectedBallPos = context.ball.position - diff;
+                expectedBallPos = context.ball.position - diff;
                 //the expected position of teammates based on diff
-                HashSet<Vector3> expectedTeamPositions = new HashSet<Vector3>();
+                expectedTeamPositions = new HashSet<Vector3>();
                 //the expected position of opponents based on diff
-                HashSet<Vector3> expectedOppoPositions = new HashSet<Vector3>();
+                expectedOppoPositions = new HashSet<Vector3>();
                 foreach (GameObject teammate in context.teammates)
                 {
                     expectedTeamPositions.Add(teammate.transform.position - diff);
                 }
+                
                 foreach (GameObject opponent in context.opponents)
                 {
                     expectedOppoPositions.Add(opponent.transform.position - diff);
                 }
                 
-                
+                Filter(scenario);
+
                 //Debug.Log("BTScenarioEvaluation (" + label + "): checking to see if current game state matches...");               
                 //check if ball's position matches
                 if ((Mathf.Abs(expectedBallPos.x - scenario.ballPosition.x) < BlackBoard2.soccerR && Mathf.Abs(expectedBallPos.z - scenario.ballPosition.z) < BlackBoard2.soccerR) || !BlackBoard2.soccerPosition)
@@ -119,5 +126,99 @@ public class BTScenarioEvaluation : BTNode
         }
 
         return BTResult.SUCCESS;
+    }
+
+    public void Filter(Scenario scenario)
+    {
+        Vector3 target = scenario.actionParameter;
+        if (scenario.action == "Kick")
+        {
+            Vector3 changedTarget = scenario.actionParameter + diff;
+            var targetDistanceToGoal = Mathf.Sqrt((target.x - context.goal.position.x) * (target.x - context.goal.position.x)+ (target.z - context.goal.position.z) * (target.z - context.goal.position.z));
+            var newTargetDistanceToGoal = Mathf.Sqrt((changedTarget.x - context.goal.position.x) * (changedTarget.x - context.goal.position.x) + (changedTarget.z - context.goal.position.z) * (changedTarget.z - context.goal.position.z));
+            if (targetDistanceToGoal < 3) //shooting:Ignore teammates and opponents not near the player
+            {
+                HashSet<Vector3> tempSet = new HashSet<Vector3>();
+                foreach (Vector3 team in expectedTeamPositions)
+                {
+                    var distanceToTeam = ((context.navAgent.transform.position.x - team.x) * (context.navAgent.transform.position.x - team.x) + (context.navAgent.transform.position.z - team.z) * (context.navAgent.transform.position.z - team.z));
+                    if (distanceToTeam > BlackBoard2.teamR)
+                    {
+                        tempSet.Add(team);
+                    }
+                }
+                foreach(var temp in tempSet)
+                {
+                    expectedOppoPositions.Remove(temp);
+                }
+                HashSet<Vector3> tempSet2 = new HashSet<Vector3>();
+                foreach (Vector3 oppo in expectedOppoPositions)
+                {
+                    var distanceToOppo = ((context.navAgent.transform.position.x - oppo.x) * (context.navAgent.transform.position.x - oppo.x) + (context.navAgent.transform.position.z - oppo.z) * (context.navAgent.transform.position.z - oppo.z));
+                    if (distanceToOppo > BlackBoard2.oppoR)
+                    {
+                        tempSet2.Add(oppo);                        
+                    }
+                }
+                foreach(var temp in tempSet2)
+                {
+                    expectedOppoPositions.Remove(temp);
+                }
+
+                if (newTargetDistanceToGoal > 3)
+                {
+                    expectedOppoPositions.Add(new Vector3(100, 100, 100));
+                }
+                
+            }
+            else //Passing:If opponent team players not near, ignore these players positions
+            {
+                HashSet<Vector3> tempSet = new HashSet<Vector3>();
+                foreach (Vector3 oppo in expectedOppoPositions)
+                {
+                    var distanceToOppo = ((target.x - oppo.x) * (target.x - oppo.x) + (target.z - oppo.z) * (target.z - oppo.z));
+                    if (distanceToOppo > BlackBoard2.oppoR)
+                    {
+                        tempSet.Add(oppo);          
+                    }
+                }
+                foreach (var temp in tempSet)
+                {
+                    expectedOppoPositions.Remove(temp);
+                }
+                if (newTargetDistanceToGoal < 3)
+                {
+                    expectedOppoPositions.Add(new Vector3(100, 100, 100));
+                }      
+            }
+        }
+        else if(scenario.action == "Move")
+        {
+            if(scenario.ballPossessed) //move with a ball: Teammates position ^and  near opponents
+            {
+                HashSet<Vector3> tempSet = new HashSet<Vector3>();
+                foreach (Vector3 oppo in expectedOppoPositions)
+                {
+                    var distanceToOppo = ((context.navAgent.transform.position.x - oppo.x) * (context.navAgent.transform.position.x - oppo.x) + (context.navAgent.transform.position.z - oppo.z) * (context.navAgent.transform.position.z - oppo.z));
+                    if (distanceToOppo > BlackBoard2.oppoR)
+                    {
+                        tempSet.Add(oppo);
+                    }
+                }
+                foreach(var temp in tempSet)
+                {
+                    expectedOppoPositions.Remove(temp);
+                }
+            }
+            else //Attack move without ball: When user add a move action to opponent area, don’t consider opponents positions
+            {
+                if ((context.contextOwner.name[0] == 'P' && target.z > 0)
+                    || (context.contextOwner.name[0] == 'B' && target.z < 0))
+                {
+                    expectedOppoPositions = new HashSet<Vector3>();
+                }                
+            }
+            
+        }
     }
 }
