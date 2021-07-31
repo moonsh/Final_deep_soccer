@@ -111,7 +111,7 @@ public class ActionConditionBoard : MonoBehaviour
         opos.Add(VecToStr(opponentPos2.text));
         opos.Add(VecToStr(opponentPos3.text));
         
-        currentScene = new Scenario(currentScene.action, currentScene.actionParameter, apos, bpos, tpos, opos, currentScene.ballPossessed, currentScene.teamWithBall, currentScene.reward);
+        currentScene = new Scenario(currentScene.action, currentScene.actionParameter, apos, bpos, tpos, opos, currentScene.ballPossessed, currentScene.teamWithBall, currentScene.reward,currentScene.strategy);
         CoachController.scenarios[key] = currentScene;
         newScenarios = new Dictionary<string, Scenario>();
         acb.SetActive(false);

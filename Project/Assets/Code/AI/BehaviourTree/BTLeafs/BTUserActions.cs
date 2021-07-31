@@ -1,4 +1,3 @@
-// Anthony Tiongson (ast119)
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +35,7 @@ public class BTUserActions : BTNode
         }
 
         return new Scenario(action, actionParameter, agentPosition, ballPosition,
-            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d);
+            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, CoachController.currentStrategy);
     }
 
     private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)

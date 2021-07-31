@@ -3,29 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActionSequenceList : MonoBehaviour
+public class StrategySequenceList : MonoBehaviour
 {
     public Transform list;
-    public Text boardName;
+    public Text strategy;
     public GameObject buttonPerfab;
     public static LinkedList<GameObject> buttons = new LinkedList<GameObject>();
-    public Button saveButton;
+    public Button strategySequenceButton;
+    public Button applyButton;
     public Button deleteButton;
-    public static string key;
     int count = 0;
     void Start()
     {
-        saveButton.onClick.AddListener(TaskOnClick);
+        strategySequenceButton.onClick.AddListener(TaskOnClick);
+        applyButton.onClick.AddListener(TaskOnClick);
         deleteButton.onClick.AddListener(TaskOnClick);
     }
     // Update is called once per frame
     void Update()
     {
-        if(count<1)
+        if (count < 1)
         {
             updateBoard();
         }
-        count++;
+        count++; 
     }
     void TaskOnClick()
     {
@@ -34,7 +35,7 @@ public class ActionSequenceList : MonoBehaviour
     }
     public void ClearBoard()
     {
-        foreach(GameObject bt in buttons)
+        foreach (GameObject bt in buttons)
         {
             Destroy(bt);
         }
@@ -42,19 +43,13 @@ public class ActionSequenceList : MonoBehaviour
     public void updateBoard()
     {
         ClearBoard();
-        boardName.text = key + " Actions";
-        foreach (KeyValuePair<string, Scenario> entry in CoachController.scenarios)
+        strategy.text = CoachController.currentStrategy;
+        foreach (string sc in CoachController.strategySequence)
         {
-            string sc = entry.Key;
-            if(entry.Value.strategy == key)
-            {
-                GameObject button = Object.Instantiate(buttonPerfab);
-                button.GetComponentInChildren<Text>().text = sc;
-                button.transform.SetParent(list);
-                buttons.AddLast(button);
-            }
-            
+            GameObject button = Object.Instantiate(buttonPerfab);
+            button.GetComponentInChildren<Text>().text = sc;
+            button.transform.SetParent(list);
+            buttons.AddLast(button);
         }
     }
-    
 }

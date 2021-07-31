@@ -15,6 +15,9 @@ public class CoachController : MonoBehaviour
     public static Dictionary<string, Scenario> scenarios = new Dictionary<string, Scenario>();
     public static List<List<string>> actionSequences = new List<List<string>>();
     public static List<string> actionSequence = new List<string>();
+    public static List<string> strategySequence = new List<string>();
+    public static string currentStrategy = "strategy1";
+    public static int strategyCount = 1;
     public static float countTime;
     public enum coachCommands
     {
@@ -24,8 +27,10 @@ public class CoachController : MonoBehaviour
     }
     public GameObject BlackBoard;
     public GameObject BlackBoard2;
+    public GameObject StrategySequenceBoard;
     public GameObject ActionSequenceBoard;
     public GameObject ActionConditionBoard;
+    public static GameObject ssb;
     public static GameObject asb;
     public static GameObject acb;
     [SerializeField] private string agentTag = "purpleAgent";
@@ -62,6 +67,11 @@ public class CoachController : MonoBehaviour
         asb.SetActive(false);
         acb.SetActive(true);
         
+    }
+    public static void toActionSequence()
+    {
+        ssb.SetActive(false);
+        asb.SetActive(true);
     }
     public void CancelAllUsersActions()
     {
@@ -369,7 +379,7 @@ public class CoachController : MonoBehaviour
         }
 
         Scenario scenario = new Scenario(action, actionParameter, agentPosition, ballPosition,
-            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d);
+            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, currentStrategy);
         scenarios.Add(newLabel, scenario);
     }
 
@@ -404,7 +414,7 @@ public class CoachController : MonoBehaviour
         }
 
         selectedAgent.pendingScenarios.Add((label, new Scenario(action, actionParameter, agentPosition,
-        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d)));
+        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, currentStrategy)));
     }
 
     // Following method is used to retrieve the relative path in regards to device platform
@@ -510,6 +520,9 @@ public class CoachController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ssb = StrategySequenceBoard;
+        asb = ActionSequenceBoard;
+        acb = ActionConditionBoard;
         scenariosGUI.SetActive(false);
         userActionsGUI.SetActive(false);
         cancelAllUsersActionsButton.SetActive(false);
@@ -518,6 +531,7 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.NONE;
         defaultMaterial = defaultPurpleMaterial;
         BlackBoard.SetActive(false);
+        StrategySequenceBoard.SetActive(false);
         ActionSequenceBoard.SetActive(false);
         ActionConditionBoard.SetActive(false);
         BlackBoard2.SetActive(true);
@@ -530,8 +544,8 @@ public class CoachController : MonoBehaviour
         {
             agent.AttachAgentScenarioIndicatorObject(agentScenarioIndicator);
         }
-        asb = ActionSequenceBoard;
-        acb = ActionConditionBoard;
+        
+        strategySequence.Add("strategy1");
     }
 
     // Update is called once per frame
@@ -608,6 +622,7 @@ public class CoachController : MonoBehaviour
                         selectedPlayer = null;
                         userActionsGUI.SetActive(false);
                         BlackBoard.SetActive(false);
+                        StrategySequenceBoard.SetActive(false);
                         ActionConditionBoard.SetActive(false);
                         ActionSequenceBoard.SetActive(false);
                         BlackBoard2.SetActive(false);
@@ -701,6 +716,7 @@ public class CoachController : MonoBehaviour
                             selectedPlayer = null;
                             userActionsGUI.SetActive(false);
                             BlackBoard.SetActive(false);
+                            StrategySequenceBoard.SetActive(false);
                             ActionConditionBoard.SetActive(false);
                             ActionSequenceBoard.SetActive(false);
                             BlackBoard2.SetActive(false);
