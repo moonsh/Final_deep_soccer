@@ -34,6 +34,8 @@
 # Unity3D generated meta files
 *.pidb.meta
 
+/Project/Assets/DeepSoccer/scene/
+
 # Unity3D Generated File On Crash Reports
 /com.unity.ml-agents/sysinfo.txt
 
