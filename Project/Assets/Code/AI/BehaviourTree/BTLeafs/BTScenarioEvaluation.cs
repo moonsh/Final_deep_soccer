@@ -44,84 +44,88 @@ public class BTScenarioEvaluation : BTNode
 
                     //Debug.Log("BTScenarioEvaluation (" + label + "): checking to see if current game state matches...");               
                     //check if ball's position matches
-                    if ((Mathf.Abs(expectedBallPos.x - scenario.ballPosition.x) < BlackBoard2.soccerR && Mathf.Abs(expectedBallPos.z - scenario.ballPosition.z) < BlackBoard2.soccerR) || !BlackBoard2.soccerPosition)
+                    if(!scenario.ballPossessed || (scenario.ballPossessed&& (context.navAgent.transform.name == SoccerBallController.ownerName)) )
                     {
-                        //Debug.Log("BTScenarioEvaluation: ball's position matches");
-                        //check if all teammate positions matches
-                        if (BlackBoard2.teamPosition)
+                        if ((Mathf.Abs(expectedBallPos.x - scenario.ballPosition.x) < BlackBoard2.soccerR && Mathf.Abs(expectedBallPos.z - scenario.ballPosition.z) < BlackBoard2.soccerR) || !BlackBoard2.soccerPosition)
                         {
-                            foreach (Vector3 expectedTeammPos in expectedTeamPositions)
+                            //Debug.Log("BTScenarioEvaluation: ball's position matches");
+                            //check if all teammate positions matches
+                            if (BlackBoard2.teamPosition)
                             {
-                                bool teammateMatch = false;
-
-                                foreach (Vector3 teammatePosition in scenario.teammatePositions)
+                                foreach (Vector3 expectedTeammPos in expectedTeamPositions)
                                 {
-                                    if (Mathf.Abs(expectedTeammPos.x - teammatePosition.x) < BlackBoard2.teamR && Mathf.Abs(expectedTeammPos.z - teammatePosition.z) < BlackBoard2.teamR)
+                                    bool teammateMatch = false;
+
+                                    foreach (Vector3 teammatePosition in scenario.teammatePositions)
                                     {
-                                        teammateMatch = true;
+                                        if (Mathf.Abs(expectedTeammPos.x - teammatePosition.x) < BlackBoard2.teamR && Mathf.Abs(expectedTeammPos.z - teammatePosition.z) < BlackBoard2.teamR)
+                                        {
+                                            teammateMatch = true;
+                                        }
+                                    }
+
+                                    if (teammateMatch == false)
+                                    {
+                                        allConditionFit = false;
+                                        break;
                                     }
                                 }
-
-                                if (teammateMatch == false)
-                                {
-                                    allConditionFit = false;
-                                    break;
-                                }
                             }
-                        }
 
-                        if (BlackBoard2.oppoPosition)
-                        {
-                            //check if all opponent position matches
-                            foreach (Vector3 expectedOpponentPos in expectedOppoPositions)
+                            if (BlackBoard2.oppoPosition)
                             {
-                                bool opponentMatch = false;
-
-                                foreach (Vector3 opponentPosition in scenario.opponentPositions)
+                                //check if all opponent position matches
+                                foreach (Vector3 expectedOpponentPos in expectedOppoPositions)
                                 {
-                                    if (Mathf.Abs(expectedOpponentPos.x - opponentPosition.x) < BlackBoard2.oppoR && Mathf.Abs(expectedOpponentPos.z - opponentPosition.z) < BlackBoard2.oppoR)
+                                    bool opponentMatch = false;
+
+                                    foreach (Vector3 opponentPosition in scenario.opponentPositions)
                                     {
-                                        opponentMatch = true;
+                                        if (Mathf.Abs(expectedOpponentPos.x - opponentPosition.x) < BlackBoard2.oppoR && Mathf.Abs(expectedOpponentPos.z - opponentPosition.z) < BlackBoard2.oppoR)
+                                        {
+                                            opponentMatch = true;
+                                        }
+                                    }
+
+                                    if (opponentMatch == false)
+                                    {
+                                        allConditionFit = false;
+                                        break;
                                     }
                                 }
+                            }
 
-                                if (opponentMatch == false)
+                            if (allConditionFit)
+                            {
+                                Tuple<string, Scenario> pastScenario = context.pastScenario;
+                                //Debug.Log("BTScenarioEvaluation (" + label + "): all conditions fit.");
+                                //Debug.Log("diff:" + diff);
+                                //Debug.Log("ballPos:" + context.ball.position);
+                                //Debug.Log("expectedBallPos:" + expectedBallPos);
+                                //Debug.Log("sceneBallPos:" + scenario.ballPosition);
+                                if (context.pastScenario != null)
                                 {
-                                    allConditionFit = false;
-                                    break;
+                                    if (context.pastScenario.Item2 == null)
+                                    {
+                                        CoachController.agentsUsingPastScenario.Add(context.contextOwner);
+                                    }
                                 }
-                            }
-                        }
-
-                        if (allConditionFit)
-                        {
-                            Tuple<string, Scenario> pastScenario = context.pastScenario;
-                            //Debug.Log("BTScenarioEvaluation (" + label + "): all conditions fit.");
-                            //Debug.Log("diff:" + diff);
-                            //Debug.Log("ballPos:" + context.ball.position);
-                            //Debug.Log("expectedBallPos:" + expectedBallPos);
-                            //Debug.Log("sceneBallPos:" + scenario.ballPosition);
-                            if (context.pastScenario != null)
-                            {
-                                if (context.pastScenario.Item2 == null)
+                                if (Mathf.Abs(scenario.relativeTarget.z) < 55f || Mathf.Abs(scenario.relativeTarget.x) < 37.5f)
                                 {
-                                    CoachController.agentsUsingPastScenario.Add(context.contextOwner);
+                                    context.pastScenario = new Tuple<string, Scenario>(label, scenario);
                                 }
-                            }
-                            if (Mathf.Abs(scenario.relativeTarget.z) < 55f || Mathf.Abs(scenario.relativeTarget.x) < 37.5f)
-                            {
-                                context.pastScenario = new Tuple<string, Scenario>(label, scenario);
-                            }
-                            if (pastScenario != context.pastScenario)
-                            {
-                                scenario.relativeTarget = scenario.actionParameter + diff;
+                                if (pastScenario != context.pastScenario)
+                                {
+                                    scenario.relativeTarget = scenario.actionParameter + diff;
 
-                            }
+                                }
 
 
-                            break;
+                                break;
+                            }
                         }
                     }
+                    
                 }
                 
                 

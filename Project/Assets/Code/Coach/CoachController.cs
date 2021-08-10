@@ -33,6 +33,12 @@ public class CoachController : MonoBehaviour
     public static GameObject ssb;
     public static GameObject asb;
     public static GameObject acb;
+    public Transform p1;
+    public Transform p2;
+    public Transform p3;
+    public Transform b1;
+    public Transform b2;
+    public Transform b3;
     [SerializeField] private string agentTag = "purpleAgent";
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
@@ -55,7 +61,7 @@ public class CoachController : MonoBehaviour
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material highlightMaterial;
 
-    private Transform selectedPlayer;
+    public static Transform selectedPlayer;
     private Transform _selection;
     private coachCommands currentCommand;
     private Material defaultMaterial;
@@ -451,9 +457,21 @@ public class CoachController : MonoBehaviour
             BlackBoard2.SetActive(false);
             ActionSequenceBoard.SetActive(false);
             ActionConditionBoard.SetActive(false);
+            ResetVisualization();
         }
     }
 
+    public void ResetVisualization()
+    {
+        p1.GetComponent<Renderer>().material = defaultPurpleMaterial;
+        p2.GetComponent<Renderer>().material = defaultPurpleMaterial;
+        p3.GetComponent<Renderer>().material = defaultPurpleMaterial;
+        b1.GetComponent<Renderer>().material = defaultBlueMaterial;
+        b2.GetComponent<Renderer>().material = defaultBlueMaterial;
+        b3.GetComponent<Renderer>().material = defaultBlueMaterial;
+        Destroy(ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer);
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().targetMark.position = new Vector3(100, 100, 100);
+    }
     private void ToggleCoachMode()
     {
         coachMode = !coachMode;
@@ -624,6 +642,7 @@ public class CoachController : MonoBehaviour
                         BlackBoard.SetActive(false);
                         StrategySequenceBoard.SetActive(false);
                         ActionConditionBoard.SetActive(false);
+                        ResetVisualization();
                         ActionSequenceBoard.SetActive(false);
                         BlackBoard2.SetActive(false);
                     }
@@ -718,6 +737,7 @@ public class CoachController : MonoBehaviour
                             BlackBoard.SetActive(false);
                             StrategySequenceBoard.SetActive(false);
                             ActionConditionBoard.SetActive(false);
+                            ResetVisualization();
                             ActionSequenceBoard.SetActive(false);
                             BlackBoard2.SetActive(false);
                             currentCommand = coachCommands.NONE;

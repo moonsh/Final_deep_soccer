@@ -4,6 +4,7 @@ public class SoccerBallController : MonoBehaviour
 {
     public GameObject area;
     public GameObject owner;
+    public static string ownerName;
     [HideInInspector]
     public SoccerEnvController envController;
     public string purpleGoalTag; //will be used to check if collided with purple goal
@@ -46,6 +47,11 @@ public class SoccerBallController : MonoBehaviour
             {
                 envController.ResetScene();
             }
+            ownerName = owner.name;
+        }
+        else
+        {
+            ownerName = "111";
         }
     }
 }
