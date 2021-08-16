@@ -12,11 +12,11 @@ public class DeleteStrategy : MonoBehaviour
     }
     void TaskOnClick()
     {
-        if (ActionSequenceList.key != "strategy1")
+        /*if (ActionSequenceList.key != "strategy1")
         {
             CoachController.strategySequence.Remove(ActionSequenceList.key);
             if (ActionSequenceList.key == CoachController.currentStrategy)
                 CoachController.currentStrategy = "strategy1";
-        }      
+        }   */   
     }
 }

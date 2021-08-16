@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class StrategySequenceList : MonoBehaviour
 {
     public Transform list;
-    public Text strategy;
+    public Text blueStrategy;
+    public Text purpleStrategy;
     public GameObject buttonPerfab;
     public static LinkedList<GameObject> buttons = new LinkedList<GameObject>();
     public Button strategySequenceButton;
@@ -43,7 +44,25 @@ public class StrategySequenceList : MonoBehaviour
     public void updateBoard()
     {
         ClearBoard();
-        strategy.text = CoachController.currentStrategy;
+       
+        if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        {
+            
+            blueStrategy.text = "NoStrategy";
+            purpleStrategy.text = "NoStrategy";
+        }
+        else if(int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
+        {
+            
+            blueStrategy.text = "DeActiveStrategy";
+            purpleStrategy.text = "ActiveStrategy";
+        }
+        else
+        {
+            blueStrategy.text = "ActiveStrategy";
+            purpleStrategy.text = "DeActiveStrategy";
+        }
+       
         foreach (string sc in CoachController.strategySequence)
         {
             GameObject button = Object.Instantiate(buttonPerfab);

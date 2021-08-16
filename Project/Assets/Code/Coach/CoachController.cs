@@ -16,7 +16,6 @@ public class CoachController : MonoBehaviour
     public static List<List<string>> actionSequences = new List<List<string>>();
     public static List<string> actionSequence = new List<string>();
     public static List<string> strategySequence = new List<string>();
-    public static string currentStrategy = "strategy1";
     public static int strategyCount = 1;
     public static float countTime;
     public enum coachCommands
@@ -118,7 +117,7 @@ public class CoachController : MonoBehaviour
         CancelAllUsersActions();
     }
 
-    public void LoadScenarios()
+    /*public void LoadScenarios()
     {
         string filename = "Saved_scenarios.csv";
         string filePath = GetPath(filename);
@@ -149,7 +148,7 @@ public class CoachController : MonoBehaviour
             CreateAndLogScenario(label, action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions,
                 ballPossessed, teamWithBall, reward);
         }
-    }
+    }*/
 
     public void SaveScenarios()
     {
@@ -371,7 +370,7 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.NONE;
     }
 
-    private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3 agentPosition,
+    /*private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3 agentPosition,
         Vector3 ballPosition, HashSet<Vector3> teammatePositions, HashSet<Vector3> opponentPositions, bool ballPossessed,
         string teamWithBall, double reward, Vector3? actionParameterSecondary = null)
     {
@@ -387,7 +386,7 @@ public class CoachController : MonoBehaviour
         Scenario scenario = new Scenario(action, actionParameter, agentPosition, ballPosition,
             teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, currentStrategy);
         scenarios.Add(newLabel, scenario);
-    }
+    }*/
 
     private void CreatePendingScenario(AIComponent selectedAgent, string label, string action, Vector3 actionParameter)
     {
@@ -420,9 +419,35 @@ public class CoachController : MonoBehaviour
         }
 
         selectedAgent.pendingScenarios.Add((label, new Scenario(action, actionParameter, agentPosition,
-        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, currentStrategy)));
+        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, checkStrategy(selectedAgent))));
     }
-
+    private string checkStrategy(AIComponent selectedAgent)
+    {
+        
+        if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        {
+            return "NoStrategy";
+        }
+        if (selectedAgent.name[0] == 'B')
+        {
+            if (int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
+            {
+                return "DeActiveStrategy";
+            }
+            return "ActiveStrategy";
+        }
+        else
+        {
+            if (int.Parse(SoccerEnvController.blueScore1.text) < int.Parse(SoccerEnvController.purpleScore1.text))
+            {
+                return "DeActiveStrategy";
+            }
+            else
+            {
+                return "ActiveStrategy";
+            }
+        }
+    }
     // Following method is used to retrieve the relative path in regards to device platform
     private string GetPath(string filename)
     {
@@ -472,6 +497,7 @@ public class CoachController : MonoBehaviour
         Destroy(ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer);
         ActionConditionBoard.GetComponent<ActionConditionBoard>().targetMark.position = new Vector3(100, 100, 100);
     }
+
     private void ToggleCoachMode()
     {
         coachMode = !coachMode;
@@ -562,8 +588,9 @@ public class CoachController : MonoBehaviour
         {
             agent.AttachAgentScenarioIndicatorObject(agentScenarioIndicator);
         }
-        
-        strategySequence.Add("strategy1");
+        strategySequence.Add("NoStrategy");
+        strategySequence.Add("ActiveStrategy");
+        strategySequence.Add("DeActiveStrategy");
     }
 
     // Update is called once per frame

@@ -13,6 +13,6 @@ public class ApplyButton : MonoBehaviour
 
     void TaskOnClick()
     {
-        CoachController.currentStrategy = ActionSequenceList.key;
+        //CoachController.currentStrategy = ActionSequenceList.key;
     }
 }

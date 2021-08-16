@@ -10,6 +10,44 @@ public class BTScenarioEvaluation : BTNode
     Vector3 expectedBallPos;
     HashSet<Vector3> expectedTeamPositions;
     HashSet<Vector3> expectedOppoPositions;
+    private bool checkStrategy(string strategy)
+    {
+        String blueStrategy;
+        String purpleStrategy;
+        if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        {
+            blueStrategy= "NoStrategy";
+            purpleStrategy = "NoStrategy";
+        }
+        else if (int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
+        {
+            
+            blueStrategy = "DeActiveStrategy";
+            purpleStrategy = "ActiveStrategy";
+        }
+        else
+        {
+            blueStrategy = "ActiveStrategy";
+            purpleStrategy = "DeActiveStrategy";
+        }
+        if(context.navAgent.name[0]=='B')
+        {
+            if (strategy == blueStrategy)
+            {
+                return true;
+            }
+            return false;
+        }
+        
+        else
+        {
+            if (strategy == purpleStrategy)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
     public override BTResult Execute()
     {
         
@@ -17,7 +55,7 @@ public class BTScenarioEvaluation : BTNode
         {
             foreach (var entry in CoachController.scenarios)
             {
-                if(entry.Value.strategy==CoachController.currentStrategy)
+                if(checkStrategy(entry.Value.strategy))
                 {
                     string label = entry.Key;
                     Scenario scenario = entry.Value;
