@@ -42,18 +42,23 @@ public class ActionConditionBoard : MonoBehaviour
     private HashSet<Transform> expectedOppoPositions;
     private Vector3 target;
     private Transform selectedPlayer;
-    public LineRenderer lineRenderer;
     public Transform targetMark;
+    public LineRenderer lineRenderer;
     void Start()
     {
         saveButton.onClick.AddListener(TaskOnClick);
         deleteButton.onClick.AddListener(deleteElement);
+        lineRenderer.startColor = Color.yellow;
+        lineRenderer.endColor = Color.red;
+        lineRenderer.startWidth = 0.3f;
+        lineRenderer.endWidth = 0.3f;
+        lineRenderer.positionCount = 2;
     }
 
     // Update is called once per frame
     void Update()
     {
-      
+        
     }
 
     private Vector3 VecToStr(string s)
@@ -79,6 +84,8 @@ public class ActionConditionBoard : MonoBehaviour
                 currentScene = scenario.Value;
                 agentPos.text = scenario.Value.agentPosition.ToString();
                 ballPos.text = scenario.Value.ballPosition.ToString();
+                selectedPlayer = CoachController.selectedPlayer;
+                diff = selectedPlayer.position - currentScene.agentPosition;
                 int count = 0;
                 foreach (Vector3 pos in scenario.Value.teammatePositions)
                 {
@@ -109,12 +116,17 @@ public class ActionConditionBoard : MonoBehaviour
                     }
                     count++;
                 }
+                Visualization(currentScene);
             }
             else
             {
-                newScenarios.Add(scenario.Key, scenario.Value);
+                if(!newScenarios.ContainsKey(scenario.Key))
+                {
+                    newScenarios.Add(scenario.Key, scenario.Value);
+                }
+
             }
-            Visualization(currentScene);
+            
         }
 
     }
@@ -122,8 +134,8 @@ public class ActionConditionBoard : MonoBehaviour
 
     private void Visualization(Scenario sc)
     {
-        selectedPlayer = CoachController.selectedPlayer;
-        diff = selectedPlayer.position - sc.agentPosition;
+        
+                
         expectedBallPos = sc.ballPosition - diff;
         //the expected position of teammates based on diff
         expectedTeamPositions = new HashSet<Transform>();
@@ -219,7 +231,7 @@ public class ActionConditionBoard : MonoBehaviour
                 foreach (Transform team in expectedTeamPositions)
                 {
                     var distanceToTeam = ((selectedPlayer.position.x - team.position.x) * (selectedPlayer.position.x - team.position.x) + (selectedPlayer.position.z - team.position.z) * (selectedPlayer.position.z - team.position.z));
-                    if (distanceToTeam > BlackBoard2.teamR)
+                    if (distanceToTeam > BlackBoard2.teamR*2)
                     {
                         tempSet.Add(team);
                     }
@@ -232,7 +244,7 @@ public class ActionConditionBoard : MonoBehaviour
                 foreach (Transform oppo in expectedOppoPositions)
                 {
                     var distanceToOppo = ((selectedPlayer.position.x - oppo.position.x) * (selectedPlayer.position.x - oppo.position.x) + (selectedPlayer.position.z - oppo.position.z) * (selectedPlayer.position.z - oppo.position.z));
-                    if (distanceToOppo > BlackBoard2.oppoR)
+                    if (distanceToOppo > BlackBoard2.oppoR*2)
                     {
                         tempSet2.Add(oppo);
                     }
@@ -255,8 +267,8 @@ public class ActionConditionBoard : MonoBehaviour
                 HashSet<Transform> tempSet = new HashSet<Transform>();
                 foreach (Transform oppo in expectedOppoPositions)
                 {
-                    var distanceToOppo = ((target.x - oppo.position.x) * (target.x - oppo.position.x) + (target.z - oppo.position.z) * (target.z - oppo.position.z));
-                    if (distanceToOppo > BlackBoard2.oppoR)
+                    var distanceToOppo = ((selectedPlayer.position.x - oppo.position.x) * (selectedPlayer.position.x - oppo.position.x) + (selectedPlayer.position.z - oppo.position.z) * (selectedPlayer.position.z - oppo.position.z));
+                    if (distanceToOppo > BlackBoard2.oppoR*2)
                     {
                         
                         tempSet.Add(oppo);
@@ -280,7 +292,7 @@ public class ActionConditionBoard : MonoBehaviour
                 foreach (Transform oppo in expectedOppoPositions)
                 {
                     var distanceToOppo = ((selectedPlayer.position.x - oppo.position.x) * (selectedPlayer.position.x - oppo.position.x) + (selectedPlayer.position.z - oppo.position.z) * (selectedPlayer.position.z - oppo.position.z));
-                    if (distanceToOppo > BlackBoard2.oppoR)
+                    if (distanceToOppo > BlackBoard2.oppoR*2)
                     {
                         tempSet.Add(oppo);
                     }
@@ -304,6 +316,10 @@ public class ActionConditionBoard : MonoBehaviour
     private void Visualize()
     {
         
+        lineRenderer.SetPosition(0, selectedPlayer.position);
+        lineRenderer.SetPosition(1, target);
+        
+        
         foreach (Transform t in expectedTeamPositions)
         {
             t.GetComponent<Renderer>().material = highlightMaterial;
@@ -313,16 +329,6 @@ public class ActionConditionBoard : MonoBehaviour
             t.GetComponent<Renderer>().material = highlightMaterial;
         }
         
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.material = highlightMaterial;
-        lineRenderer.startColor = Color.yellow;
-        lineRenderer.endColor = Color.red;
-        lineRenderer.startWidth = 0.3f;
-        lineRenderer.endWidth = 0.3f;
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(1, target);
-        lineRenderer.SetPosition(0, selectedPlayer.position);
-
         targetMark.position = new Vector3(target.x, 1, target.z);
     }
 
@@ -334,7 +340,7 @@ public class ActionConditionBoard : MonoBehaviour
         b1.GetComponent<Renderer>().material = defaultBlueMaterial;
         b2.GetComponent<Renderer>().material = defaultBlueMaterial;
         b3.GetComponent<Renderer>().material = defaultBlueMaterial;
-        Destroy(lineRenderer);
+   //     Destroy(lineRenderer);
         targetMark.position = new Vector3(100, 100, 100);
     }
 

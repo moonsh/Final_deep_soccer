@@ -494,7 +494,8 @@ public class CoachController : MonoBehaviour
         b1.GetComponent<Renderer>().material = defaultBlueMaterial;
         b2.GetComponent<Renderer>().material = defaultBlueMaterial;
         b3.GetComponent<Renderer>().material = defaultBlueMaterial;
-        Destroy(ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer);
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer.SetPosition(0, new Vector3(100, 100, 100));
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer.SetPosition(1, new Vector3(100, 100, 100));
         ActionConditionBoard.GetComponent<ActionConditionBoard>().targetMark.position = new Vector3(100, 100, 100);
     }
 
