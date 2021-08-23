@@ -12,7 +12,8 @@ public class ActionSequenceList : MonoBehaviour
     public Button saveButton;
     public Button deleteButton;
     public static string key;
-    int count = 0;
+    private int count = 0;
+    private int ScenarioCount = 0;
     void Start()
     {
         saveButton.onClick.AddListener(TaskOnClick);
@@ -21,7 +22,7 @@ public class ActionSequenceList : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(count<1)
+        if(count<1 || ScenarioCount != CoachController.scenarios.Count)
         {
             updateBoard();
         }
@@ -43,6 +44,7 @@ public class ActionSequenceList : MonoBehaviour
     {
         ClearBoard();
         boardName.text = key + " Actions";
+        ScenarioCount = CoachController.scenarios.Count;
         foreach (KeyValuePair<string, Scenario> entry in CoachController.scenarios)
         {
             string sc = entry.Key;
@@ -52,6 +54,7 @@ public class ActionSequenceList : MonoBehaviour
                 button.GetComponentInChildren<Text>().text = sc;
                 button.transform.SetParent(list);
                 buttons.AddLast(button);
+                
             }
             
         }

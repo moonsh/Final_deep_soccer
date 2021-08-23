@@ -1,4 +1,4 @@
-// Anthony Tiongson (ast119)
+
 
 using System.Collections.Generic;
 using System.IO;
@@ -18,12 +18,13 @@ public class CoachController : MonoBehaviour
     public static List<string> strategySequence = new List<string>();
     public static int strategyCount = 1;
     public static float countTime;
+    public static int pastScenarioCount=1;
     public enum coachCommands
     {
         NONE,
         MOVE,
         KICK,
-    }
+    } 
     public GameObject BlackBoard;
     public GameObject BlackBoard2;
     public GameObject StrategySequenceBoard;

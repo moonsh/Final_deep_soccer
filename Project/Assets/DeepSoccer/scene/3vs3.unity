@@ -985,6 +985,7 @@ GameObject:
   - component: {fileID: 266400419}
   - component: {fileID: 266400418}
   - component: {fileID: 266400417}
+  - component: {fileID: 266400420}
   m_Layer: 5
   m_Name: SaveScenariosButton
   m_TagString: Untagged
@@ -1098,6 +1099,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266400415}
   m_CullTransparentMesh: 0
+--- !u!114 &266400420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266400415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb770e10e7ab914f8f6dcd6f292877b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 266400417}
 --- !u!1 &276547584
 GameObject:
   m_ObjectHideFlags: 0
@@ -2460,6 +2474,7 @@ GameObject:
   - component: {fileID: 660365935}
   - component: {fileID: 660365934}
   - component: {fileID: 660365933}
+  - component: {fileID: 660365936}
   m_Layer: 5
   m_Name: ClearScenariosButton
   m_TagString: Untagged
@@ -2584,6 +2599,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660365931}
   m_CullTransparentMesh: 0
+--- !u!114 &660365936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 660365931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bb51eac0943b384eb6971a041dc9ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 660365933}
 --- !u!1 &696510503
 GameObject:
   m_ObjectHideFlags: 0
@@ -2951,6 +2979,7 @@ GameObject:
   - component: {fileID: 727791110}
   - component: {fileID: 727791109}
   - component: {fileID: 727791108}
+  - component: {fileID: 727791111}
   m_Layer: 5
   m_Name: Delete
   m_TagString: Untagged
@@ -3064,6 +3093,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 727791106}
   m_CullTransparentMesh: 0
+--- !u!114 &727791111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727791106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1082ce998d15b6b4481895704252c308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 727791108}
+  ActionConditionBoard: {fileID: 981619295}
 --- !u!1 &734188731
 GameObject:
   m_ObjectHideFlags: 0
@@ -3254,7 +3297,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 6307445026545604970}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1991605472}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -7363,6 +7406,7 @@ GameObject:
   - component: {fileID: 1633157551}
   - component: {fileID: 1633157550}
   - component: {fileID: 1633157549}
+  - component: {fileID: 1633157552}
   m_Layer: 5
   m_Name: LoadScenariosButton
   m_TagString: Untagged
@@ -7476,6 +7520,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1633157547}
   m_CullTransparentMesh: 0
+--- !u!114 &1633157552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633157547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e997659eebd53d48bd13bc554950633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 1633157549}
 --- !u!1 &1636663208
 GameObject:
   m_ObjectHideFlags: 0
@@ -9991,6 +10048,26 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: N/A
+--- !u!1 &1991605472 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6307445027142846836, guid: b0440fbffd1ca4644a8654409487ff3c,
+    type: 3}
+  m_PrefabInstance: {fileID: 6307445026545604970}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1991605476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991605472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1082ce998d15b6b4481895704252c308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 749293600}
+  ActionConditionBoard: {fileID: 981619295}
 --- !u!1 &2002173881
 GameObject:
   m_ObjectHideFlags: 0
@@ -10671,12 +10748,32 @@ PrefabInstance:
     - target: {fileID: 6307445027142846794, guid: b0440fbffd1ca4644a8654409487ff3c,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6307445027142846794, guid: b0440fbffd1ca4644a8654409487ff3c,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307445027142846794, guid: b0440fbffd1ca4644a8654409487ff3c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307445027142846794, guid: b0440fbffd1ca4644a8654409487ff3c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307445027142846794, guid: b0440fbffd1ca4644a8654409487ff3c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307445027142846794, guid: b0440fbffd1ca4644a8654409487ff3c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6307445027142846837, guid: b0440fbffd1ca4644a8654409487ff3c,
         type: 3}
