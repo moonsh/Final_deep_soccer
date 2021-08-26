@@ -204,4 +204,8 @@ public class SoccerEnvController : MonoBehaviour
         //Reset Ball
         ResetBall();
     }
+
+    
+
+    
 }
