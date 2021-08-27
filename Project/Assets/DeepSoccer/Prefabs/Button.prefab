@@ -155,8 +155,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 5325067241012352177}
-  ACB: {fileID: 2970362125623891299, guid: 2b5e1e123ed83984ebc50eb94f74cad8, type: 3}
-  ASB: {fileID: 2970362125623891299, guid: 0cea3fa91bf2cea428164fce10407751, type: 3}
 --- !u!1 &8619047166874227326
 GameObject:
   m_ObjectHideFlags: 0

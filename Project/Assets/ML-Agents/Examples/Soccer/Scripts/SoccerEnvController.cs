@@ -46,6 +46,8 @@ public class SoccerEnvController : MonoBehaviour
     public int stealProbability = 50;
     public Text purpleScore;
     public Text blueScore;
+    public static Text purpleScore1;
+    public static Text blueScore1;
     private SoccerSettings m_SoccerSettings;
 
 
@@ -93,6 +95,8 @@ public class SoccerEnvController : MonoBehaviour
 
     void FixedUpdate()
     {
+        purpleScore1 = purpleScore;
+        blueScore1 = blueScore;
         m_ResetTimer += 1;
         if (m_ResetTimer >= MaxEnvironmentSteps && MaxEnvironmentSteps > 0)
         {
@@ -200,4 +204,8 @@ public class SoccerEnvController : MonoBehaviour
         //Reset Ball
         ResetBall();
     }
+
+    
+
+    
 }

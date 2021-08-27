@@ -1,4 +1,4 @@
-// Anthony Tiongson (ast119)
+
 
 using System.Collections.Generic;
 using System.IO;
@@ -15,19 +15,30 @@ public class CoachController : MonoBehaviour
     public static Dictionary<string, Scenario> scenarios = new Dictionary<string, Scenario>();
     public static List<List<string>> actionSequences = new List<List<string>>();
     public static List<string> actionSequence = new List<string>();
+    public static List<string> strategySequence = new List<string>();
+    public static int strategyCount = 1;
     public static float countTime;
+    public static int pastScenarioCount=1;
     public enum coachCommands
     {
         NONE,
         MOVE,
         KICK,
-    }
+    } 
     public GameObject BlackBoard;
     public GameObject BlackBoard2;
+    public GameObject StrategySequenceBoard;
     public GameObject ActionSequenceBoard;
     public GameObject ActionConditionBoard;
+    public static GameObject ssb;
     public static GameObject asb;
     public static GameObject acb;
+    public Transform p1;
+    public Transform p2;
+    public Transform p3;
+    public Transform b1;
+    public Transform b2;
+    public Transform b3;
     [SerializeField] private string agentTag = "purpleAgent";
     [SerializeField] private string fieldTag = "field";
     [SerializeField] private string ballTag = "ball";
@@ -50,7 +61,7 @@ public class CoachController : MonoBehaviour
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material highlightMaterial;
 
-    private Transform selectedPlayer;
+    public static Transform selectedPlayer;
     private Transform _selection;
     private coachCommands currentCommand;
     private Material defaultMaterial;
@@ -62,6 +73,11 @@ public class CoachController : MonoBehaviour
         asb.SetActive(false);
         acb.SetActive(true);
         
+    }
+    public static void toActionSequence()
+    {
+        ssb.SetActive(false);
+        asb.SetActive(true);
     }
     public void CancelAllUsersActions()
     {
@@ -102,7 +118,7 @@ public class CoachController : MonoBehaviour
         CancelAllUsersActions();
     }
 
-    public void LoadScenarios()
+    /*public void LoadScenarios()
     {
         string filename = "Saved_scenarios.csv";
         string filePath = GetPath(filename);
@@ -133,7 +149,7 @@ public class CoachController : MonoBehaviour
             CreateAndLogScenario(label, action, actionParameter, agentPosition, ballPosition, teammatePositions, opponentPositions,
                 ballPossessed, teamWithBall, reward);
         }
-    }
+    }*/
 
     public void SaveScenarios()
     {
@@ -355,7 +371,7 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.NONE;
     }
 
-    private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3 agentPosition,
+    /*private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3 agentPosition,
         Vector3 ballPosition, HashSet<Vector3> teammatePositions, HashSet<Vector3> opponentPositions, bool ballPossessed,
         string teamWithBall, double reward, Vector3? actionParameterSecondary = null)
     {
@@ -369,9 +385,9 @@ public class CoachController : MonoBehaviour
         }
 
         Scenario scenario = new Scenario(action, actionParameter, agentPosition, ballPosition,
-            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d);
+            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, currentStrategy);
         scenarios.Add(newLabel, scenario);
-    }
+    }*/
 
     private void CreatePendingScenario(AIComponent selectedAgent, string label, string action, Vector3 actionParameter)
     {
@@ -404,9 +420,35 @@ public class CoachController : MonoBehaviour
         }
 
         selectedAgent.pendingScenarios.Add((label, new Scenario(action, actionParameter, agentPosition,
-        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d)));
+        ballPosition, teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, checkStrategy(selectedAgent))));
     }
-
+    private string checkStrategy(AIComponent selectedAgent)
+    {
+        
+        if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        {
+            return "NoStrategy";
+        }
+        if (selectedAgent.name[0] == 'B')
+        {
+            if (int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
+            {
+                return "DeActiveStrategy";
+            }
+            return "ActiveStrategy";
+        }
+        else
+        {
+            if (int.Parse(SoccerEnvController.blueScore1.text) < int.Parse(SoccerEnvController.purpleScore1.text))
+            {
+                return "DeActiveStrategy";
+            }
+            else
+            {
+                return "ActiveStrategy";
+            }
+        }
+    }
     // Following method is used to retrieve the relative path in regards to device platform
     private string GetPath(string filename)
     {
@@ -441,7 +483,21 @@ public class CoachController : MonoBehaviour
             BlackBoard2.SetActive(false);
             ActionSequenceBoard.SetActive(false);
             ActionConditionBoard.SetActive(false);
+            ResetVisualization();
         }
+    }
+
+    public void ResetVisualization()
+    {
+        p1.GetComponent<Renderer>().material = defaultPurpleMaterial;
+        p2.GetComponent<Renderer>().material = defaultPurpleMaterial;
+        p3.GetComponent<Renderer>().material = defaultPurpleMaterial;
+        b1.GetComponent<Renderer>().material = defaultBlueMaterial;
+        b2.GetComponent<Renderer>().material = defaultBlueMaterial;
+        b3.GetComponent<Renderer>().material = defaultBlueMaterial;
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer.SetPosition(0, new Vector3(100, 100, 100));
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer.SetPosition(1, new Vector3(100, 100, 100));
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().targetMark.position = new Vector3(100, 100, 100);
     }
 
     private void ToggleCoachMode()
@@ -510,6 +566,9 @@ public class CoachController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ssb = StrategySequenceBoard;
+        asb = ActionSequenceBoard;
+        acb = ActionConditionBoard;
         scenariosGUI.SetActive(false);
         userActionsGUI.SetActive(false);
         cancelAllUsersActionsButton.SetActive(false);
@@ -518,6 +577,7 @@ public class CoachController : MonoBehaviour
         currentCommand = coachCommands.NONE;
         defaultMaterial = defaultPurpleMaterial;
         BlackBoard.SetActive(false);
+        StrategySequenceBoard.SetActive(false);
         ActionSequenceBoard.SetActive(false);
         ActionConditionBoard.SetActive(false);
         BlackBoard2.SetActive(true);
@@ -530,8 +590,9 @@ public class CoachController : MonoBehaviour
         {
             agent.AttachAgentScenarioIndicatorObject(agentScenarioIndicator);
         }
-        asb = ActionSequenceBoard;
-        acb = ActionConditionBoard;
+        strategySequence.Add("NoStrategy");
+        strategySequence.Add("ActiveStrategy");
+        strategySequence.Add("DeActiveStrategy");
     }
 
     // Update is called once per frame
@@ -608,7 +669,9 @@ public class CoachController : MonoBehaviour
                         selectedPlayer = null;
                         userActionsGUI.SetActive(false);
                         BlackBoard.SetActive(false);
+                        StrategySequenceBoard.SetActive(false);
                         ActionConditionBoard.SetActive(false);
+                        ResetVisualization();
                         ActionSequenceBoard.SetActive(false);
                         BlackBoard2.SetActive(false);
                     }
@@ -701,7 +764,9 @@ public class CoachController : MonoBehaviour
                             selectedPlayer = null;
                             userActionsGUI.SetActive(false);
                             BlackBoard.SetActive(false);
+                            StrategySequenceBoard.SetActive(false);
                             ActionConditionBoard.SetActive(false);
+                            ResetVisualization();
                             ActionSequenceBoard.SetActive(false);
                             BlackBoard2.SetActive(false);
                             currentCommand = coachCommands.NONE;

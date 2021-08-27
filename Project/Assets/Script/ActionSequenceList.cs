@@ -6,30 +6,25 @@ using UnityEngine.UI;
 public class ActionSequenceList : MonoBehaviour
 {
     public Transform list;
+    public Text boardName;
     public GameObject buttonPerfab;
     public static LinkedList<GameObject> buttons = new LinkedList<GameObject>();
-    public Button actionSequenceButton;
     public Button saveButton;
     public Button deleteButton;
-    int count = 0;
+    public static string key;
+    private int count = 0;
+    private int ScenarioCount = 0;
     void Start()
     {
-        actionSequenceButton.onClick.AddListener(TaskOnClick);
         saveButton.onClick.AddListener(TaskOnClick);
         deleteButton.onClick.AddListener(TaskOnClick);
     }
     // Update is called once per frame
     void Update()
     {
-        if(count<1)
+        if(count<1 || ScenarioCount != CoachController.scenarios.Count)
         {
-            foreach (string sc in CoachController.scenarios.Keys)
-            {
-                GameObject button = Object.Instantiate(buttonPerfab);
-                button.GetComponentInChildren<Text>().text = sc;
-                button.transform.SetParent(list);
-                buttons.AddLast(button);
-            }
+            updateBoard();
         }
         count++;
     }
@@ -38,11 +33,31 @@ public class ActionSequenceList : MonoBehaviour
         ClearBoard();
         count = 0;
     }
-    void ClearBoard()
+    public void ClearBoard()
     {
         foreach(GameObject bt in buttons)
         {
             Destroy(bt);
         }
     }
+    public void updateBoard()
+    {
+        ClearBoard();
+        boardName.text = key + " Actions";
+        ScenarioCount = CoachController.scenarios.Count;
+        foreach (KeyValuePair<string, Scenario> entry in CoachController.scenarios)
+        {
+            string sc = entry.Key;
+            if(entry.Value.strategy == key)
+            {
+                GameObject button = Object.Instantiate(buttonPerfab);
+                button.GetComponentInChildren<Text>().text = sc;
+                button.transform.SetParent(list);
+                buttons.AddLast(button);
+                
+            }
+            
+        }
+    }
+    
 }

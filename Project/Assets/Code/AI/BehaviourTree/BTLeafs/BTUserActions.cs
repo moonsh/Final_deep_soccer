@@ -1,4 +1,3 @@
-// Anthony Tiongson (ast119)
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +35,35 @@ public class BTUserActions : BTNode
         }
 
         return new Scenario(action, actionParameter, agentPosition, ballPosition,
-            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d);
+            teammatePositions, opponentPositions, ballPossessed, teamWithBall, 0d, checkStrategy());
+    }
+
+    private string checkStrategy()
+    {
+       
+        if(int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        {
+            return "NoStrategy";
+        }
+        if (context.navAgent.name[0]=='B')
+        {
+            if (int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
+            {
+                return "DeActiveStrategy";
+            }
+            return "ActiveStrategy";
+        }
+        else
+        {
+            if (int.Parse(SoccerEnvController.blueScore1.text) < int.Parse(SoccerEnvController.purpleScore1.text))
+            {
+                return "DeActiveStrategy";
+            }
+            else
+            {
+                return "ActiveStrategy";
+            }
+        }
     }
 
     private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)

@@ -4,6 +4,7 @@ public class SoccerBallController : MonoBehaviour
 {
     public GameObject area;
     public GameObject owner;
+    public static string ownerName;
     [HideInInspector]
     public SoccerEnvController envController;
     public string purpleGoalTag; //will be used to check if collided with purple goal
@@ -12,6 +13,7 @@ public class SoccerBallController : MonoBehaviour
     void Start()
     {
         envController = area.GetComponent<SoccerEnvController>();
+        ownerName = "111";
     }
 
     void OnCollisionEnter(Collision col)
@@ -33,7 +35,7 @@ public class SoccerBallController : MonoBehaviour
 
     void Update()
     {
-        if (owner)
+        if (owner )
         {
             //Debug.Log(owner.transform.forward);
             //            transform.position = owner.transform.position + owner.transform.forward * 1.5f + owner.transform.up  * 1.0f;
@@ -41,11 +43,16 @@ public class SoccerBallController : MonoBehaviour
             //float velocity = owner.GetComponent<AgentSoccer>().v.magnitude; //rapidité
                                                                                                  // Debug.Log(velocity);
             transform.Rotate(owner.transform.right, 0.1f * 10f);
-
-            if (owner.tag == "blueAgent")
+            ownerName = owner.transform.name;
+            /*if (owner.tag == "blueAgent")
             {
                 envController.ResetScene();
-            }
+            }*/
+
+        }
+        else
+        {
+            ownerName = "111";
         }
     }
 }
