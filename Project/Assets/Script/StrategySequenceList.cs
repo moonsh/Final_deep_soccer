@@ -48,19 +48,19 @@ public class StrategySequenceList : MonoBehaviour
         if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
         {
             
-            blueStrategy.text = "NoStrategy";
-            purpleStrategy.text = "NoStrategy";
+            blueStrategy.text = "Draw";     //  NoStrategy
+            purpleStrategy.text = "Draw";  //  NoStrategy
         }
         else if(int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
         {
             
-            blueStrategy.text = "DeActiveStrategy";
-            purpleStrategy.text = "ActiveStrategy";
+            blueStrategy.text = "Win";   //  DeActiveStrategy
+            purpleStrategy.text = "Lose";   //  ActiveStrategy
         }
         else
         {
-            blueStrategy.text = "ActiveStrategy";
-            purpleStrategy.text = "DeActiveStrategy";
+            blueStrategy.text = "Lose";  //  ActiveStrategy
+            purpleStrategy.text = "Win";  //  DeActiveStrategy
         }
        
         foreach (string sc in CoachController.strategySequence)

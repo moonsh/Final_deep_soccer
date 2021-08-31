@@ -12,41 +12,129 @@ public class BTScenarioEvaluation : BTNode
     HashSet<Vector3> expectedOppoPositions;
     private bool checkStrategy(string strategy)
     {
-        String blueStrategy;
-        String purpleStrategy;
+//        int[] blueStrategy;
+//        String purpleStrategy;
         if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
         {
-            blueStrategy= "NoStrategy";
-            purpleStrategy = "NoStrategy";
+            int[] blueStrategy_d= { 1, 2, 3, 4, 5 };
+            int[] purpleStrategy_d = { 1, 2, 3, 4, 5 };
+
+
+
+            if (context.navAgent.name[0] == 'B')
+            {
+                for (int i = 0; i < blueStrategy_d.Length; i++)
+                {
+                    if (strategy == blueStrategy_d[i].ToString())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+            else
+            {
+                for (int i = 0; i < purpleStrategy_d.Length; i++)
+                {
+                    if (strategy == purpleStrategy_d[i].ToString())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+
+            //            purpleStrategy = "1";
         }
         else if (int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
         {
-            
-            blueStrategy = "DeActiveStrategy";
-            purpleStrategy = "ActiveStrategy";
+            int[] blueStrategy_w = { 3, 4};
+            int[] purpleStrategy_l = { 1, 2, 5 };
+
+
+            if (context.navAgent.name[0] == 'B')
+            {
+                for (int i = 0; i < blueStrategy_w.Length; i++)
+                {
+                    if (strategy == blueStrategy_w[i].ToString())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+            else
+            {
+                for (int i = 0; i < purpleStrategy_l.Length; i++)
+                {
+                    if (strategy == purpleStrategy_l[i].ToString())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+
+
+            //            blueStrategy = "2";
+            //            purpleStrategy = "3";
         }
         else
         {
-            blueStrategy = "ActiveStrategy";
-            purpleStrategy = "DeActiveStrategy";
-        }
-        if(context.navAgent.name[0]=='B')
-        {
-            if (strategy == blueStrategy)
+//            blueStrategy = "3";
+//            purpleStrategy = "2";
+            int[] blueStrategy_l = { 1, 2,5 };
+            int[] purpleStrategy_w = { 3, 4 };
+
+            if (context.navAgent.name[0] == 'B')
             {
-                return true;
+                for (int i = 0; i < blueStrategy_l.Length; i++)
+                {
+                    if (strategy == blueStrategy_l[i].ToString())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
             }
-            return false;
+            else
+            {
+                for (int i = 0; i < purpleStrategy_w.Length; i++)
+                {
+                    if (strategy == purpleStrategy_w[i].ToString())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+
         }
+
+        //if (context.navAgent.name[0]=='B')
+        //{
+
+        //    if (strategy == blueStrategy )
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
         
-        else
-        {
-            if (strategy == purpleStrategy)
-            {
-                return true;
-            }
-            return false;
-        }
+        //else
+        //{
+        //    if (strategy == purpleStrategy)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
     }
     public override BTResult Execute()
     {

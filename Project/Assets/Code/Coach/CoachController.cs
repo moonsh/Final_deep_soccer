@@ -8,6 +8,10 @@ using UnityEngine;
 
 public class CoachController : MonoBehaviour
 {
+
+    public specify_option test1;
+    public GameObject camera_t;
+
     public static bool coachMode;
     public static bool sceneReset;
     public static HashSet<AIComponent> agentsWithUserActions = new HashSet<AIComponent>();
@@ -424,28 +428,28 @@ public class CoachController : MonoBehaviour
     }
     private string checkStrategy(AIComponent selectedAgent)
     {
-        
+        return test1.input_option.ToString();
         if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
         {
-            return "NoStrategy";
+            return "1";    // NoStrategy
         }
         if (selectedAgent.name[0] == 'B')
         {
             if (int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
             {
-                return "DeActiveStrategy";
+                return "2";   // DeActiveStrategy
             }
-            return "ActiveStrategy";
+            return "3";  // ActiveStrategy
         }
         else
         {
             if (int.Parse(SoccerEnvController.blueScore1.text) < int.Parse(SoccerEnvController.purpleScore1.text))
             {
-                return "DeActiveStrategy";
+                return "2";
             }
             else
             {
-                return "ActiveStrategy";
+                return "3";
             }
         }
     }
@@ -566,6 +570,10 @@ public class CoachController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        camera_t = GameObject.Find("Main_Camera");
+        test1 = camera_t.GetComponent<specify_option>();
+
         ssb = StrategySequenceBoard;
         asb = ActionSequenceBoard;
         acb = ActionConditionBoard;
@@ -590,9 +598,13 @@ public class CoachController : MonoBehaviour
         {
             agent.AttachAgentScenarioIndicatorObject(agentScenarioIndicator);
         }
-        strategySequence.Add("NoStrategy");
-        strategySequence.Add("ActiveStrategy");
-        strategySequence.Add("DeActiveStrategy");
+        strategySequence.Add("1");  // NoStrategy
+        strategySequence.Add("2");  // ActiveStrategy
+        strategySequence.Add("3");  // DeActiveStrategy
+        strategySequence.Add("4");
+        strategySequence.Add("5");
+
+
     }
 
     // Update is called once per frame
