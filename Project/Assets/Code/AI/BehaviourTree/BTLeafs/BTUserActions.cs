@@ -40,28 +40,29 @@ public class BTUserActions : BTNode
 
     private string checkStrategy()
     {
-       
-        if(int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        return context.contextOwner.test1.input_option.ToString();
+
+        if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
         {
-            return "NoStrategy";
+            return "1";
         }
         if (context.navAgent.name[0]=='B')
         {
             if (int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
             {
-                return "DeActiveStrategy";
+                return "2";
             }
-            return "ActiveStrategy";
+            return "3";
         }
         else
         {
             if (int.Parse(SoccerEnvController.blueScore1.text) < int.Parse(SoccerEnvController.purpleScore1.text))
             {
-                return "DeActiveStrategy";
+                return "2";
             }
             else
             {
-                return "ActiveStrategy";
+                return "3";
             }
         }
     }

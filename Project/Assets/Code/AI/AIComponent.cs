@@ -12,6 +12,9 @@ using UnityEngine.AI;
 //[RequireComponent(typeof(BehaviourTreeType))]
 public class AIComponent : MonoBehaviour, IEventSource
 {
+    public specify_option test1;
+    public GameObject camera_t;
+
     public BehaviourTreeType behaviourTreeType;
     public SensorySystem sensorySystem;
     public AIEventHandler eventHandler;
@@ -111,14 +114,14 @@ public class AIComponent : MonoBehaviour, IEventSource
         targetTeammate = null;
     }
 
-    public void CreateAgentScenarioIndicator(string label)
+    public void CreateAgentScenarioIndicator(string label, string strategy_name)
     {
         var textRotation = Quaternion.identity;
         textRotation.eulerAngles = new Vector3(90, 0, 90);
         var location = transform.position;
         var textOffset = new Vector3(location.x, 70, location.z);
         agentScenarioIndicator = Instantiate(agentScenarioIndicatorObject, textOffset, textRotation);
-        agentScenarioIndicator.GetComponentInChildren<TextMeshProUGUI>().text = label;
+        agentScenarioIndicator.GetComponentInChildren<TextMeshProUGUI>().text = strategy_name + " " + label ;
         agentScenarioIndicatorVisible = true;
     }
 
@@ -197,6 +200,10 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     private void Awake()
     {
+
+        camera_t = GameObject.Find("Main_Camera");
+        test1 = camera_t.GetComponent<specify_option>();
+
         navAgent = GetComponent<NavMeshAgent>();
         animatorController = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
