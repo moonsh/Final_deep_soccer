@@ -9,6 +9,7 @@ public class RestartGameButton : MonoBehaviour
     public Text blueScore;
     public Transform SoccerStadium;
     public Button button;
+
     void Start()
     {
         button.onClick.AddListener(TaskOnClick);

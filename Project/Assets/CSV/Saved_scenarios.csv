@@ -1,2 +1,3 @@
 Label,Action,Action Paramater X,Action Paramater Y,Action Paramater Z,Agent Position X,Agent Position Y,Agent Position Z,Ball Position X,Ball Position Y,Ball Position Z,Teammate1 Position X,Teammate1 Position Y,Teammate1 Position Z,Teammat2 Position X,Teammat2 Position Y,Teammat2 Position Z,Opponent1 Position X,Opponent1 Position Y,Opponent1 Position Z,Opponent2 Position X,Opponent2 Position Y,Opponent2 Position Z,Opponent3 Position X,Opponent3 Position Y,Opponent3 Position Z,Ball Possessed,Team With Ball,Reward
+Move,Move,-0.2253647,-8.402566E-09,1.070486,3.746896,0.1626063,-10.61151,0,0.72,6.736773E-08,14.285,0.1625287,-10.65124,-4.353173,0.1626584,-10.58483,-5.67434,0.1833319,23.49439,17.12853,0.1833319,20.97753,10.85207,0.1833319,8.335488,False,None,0
 

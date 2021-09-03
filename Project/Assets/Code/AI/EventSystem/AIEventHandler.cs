@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -67,18 +67,6 @@ public class AIEventHandler
     {
         bool isValid = false;
 
-        if (_event.sourceAgent != aiComponent as IEventSource)
-        {
-            switch (_event.stimType)
-            {
-                case StimType.HURT:
-                    isValid = aiComponent.sensorySystem.IsEventSourceVisible(_event.eventInstigator);
-                    break;
-                default:
-                    isValid = (_event.sourcePosition - aiComponent.transform.position).sqrMagnitude < _event.radius * _event.radius;
-                    break;
-            }
-        }
 
         return isValid;
     }

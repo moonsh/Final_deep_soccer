@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class AIGeneralDebugView : AIDebugView
 {
@@ -19,11 +19,11 @@ public class AIGeneralDebugView : AIDebugView
         }
         else viewText += "Target: " + "None" + "\n";
 
-        Vector3 lkp = owningAgent.sensorySystem.lastKnownPosition;
-        if ( lkp != Vector3.zero)
-        {
-            viewText += "Last Known Position: " + lkp.ToString();
-        }
+        //Vector3 lkp = owningAgent.sensorySystem.lastKnownPosition;
+        //if ( lkp != Vector3.zero)
+        //{
+        //    viewText += "Last Known Position: " + lkp.ToString();
+        //}
 
         switch (owningAgent.currentState)
         {

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,13 +11,16 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NavMeshAgent))]
 //[RequireComponent(typeof(BehaviourTreeType))]
+//public class AIComponent : MonoBehaviour
 public class AIComponent : MonoBehaviour, IEventSource
 {
+    private IEnumerator coroutine;
+
     public specify_option test1;
     public GameObject camera_t;
 
     public BehaviourTreeType behaviourTreeType;
-    public SensorySystem sensorySystem;
+//    public SensorySystem sensorySystem;
     public AIEventHandler eventHandler;
     public Rigidbody rb;
     public Transform goal;
@@ -29,6 +33,9 @@ public class AIComponent : MonoBehaviour, IEventSource
     //public List<Vector3> userActionMoves = new List<Vector3>();
     //public CoachController coachController;
     //public RefereeController refereeController;
+
+    //private IEnumerator coroutine;
+
 
     internal AIState currentState = AIState.IDLE;
     internal IEventSource currentTarget;
@@ -175,13 +182,25 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     public void RemoveAgentScenarioIndicator()
     {
+
+//        coroutine = WaitAndPrint(2.0f);
         if (agentScenarioIndicatorVisible)
         {
             Destroy(agentScenarioIndicator);
             CoachController.agentsUsingPastScenario.Remove(this);
             agentScenarioIndicatorVisible = false;
+
         }
     }
+
+    //private IEnumerator WaitAndPrint(float waitTime)
+    //{
+    //    yield return new WaitForSeconds(waitTime);
+    //    print("Coroutine ended: " + Time.time + " seconds");
+    //}
+
+
+
 
     public void RemoveAllActions()
     {
@@ -241,9 +260,15 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     private void Start()
     {
+
+
+//        coroutine = WaitAndPrint(2.0f);
+//        StartCoroutine(coroutine);
+
+
         ballMarkerVisible = false;
         agentScenarioIndicatorVisible = false;
-        sensorySystem.Initialize(this, navAgent);
+//        sensorySystem.Initialize(this, navAgent);
         eventHandler.Initialize(this, animatorController, navAgent);
         BehaviourTreeRuntimeData.RegisterAgentContext(behaviourTreeType, aiContext);
         userActionPath = gameObject.AddComponent<LineRenderer>();
@@ -267,6 +292,8 @@ public class AIComponent : MonoBehaviour, IEventSource
     void Update()
     {
         var currentBallPosition = ball.position;
+
+
 
         if (agentScenarioIndicatorVisible)
         {
@@ -328,7 +355,7 @@ public class AIComponent : MonoBehaviour, IEventSource
             userActionPath.SetPositions(points);
         }
 
-        sensorySystem.Update();
+        //sensorySystem.Update();
         eventHandler.Update();
 
         /*if (behaviourTreeType.Equals(BehaviourTreeType.PLAYER))

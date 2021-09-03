@@ -99,6 +99,7 @@ public class BTScenario : BTNode
                 }
 
                 context.contextOwner.RemoveAgentScenarioIndicator();
+
                 context.pastScenario = null;
                 return BTResult.SUCCESS;
             case "Pass":

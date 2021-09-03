@@ -607,6 +607,13 @@ public class CoachController : MonoBehaviour
 
     }
 
+    public void add_strategy()
+    {
+        int num_c = strategySequence.Count + 1;
+        string name = num_c.ToString();
+        strategySequence.Add(name);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -683,6 +690,7 @@ public class CoachController : MonoBehaviour
                         BlackBoard.SetActive(false);
                         StrategySequenceBoard.SetActive(false);
                         ActionConditionBoard.SetActive(false);
+//                        scenariosGUI.SetActive(false);
                         ResetVisualization();
                         ActionSequenceBoard.SetActive(false);
                         BlackBoard2.SetActive(false);
@@ -775,6 +783,7 @@ public class CoachController : MonoBehaviour
                         {
                             selectedPlayer = null;
                             userActionsGUI.SetActive(false);
+//                            scenariosGUI.SetActive(false);
                             BlackBoard.SetActive(false);
                             StrategySequenceBoard.SetActive(false);
                             ActionConditionBoard.SetActive(false);
