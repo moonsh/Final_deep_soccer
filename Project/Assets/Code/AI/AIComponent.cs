@@ -182,7 +182,6 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     public void RemoveAgentScenarioIndicator()
     {
-
 //        coroutine = WaitAndPrint(2.0f);
         if (agentScenarioIndicatorVisible)
         {
@@ -192,6 +191,19 @@ public class AIComponent : MonoBehaviour, IEventSource
 
         }
     }
+
+    public void RemoveAgentScenarioIndicator2()
+    {
+        //        coroutine = WaitAndPrint(2.0f);
+        if (agentScenarioIndicatorVisible)
+        {
+            Destroy(agentScenarioIndicator, 0.1f);
+            CoachController.agentsUsingPastScenario.Remove(this);
+            agentScenarioIndicatorVisible = false;
+
+        }
+    }
+
 
     //private IEnumerator WaitAndPrint(float waitTime)
     //{
@@ -292,7 +304,7 @@ public class AIComponent : MonoBehaviour, IEventSource
     void Update()
     {
         var currentBallPosition = ball.position;
-
+//        int count_v = 0;
 
 
         if (agentScenarioIndicatorVisible)
@@ -301,6 +313,20 @@ public class AIComponent : MonoBehaviour, IEventSource
             var textOffset = new Vector3(location.x, 70, location.z);
             agentScenarioIndicator.transform.position = textOffset;
         }
+
+
+        //        if (agentScenarioIndicatorVisible==false)
+        //        {
+        //            count_v = count_v + 1;
+
+        //            if ( count_v ==10)
+        //            {
+        //                Destroy(agentScenarioIndicator);
+        //                CoachController.agentsUsingPastScenario.Remove(this);
+        ////                agentScenarioIndicatorVisible = false;
+        //            }
+
+        //        }
 
         if (ballMarkerVisible)
         {

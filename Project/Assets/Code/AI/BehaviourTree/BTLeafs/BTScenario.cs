@@ -98,7 +98,7 @@ public class BTScenario : BTNode
                     context.navAgent.GetComponent<AgentSoccer>().Kick(direction, 200f * distance);
                 }
 
-                context.contextOwner.RemoveAgentScenarioIndicator();
+                context.contextOwner.RemoveAgentScenarioIndicator2();
 
                 context.pastScenario = null;
                 return BTResult.SUCCESS;
@@ -137,7 +137,7 @@ public class BTScenario : BTNode
                     }
                 }
 
-                context.contextOwner.RemoveAgentScenarioIndicator();
+                context.contextOwner.RemoveAgentScenarioIndicator2();
                 context.pastScenario = null;
 
                 return BTResult.SUCCESS;
