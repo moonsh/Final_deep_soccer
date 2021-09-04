@@ -148,6 +148,13 @@ public class BTScenarioEvaluation : BTNode
                     string label = entry.Key;
                     Scenario scenario = entry.Value;
                     bool allConditionFit = true;
+                    if (context.navAgent.name[0] == 'B')
+                    {
+                        scenario.agentPosition.x = -scenario.agentPosition.x;
+                        scenario.agentPosition.z = -scenario.agentPosition.z;
+//                        Debug.Log("testing blue agent");
+                    }
+
                     //the difference between agent's current position and agent's position in the scene
                     diff = context.navAgent.transform.position - scenario.agentPosition;
                     //the expected position of ball based on diff
@@ -166,7 +173,7 @@ public class BTScenarioEvaluation : BTNode
                         expectedOppoPositions.Add(opponent.transform.position - diff);
                     }
 
-                    Filter(scenario);
+//                    Filter(scenario);
 
                     //Debug.Log("BTScenarioEvaluation (" + label + "): checking to see if current game state matches...");               
                     //check if ball's position matches
@@ -184,10 +191,21 @@ public class BTScenarioEvaluation : BTNode
 
                                     foreach (Vector3 teammatePosition in scenario.teammatePositions)
                                     {
-                                        if (Mathf.Abs(expectedTeammPos.x - teammatePosition.x) < BlackBoard2.teamR && Mathf.Abs(expectedTeammPos.z - teammatePosition.z) < BlackBoard2.teamR)
-                                        {
-                                            teammateMatch = true;
-                                        }
+
+                                        if (context.navAgent.name[0] == 'P')
+                                            if (Mathf.Abs(expectedTeammPos.x - teammatePosition.x) < BlackBoard2.teamR && Mathf.Abs(expectedTeammPos.z - teammatePosition.z) < BlackBoard2.teamR)
+                                            {
+                                                teammateMatch = true;
+                                            }
+
+                                        if (context.navAgent.name[0] == 'B')
+                                            if (Mathf.Abs(expectedTeammPos.x + teammatePosition.x) < BlackBoard2.teamR && Mathf.Abs(expectedTeammPos.z + teammatePosition.z) < BlackBoard2.teamR)
+                                            {
+                                                teammateMatch = true;
+                                            }
+                                        
+
+
                                     }
 
                                     if (teammateMatch == false)
@@ -207,10 +225,20 @@ public class BTScenarioEvaluation : BTNode
 
                                     foreach (Vector3 opponentPosition in scenario.opponentPositions)
                                     {
-                                        if (Mathf.Abs(expectedOpponentPos.x - opponentPosition.x) < BlackBoard2.oppoR && Mathf.Abs(expectedOpponentPos.z - opponentPosition.z) < BlackBoard2.oppoR)
-                                        {
-                                            opponentMatch = true;
-                                        }
+                                        if (context.navAgent.name[0] == 'P')
+                                            if (Mathf.Abs(expectedOpponentPos.x - opponentPosition.x) < BlackBoard2.oppoR && Mathf.Abs(expectedOpponentPos.z - opponentPosition.z) < BlackBoard2.oppoR)
+                                            {
+                                                opponentMatch = true;
+                                            }
+
+                                        if (context.navAgent.name[0] == 'B')
+                                            if (Mathf.Abs(expectedOpponentPos.x + opponentPosition.x) < BlackBoard2.oppoR && Mathf.Abs(expectedOpponentPos.z + opponentPosition.z) < BlackBoard2.oppoR)
+                                            {
+                                                opponentMatch = true;
+                                            }
+
+
+
                                     }
 
                                     if (opponentMatch == false)
@@ -242,7 +270,15 @@ public class BTScenarioEvaluation : BTNode
                                 }
                                 if (pastScenario != context.pastScenario)
                                 {
+                                    //if (context.navAgent.name[0] == 'B')
+                                    //{
+                                    //    scenario.actionParameter.z = -scenario.actionParameter.z;
+                                    //    scenario.actionParameter.x = -scenario.actionParameter.x;
+                                    //}
                                     scenario.relativeTarget = scenario.actionParameter + diff;
+
+                                    if (context.navAgent.name[0] == 'B')
+                                        scenario.relativeTarget = -scenario.actionParameter + diff;
 
                                 }
 

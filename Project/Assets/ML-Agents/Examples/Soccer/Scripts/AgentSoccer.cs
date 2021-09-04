@@ -59,7 +59,7 @@ public class AgentSoccer : Agent
         {
             team = Team.Blue;
             initialPos = new Vector3(transform.position.x -5f, .5f, transform.position.z+10f);
-            rotSign = 1f;
+            rotSign = 90f;
         }
         else
         {

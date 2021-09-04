@@ -205,7 +205,80 @@ public class SoccerEnvController : MonoBehaviour
         ResetBall();
     }
 
-    
+    public void ResetScene_purple_attack()
+    {
+        m_ResetTimer = 0;
 
-    
+        //Reset Agents
+        foreach (var item in AgentsList)
+        {
+
+            if (item.Agent.CompareTag("blueAgent"))
+            {
+                var rot = 180f;
+                var newRot = Quaternion.Euler(0, rot, 0);
+                Vector3 change = new Vector3(0, 0, 3);
+                item.Agent.transform.SetPositionAndRotation(item.StartingPos+ change*2, newRot);
+                item.Rb.velocity = Vector3.zero;
+                item.Rb.angularVelocity = Vector3.zero;
+                item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
+            }
+            else
+            {
+                var rot = 0f;
+                var newRot = Quaternion.Euler(0, rot, 0);
+                Vector3 change = new Vector3(0, 0, 3);
+                item.Agent.transform.SetPositionAndRotation(item.StartingPos + change*2, newRot);
+                item.Rb.velocity = Vector3.zero;
+                item.Rb.angularVelocity = Vector3.zero;
+                item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
+
+
+            }
+        }
+
+        CoachController.sceneReset = true;
+        CoachController.actionSequence.Clear();
+        //Reset Ball
+        ResetBall();
+    }
+
+    public void ResetScene_purple_defense()
+    {
+        m_ResetTimer = 0;
+
+        //Reset Agents
+        foreach (var item in AgentsList)
+        {
+
+            if (item.Agent.CompareTag("purpleAgent"))
+            {
+                var rot = 0f;
+                var newRot = Quaternion.Euler(0, rot, 0);
+                Vector3 change = new Vector3(0, 0, 3);
+                item.Agent.transform.SetPositionAndRotation(item.StartingPos - change*2, newRot);
+                item.Rb.velocity = Vector3.zero;
+                item.Rb.angularVelocity = Vector3.zero;
+                item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
+            }
+            else
+            {
+                var rot = 180f;
+                var newRot = Quaternion.Euler(0, rot, 0);
+                Vector3 change = new Vector3(0, 0, 3);
+                item.Agent.transform.SetPositionAndRotation(item.StartingPos - change*2, newRot);
+                item.Rb.velocity = Vector3.zero;
+                item.Rb.angularVelocity = Vector3.zero;
+                item.Agent.GetComponent<NavMeshAgent>().SetDestination(item.Agent.transform.position);
+            }
+        }
+
+        CoachController.sceneReset = true;
+        CoachController.actionSequence.Clear();
+        //Reset Ball
+        ResetBall();
+    }
+
+
+
 }

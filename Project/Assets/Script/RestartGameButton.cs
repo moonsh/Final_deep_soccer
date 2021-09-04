@@ -18,7 +18,14 @@ public class RestartGameButton : MonoBehaviour
     void TaskOnClick()
     {
         SoccerStadium.GetComponent<SoccerEnvController>().ResetScene();
-//        purpleScore.text = "0";
-//        blueScore.text = "0";
+        if (button.CompareTag("PurpleAttack"))
+            SoccerStadium.GetComponent<SoccerEnvController>().ResetScene_purple_attack();
+
+        if (button.CompareTag("PurpleDefense"))
+            SoccerStadium.GetComponent<SoccerEnvController>().ResetScene_purple_defense();
+
+
+        //        purpleScore.text = "0";
+        //        blueScore.text = "0";
     }
 }
