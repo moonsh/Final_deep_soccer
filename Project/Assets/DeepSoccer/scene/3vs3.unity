@@ -1893,7 +1893,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Purple Defense
+  m_Text: Blue Attack
 --- !u!222 &217290559
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12124,7 +12124,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Purple Attack
+  m_Text: Red Attack
 --- !u!222 &1513192064
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13849,6 +13849,26 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 113941704406509770, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 113941704406509770, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 113941704406509770, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 113941704406509770, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Text
+      value: Red
+      objectReference: {fileID: 0}
     - target: {fileID: 456097121809647385, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_Drag
@@ -13857,12 +13877,12 @@ PrefabInstance:
     - target: {fileID: 521643791691763785, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_Text
-      value: P2
+      value: R2
       objectReference: {fileID: 0}
     - target: {fileID: 946557930567229529, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_Text
-      value: P3
+      value: R3
       objectReference: {fileID: 0}
     - target: {fileID: 946557930567229529, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
@@ -13912,7 +13932,7 @@ PrefabInstance:
     - target: {fileID: 3635978006685099326, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
       propertyPath: m_Text
-      value: P1
+      value: R1
       objectReference: {fileID: 0}
     - target: {fileID: 3857077391142220771, guid: 83b78873ec0e58e4fa366823f8a296a7,
         type: 3}
@@ -14454,6 +14474,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Drag
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039500271996589696, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039500271996589696, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039500271996589696, guid: 83b78873ec0e58e4fa366823f8a296a7,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 83b78873ec0e58e4fa366823f8a296a7, type: 3}
