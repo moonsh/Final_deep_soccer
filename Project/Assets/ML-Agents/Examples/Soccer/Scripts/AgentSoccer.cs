@@ -146,11 +146,7 @@ public class AgentSoccer : Agent
 
                 }
                 break;
-                
-
         }
-
-
 
         transform.Rotate(rotateDir, Time.deltaTime * 100f);
         agentRb.AddForce(dirToGo * m_SoccerSettings.agentRunSpeed,

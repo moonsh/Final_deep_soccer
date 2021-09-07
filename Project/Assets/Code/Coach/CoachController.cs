@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class CoachController : MonoBehaviour
-{
+public class CoachController : MonoBehaviour{
 
     public specify_option test1;
     public GameObject camera_t;
@@ -603,8 +602,6 @@ public class CoachController : MonoBehaviour
         strategySequence.Add("3");  // DeActiveStrategy
         strategySequence.Add("4");
         strategySequence.Add("5");
-
-
     }
 
     // Update is called once per frame
@@ -819,5 +816,35 @@ public class CoachController : MonoBehaviour
         }
 
         countTime += Time.deltaTime;
+    }
+
+    public void PauseGame()
+    {
+        switch (currentCommand)
+        {
+            case coachCommands.NONE:
+                if (selectedPlayer != null)
+                {
+                    _selection = selectedPlayer;
+                    selectedPlayer = null;
+                    userActionsGUI.SetActive(false);
+                    BlackBoard.SetActive(false);
+                    StrategySequenceBoard.SetActive(false);
+                    ActionConditionBoard.SetActive(false);
+                    ResetVisualization();
+                    ActionSequenceBoard.SetActive(false);
+                    BlackBoard2.SetActive(false);
+                }
+                else
+                {
+                    ToggleCoachMode();
+                }
+                break;
+            default:
+                userActionsGUI.SetActive(true);
+                BlackBoard.SetActive(true);
+                currentCommand = coachCommands.NONE;
+                break;
+        }
     }
 }
