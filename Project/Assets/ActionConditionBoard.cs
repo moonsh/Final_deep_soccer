@@ -44,6 +44,11 @@ public class ActionConditionBoard : MonoBehaviour
     private Transform selectedPlayer;
     public Transform targetMark;
     public LineRenderer lineRenderer;
+    public LineRenderer circle1;
+    public LineRenderer circle2;
+    public Text text1;
+    public Text text2;
+    
     void Start()
     {
         saveButton.onClick.AddListener(TaskOnClick);
@@ -73,6 +78,145 @@ public class ActionConditionBoard : MonoBehaviour
         return result;
     }
 
+    public void DrawCircle(Vector3 pos, LineRenderer circle)
+    {
+        int points = 100;
+        int R = 5;                                           
+        float angle = 360f / (points - 20);                
+        Quaternion q = new Quaternion();
+        circle.startColor = Color.red;
+        circle.endColor = Color.red;
+        circle.startWidth = 0.3f;
+        circle.endWidth = 0.3f;
+        circle.positionCount = points;
+        for (int i = 0; i < points; i++)
+        {
+            if (i != 0)
+            {
+                q = Quaternion.Euler(q.eulerAngles.x + angle, q.eulerAngles.y, q.eulerAngles.z + angle);
+            }
+            Vector3 forwardPosition = pos + q * Vector3.down * R;
+            circle.SetPosition(i, forwardPosition);
+        }
+    }
+    public void ResetText(Vector3 pos1, Vector3 pos2, string name)
+    {
+       
+        DrawCircle(pos1, circle1);
+        DrawCircle(pos2, circle2);
+
+        if (name == "P1")
+        {
+            var temp1 = p2.position;
+            var temp2 = p3.position;
+            var distance1 = Mathf.Sqrt((temp1.x - pos1.x) * (temp1.x - pos1.x) + (temp1.z - pos1.z) * (temp1.z - pos1.z));
+            var distance2 = Mathf.Sqrt((temp2.x - pos1.x) * (temp2.x - pos1.x) + (temp2.z - pos1.z) * (temp2.z - pos1.z));
+            if(distance1 > distance2)
+            {
+                text1.text = "R2";
+                text2.text = "R3";
+            }
+            else
+            {
+                text1.text = "R3";
+                text2.text = "R2";
+            }
+        }
+        if(name == "P2")
+        {
+            var temp1 = p1.position;
+            var temp2 = p3.position;
+            var distance1 = Mathf.Sqrt((temp1.x - pos1.x) * (temp1.x - pos1.x) + (temp1.z - pos1.z) * (temp1.z - pos1.z));
+            var distance2 = Mathf.Sqrt((temp2.x - pos1.x) * (temp2.x - pos1.x) + (temp2.z - pos1.z) * (temp2.z - pos1.z));
+            if (distance1 > distance2)
+            {
+                text1.text = "R1";
+                text2.text = "R3";
+            }
+            else
+            {
+                text1.text = "R3";
+                text2.text = "R1";
+            }
+        }
+        if(name == "P3")
+        {
+            var temp1 = p1.position;
+            var temp2 = p2.position;
+            var distance1 = Mathf.Sqrt((temp1.x - pos1.x) * (temp1.x - pos1.x) + (temp1.z - pos1.z) * (temp1.z - pos1.z));
+            var distance2 = Mathf.Sqrt((temp2.x - pos1.x) * (temp2.x - pos1.x) + (temp2.z - pos1.z) * (temp2.z - pos1.z));
+            if (distance1 > distance2)
+            {
+                text1.text = "R1";
+                text2.text = "R2";
+            }
+            else
+            {
+                text1.text = "R2";
+                text2.text = "R1";
+            }
+            Debug.Log(text1.text);
+        }
+        if(name == "B1")
+        {
+            var temp1 = b2.position;
+            var temp2 = b3.position;
+            var distance1 = Mathf.Sqrt((temp1.x - pos1.x) * (temp1.x - pos1.x) + (temp1.z - pos1.z) * (temp1.z - pos1.z));
+            var distance2 = Mathf.Sqrt((temp2.x - pos1.x) * (temp2.x - pos1.x) + (temp2.z - pos1.z) * (temp2.z - pos1.z));
+            if (distance1 > distance2)
+            {
+                text1.text = "B2";
+                text2.text = "B3";
+            }
+            else
+            {
+                text1.text = "B3";
+                text2.text = "B2";
+            }
+        }
+
+        if (name == "B2")
+        {
+            var temp1 = b1.position;
+            var temp2 = b3.position;
+            var distance1 = Mathf.Sqrt((temp1.x - pos1.x) * (temp1.x - pos1.x) + (temp1.z - pos1.z) * (temp1.z - pos1.z));
+            var distance2 = Mathf.Sqrt((temp2.x - pos1.x) * (temp2.x - pos1.x) + (temp2.z - pos1.z) * (temp2.z - pos1.z));
+            if (distance1 > distance2)
+            {
+                text1.text = "B1";
+                text2.text = "B3";
+            }
+            else
+            {
+                text1.text = "B3";
+                text2.text = "B1";
+            }
+        }
+        if (name == "B3")
+        {
+            var temp1 = b1.position;
+            var temp2 = b2.position;
+            var distance1 = Mathf.Sqrt((temp1.x - pos1.x) * (temp1.x - pos1.x) + (temp1.z - pos1.z) * (temp1.z - pos1.z));
+            var distance2 = Mathf.Sqrt((temp2.x - pos1.x) * (temp2.x - pos1.x) + (temp2.z - pos1.z) * (temp2.z - pos1.z));
+            if (distance1 > distance2)
+            {
+                text1.text = "B1";
+                text2.text = "B2";
+            }
+            else
+            {
+                text1.text = "B2";
+                text2.text = "B1";
+            }
+        }
+
+        text1.transform.position = new Vector3(text1.transform.position.x + pos1.z * 5, text1.transform.position.y - pos1.x * 5, text1.transform.position.z);
+        text2.transform.position = new Vector3(text2.transform.position.x + pos2.z * 5, text2.transform.position.y - pos2.x * 5, text2.transform.position.z);
+
+
+    }
+
+
     public void resetBoard()
     {
         
@@ -81,6 +225,8 @@ public class ActionConditionBoard : MonoBehaviour
         {
             if (scenario.Key == key)
             {
+                Vector3 pos1 = Vector3.zero;
+                Vector3 pos2 = Vector3.zero;
                 currentScene = scenario.Value;
                 agentPos.text = scenario.Value.agentPosition.ToString();
                 ballPos.text = scenario.Value.ballPosition.ToString();
@@ -92,13 +238,16 @@ public class ActionConditionBoard : MonoBehaviour
                     if (count == 0)
                     {
                         teammatePos1.text = pos.ToString();
+                        pos1 = pos;
                     }
                     else if (count == 1)
                     {
                         teammatePos2.text = pos.ToString();
+                        pos2 = pos;
                     }
                     count++;
                 }
+                ResetText(pos1 + diff, pos2 + diff,selectedPlayer.name.Substring(selectedPlayer.name.Length - 2));
                 count = 0;
                 foreach (Vector3 pos in scenario.Value.opponentPositions)
                 {

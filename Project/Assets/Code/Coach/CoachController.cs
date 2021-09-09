@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CoachController : MonoBehaviour
 {
@@ -70,8 +71,11 @@ public class CoachController : MonoBehaviour
     private coachCommands currentCommand;
     private Material defaultMaterial;
     private int count;
+    public Text text1;
+    public Text text2;
+    public Canvas canvas;
 
-   
+
     public static void toActionCondition()
     {
         asb.SetActive(false);
@@ -487,6 +491,7 @@ public class CoachController : MonoBehaviour
             BlackBoard2.SetActive(false);
             ActionSequenceBoard.SetActive(false);
             ActionConditionBoard.SetActive(false);
+            
             ResetVisualization();
         }
     }
@@ -502,6 +507,12 @@ public class CoachController : MonoBehaviour
         ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer.SetPosition(0, new Vector3(100, 100, 100));
         ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer.SetPosition(1, new Vector3(100, 100, 100));
         ActionConditionBoard.GetComponent<ActionConditionBoard>().targetMark.position = new Vector3(100, 100, 100);
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle1.positionCount = 0;
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle2.positionCount = 0;
+        text1.text = "";
+        text2.text = "";
+        text1.transform.position = new Vector3(canvas.transform.position.x + 75, canvas.transform.position.y - 10, canvas.transform.position.z);
+        text2.transform.position = new Vector3(canvas.transform.position.x + 75, canvas.transform.position.y - 10, canvas.transform.position.z);
     }
 
     private void ToggleCoachMode()
@@ -690,7 +701,8 @@ public class CoachController : MonoBehaviour
                         BlackBoard.SetActive(false);
                         StrategySequenceBoard.SetActive(false);
                         ActionConditionBoard.SetActive(false);
-//                        scenariosGUI.SetActive(false);
+                        
+                        //                        scenariosGUI.SetActive(false);
                         ResetVisualization();
                         ActionSequenceBoard.SetActive(false);
                         BlackBoard2.SetActive(false);

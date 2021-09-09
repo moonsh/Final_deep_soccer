@@ -14,6 +14,5 @@ public class specify_option : MonoBehaviour
     public void input_string(string s)
     {
         input_option = s;
-        Debug.Log(input_option);
     }
 }
