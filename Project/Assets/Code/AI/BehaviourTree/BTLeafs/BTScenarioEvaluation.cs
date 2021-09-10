@@ -257,13 +257,6 @@ public class BTScenarioEvaluation : BTNode
                                 //Debug.Log("ballPos:" + context.ball.position);
                                 //Debug.Log("expectedBallPos:" + expectedBallPos);
                                 //Debug.Log("sceneBallPos:" + scenario.ballPosition);
-                                if (context.pastScenario != null)
-                                {
-                                    if (context.pastScenario.Item2 == null)
-                                    {
-                                        CoachController.agentsUsingPastScenario.Add(context.contextOwner);
-                                    }
-                                }
                                 if (Mathf.Abs(scenario.relativeTarget.z) < 55f || Mathf.Abs(scenario.relativeTarget.x) < 37.5f)
                                 {
                                     context.pastScenario = new Tuple<string, Scenario>(label, scenario);
@@ -281,6 +274,14 @@ public class BTScenarioEvaluation : BTNode
                                         scenario.relativeTarget = -scenario.actionParameter + diff;
 
                                 }
+                                if (context.pastScenario != null)
+                                {
+                                    if (context.pastScenario.Item2 == null)
+                                    {
+                                        CoachController.agentsUsingPastScenario.Add(context.contextOwner);
+                                    }
+                                }
+
 
 
                                 break;

@@ -89,11 +89,14 @@ public class ActionConditionBoard : MonoBehaviour
         {
             circle.startColor = Color.red;
             circle.endColor = Color.red;
+            circle.material.SetColor("_Color", Color.red);
         }
         else
         {
             circle.startColor = Color.blue;
             circle.endColor = Color.blue;
+            circle.material.SetColor("_Color", Color.blue);
+
         }
         circle.startWidth = 0.5f;
         circle.endWidth = 0.5f;
@@ -129,6 +132,7 @@ public class ActionConditionBoard : MonoBehaviour
                 ballPos.text = scenario.Value.ballPosition.ToString();
                 selectedPlayer = CoachController.selectedPlayer;
                 diff = selectedPlayer.position - currentScene.agentPosition;
+//                diff = new Vector3(0, 0, 0);
                 int count = 0;
                 foreach (Vector3 pos in scenario.Value.teammatePositions)
                 {
@@ -167,11 +171,11 @@ public class ActionConditionBoard : MonoBehaviour
                     count++;
                 }
                 Visualization(currentScene);
-                DrawCircle(pos1 + diff, circle1, CoachController.TeamR, true);
-                DrawCircle(pos2 + diff, circle2, CoachController.TeamR, true);
-                DrawCircle(pos3 + diff, circle3, CoachController.OppoR, false);
-                DrawCircle(pos4 + diff, circle4, CoachController.OppoR, false);
-                DrawCircle(pos5 + diff, circle5, CoachController.OppoR, false);
+                DrawCircle(pos1 + diff, circle1, CoachController.TeamR*2, true);
+                DrawCircle(pos2 + diff, circle2, CoachController.TeamR*2, true);
+                DrawCircle(pos3 + diff, circle3, CoachController.OppoR*2, false);
+                DrawCircle(pos4 + diff, circle4, CoachController.OppoR*2, false);
+                DrawCircle(pos5 + diff, circle5, CoachController.OppoR*2, false);
             }
             else
             {
@@ -198,7 +202,7 @@ public class ActionConditionBoard : MonoBehaviour
         expectedOppoPositions = new HashSet<Transform>();
         target = sc.actionParameter + diff;
         string team = FindSelectedAgent(selectedPlayer);
-        Filter(sc, selectedPlayer, team);
+        //Filter(sc, selectedPlayer, team);
         Visualize();
     }
 
