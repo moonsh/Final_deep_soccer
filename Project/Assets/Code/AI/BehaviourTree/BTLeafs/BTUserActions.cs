@@ -42,7 +42,7 @@ public class BTUserActions : BTNode
     {
         return context.contextOwner.test1.input_option.ToString();
 
-        if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        /*if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
         {
             return "1";
         }
@@ -64,7 +64,7 @@ public class BTUserActions : BTNode
             {
                 return "3";
             }
-        }
+        }*/
     }
 
     private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)

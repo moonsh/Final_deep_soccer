@@ -71,9 +71,9 @@ public class CoachController : MonoBehaviour
     private coachCommands currentCommand;
     private Material defaultMaterial;
     private int count;
-    public Text text1;
-    public Text text2;
     public Canvas canvas;
+    public static int TeamR = 5;
+    public static int OppoR = 5;
 
 
     public static void toActionCondition()
@@ -433,7 +433,7 @@ public class CoachController : MonoBehaviour
     private string checkStrategy(AIComponent selectedAgent)
     {
         return test1.input_option.ToString();
-        if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        /*if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
         {
             return "1";    // NoStrategy
         }
@@ -455,7 +455,7 @@ public class CoachController : MonoBehaviour
             {
                 return "3";
             }
-        }
+        }*/
     }
     // Following method is used to retrieve the relative path in regards to device platform
     private string GetPath(string filename)
@@ -509,10 +509,10 @@ public class CoachController : MonoBehaviour
         ActionConditionBoard.GetComponent<ActionConditionBoard>().targetMark.position = new Vector3(100, 100, 100);
         ActionConditionBoard.GetComponent<ActionConditionBoard>().circle1.positionCount = 0;
         ActionConditionBoard.GetComponent<ActionConditionBoard>().circle2.positionCount = 0;
-        text1.text = "";
-        text2.text = "";
-        text1.transform.position = new Vector3(canvas.transform.position.x + 75, canvas.transform.position.y - 10, canvas.transform.position.z);
-        text2.transform.position = new Vector3(canvas.transform.position.x + 75, canvas.transform.position.y - 10, canvas.transform.position.z);
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle3.positionCount = 0;
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle4.positionCount = 0;
+        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle5.positionCount = 0;
+
     }
 
     private void ToggleCoachMode()
