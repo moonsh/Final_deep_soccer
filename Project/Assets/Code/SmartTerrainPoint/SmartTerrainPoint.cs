@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +27,7 @@ public class SmartTerrainPoint : MonoBehaviour
     public string onPathPointReachedTriggerName;
     public string onPathEndTriggerName;
 
+    
     List<Transform> terrainPathPoints;
     internal bool stpStarted = false;
     internal bool endPointReached = false;

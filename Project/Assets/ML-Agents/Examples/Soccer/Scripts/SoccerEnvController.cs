@@ -49,13 +49,15 @@ public class SoccerEnvController : MonoBehaviour
     public static Text purpleScore1;
     public static Text blueScore1;
     private SoccerSettings m_SoccerSettings;
+
+
     private SimpleMultiAgentGroup m_BlueAgentGroup;
     private SimpleMultiAgentGroup m_PurpleAgentGroup;
 
     private int m_ResetTimer;
     private Vector3 current_position;
     private float distance_cal;
-    //private SoccerBallController m_ballcontrol;
+    //    private SoccerBallController m_ballcontrol;
     private Vector3 calculate_distance_ball_agents;
     private float WaitTime = 3.0f;
     private float Timer = 0.0f;
@@ -201,5 +203,9 @@ public class SoccerEnvController : MonoBehaviour
         CoachController.actionSequence.Clear();
         //Reset Ball
         ResetBall();
-    }   
+    }
+
+    
+
+    
 }
