@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,16 +10,10 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NavMeshAgent))]
 //[RequireComponent(typeof(BehaviourTreeType))]
-//public class AIComponent : MonoBehaviour
 public class AIComponent : MonoBehaviour, IEventSource
 {
-    private IEnumerator coroutine;
-
-    public specify_option test1;
-    public GameObject camera_t;
-
     public BehaviourTreeType behaviourTreeType;
-//    public SensorySystem sensorySystem;
+    public SensorySystem sensorySystem;
     public AIEventHandler eventHandler;
     public Rigidbody rb;
     public Transform goal;
@@ -33,9 +26,6 @@ public class AIComponent : MonoBehaviour, IEventSource
     //public List<Vector3> userActionMoves = new List<Vector3>();
     //public CoachController coachController;
     //public RefereeController refereeController;
-
-    //private IEnumerator coroutine;
-
 
     internal AIState currentState = AIState.IDLE;
     internal IEventSource currentTarget;
@@ -121,14 +111,14 @@ public class AIComponent : MonoBehaviour, IEventSource
         targetTeammate = null;
     }
 
-    public void CreateAgentScenarioIndicator(string label, string strategy_name)
+    public void CreateAgentScenarioIndicator(string label)
     {
         var textRotation = Quaternion.identity;
         textRotation.eulerAngles = new Vector3(90, 0, 90);
         var location = transform.position;
         var textOffset = new Vector3(location.x, 70, location.z);
         agentScenarioIndicator = Instantiate(agentScenarioIndicatorObject, textOffset, textRotation);
-        agentScenarioIndicator.GetComponentInChildren<TextMeshProUGUI>().text = strategy_name + " " + label ;
+        agentScenarioIndicator.GetComponentInChildren<TextMeshProUGUI>().text = label;
         agentScenarioIndicatorVisible = true;
     }
 
@@ -182,37 +172,13 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     public void RemoveAgentScenarioIndicator()
     {
-//        coroutine = WaitAndPrint(2.0f);
         if (agentScenarioIndicatorVisible)
         {
             Destroy(agentScenarioIndicator);
             CoachController.agentsUsingPastScenario.Remove(this);
             agentScenarioIndicatorVisible = false;
-
         }
     }
-
-    public void RemoveAgentScenarioIndicator2()
-    {
-        //        coroutine = WaitAndPrint(2.0f);
-        if (agentScenarioIndicatorVisible)
-        {
-            Destroy(agentScenarioIndicator, 0.1f);
-            CoachController.agentsUsingPastScenario.Remove(this);
-            agentScenarioIndicatorVisible = false;
-
-        }
-    }
-
-
-    //private IEnumerator WaitAndPrint(float waitTime)
-    //{
-    //    yield return new WaitForSeconds(waitTime);
-    //    print("Coroutine ended: " + Time.time + " seconds");
-    //}
-
-
-
 
     public void RemoveAllActions()
     {
@@ -231,10 +197,6 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     private void Awake()
     {
-
-        camera_t = GameObject.Find("Main_Camera");
-        test1 = camera_t.GetComponent<specify_option>();
-
         navAgent = GetComponent<NavMeshAgent>();
         animatorController = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
@@ -272,15 +234,9 @@ public class AIComponent : MonoBehaviour, IEventSource
 
     private void Start()
     {
-
-
-//        coroutine = WaitAndPrint(2.0f);
-//        StartCoroutine(coroutine);
-
-
         ballMarkerVisible = false;
         agentScenarioIndicatorVisible = false;
-//        sensorySystem.Initialize(this, navAgent);
+        sensorySystem.Initialize(this, navAgent);
         eventHandler.Initialize(this, animatorController, navAgent);
         BehaviourTreeRuntimeData.RegisterAgentContext(behaviourTreeType, aiContext);
         userActionPath = gameObject.AddComponent<LineRenderer>();
@@ -304,8 +260,6 @@ public class AIComponent : MonoBehaviour, IEventSource
     void Update()
     {
         var currentBallPosition = ball.position;
-//        int count_v = 0;
-
 
         if (agentScenarioIndicatorVisible)
         {
@@ -313,20 +267,6 @@ public class AIComponent : MonoBehaviour, IEventSource
             var textOffset = new Vector3(location.x, 70, location.z);
             agentScenarioIndicator.transform.position = textOffset;
         }
-
-
-        //        if (agentScenarioIndicatorVisible==false)
-        //        {
-        //            count_v = count_v + 1;
-
-        //            if ( count_v ==10)
-        //            {
-        //                Destroy(agentScenarioIndicator);
-        //                CoachController.agentsUsingPastScenario.Remove(this);
-        ////                agentScenarioIndicatorVisible = false;
-        //            }
-
-        //        }
 
         if (ballMarkerVisible)
         {
@@ -381,7 +321,7 @@ public class AIComponent : MonoBehaviour, IEventSource
             userActionPath.SetPositions(points);
         }
 
-        //sensorySystem.Update();
+        sensorySystem.Update();
         eventHandler.Update();
 
         /*if (behaviourTreeType.Equals(BehaviourTreeType.PLAYER))

@@ -59,8 +59,6 @@ public class BlackBoard2 : MonoBehaviour
         soccerR = int.Parse(soccerRange.text);
         teamR = int.Parse(teamRange.text);
         oppoR = int.Parse(oppoRange.text);
-        CoachController.TeamR = teamR;
-        CoachController.OppoR = oppoR;
         if( !teamPosition && !oppoPosition)
         {
             soccerPos.isOn = true;

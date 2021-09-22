@@ -40,31 +40,30 @@ public class BTUserActions : BTNode
 
     private string checkStrategy()
     {
-        return context.contextOwner.test1.input_option.ToString();
-
-        /*if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+       
+        if(int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
         {
-            return "1";
+            return "NoStrategy";
         }
         if (context.navAgent.name[0]=='B')
         {
             if (int.Parse(SoccerEnvController.blueScore1.text) > int.Parse(SoccerEnvController.purpleScore1.text))
             {
-                return "2";
+                return "DeActiveStrategy";
             }
-            return "3";
+            return "ActiveStrategy";
         }
         else
         {
             if (int.Parse(SoccerEnvController.blueScore1.text) < int.Parse(SoccerEnvController.purpleScore1.text))
             {
-                return "2";
+                return "DeActiveStrategy";
             }
             else
             {
-                return "3";
+                return "ActiveStrategy";
             }
-        }*/
+        }
     }
 
     private void CreateAndLogScenario(string label, string action, Vector3 actionParameter, Vector3? actionParameterSecondary = null)

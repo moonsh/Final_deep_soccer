@@ -13,14 +13,12 @@ public class StrategySequenceList : MonoBehaviour
     public Button strategySequenceButton;
     public Button applyButton;
     public Button deleteButton;
-    public Button add_strategySequence;
     int count = 0;
     void Start()
     {
         strategySequenceButton.onClick.AddListener(TaskOnClick);
         applyButton.onClick.AddListener(TaskOnClick);
         deleteButton.onClick.AddListener(TaskOnClick);
-        add_strategySequence.onClick.AddListener(TaskOnClick);
     }
     // Update is called once per frame
     void Update()

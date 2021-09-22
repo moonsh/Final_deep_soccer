@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/DeepSoccer/scene/3vs3 Mobile.unity
+    guid: 438c219be572d654f81ce6d25047f2f1
   m_configObjects: {}

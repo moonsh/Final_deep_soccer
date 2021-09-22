@@ -33,8 +33,6 @@ TagManager:
   - Boundary
   - field
   - waypoint
-  - PurpleAttack
-  - PurpleDefense
   layers:
   - Default
   - TransparentFX

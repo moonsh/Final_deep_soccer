@@ -5,10 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class CoachController : MonoBehaviour
-{
+public class CoachController : MonoBehaviour{
 
     public specify_option test1;
     public GameObject camera_t;
@@ -71,11 +69,8 @@ public class CoachController : MonoBehaviour
     private coachCommands currentCommand;
     private Material defaultMaterial;
     private int count;
-    public Canvas canvas;
-    public static int TeamR = 5;
-    public static int OppoR = 5;
 
-
+   
     public static void toActionCondition()
     {
         asb.SetActive(false);
@@ -433,7 +428,7 @@ public class CoachController : MonoBehaviour
     private string checkStrategy(AIComponent selectedAgent)
     {
         return test1.input_option.ToString();
-        /*if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
+        if (int.Parse(SoccerEnvController.blueScore1.text) == int.Parse(SoccerEnvController.purpleScore1.text))
         {
             return "1";    // NoStrategy
         }
@@ -455,7 +450,7 @@ public class CoachController : MonoBehaviour
             {
                 return "3";
             }
-        }*/
+        }
     }
     // Following method is used to retrieve the relative path in regards to device platform
     private string GetPath(string filename)
@@ -491,7 +486,6 @@ public class CoachController : MonoBehaviour
             BlackBoard2.SetActive(false);
             ActionSequenceBoard.SetActive(false);
             ActionConditionBoard.SetActive(false);
-            
             ResetVisualization();
         }
     }
@@ -507,12 +501,6 @@ public class CoachController : MonoBehaviour
         ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer.SetPosition(0, new Vector3(100, 100, 100));
         ActionConditionBoard.GetComponent<ActionConditionBoard>().lineRenderer.SetPosition(1, new Vector3(100, 100, 100));
         ActionConditionBoard.GetComponent<ActionConditionBoard>().targetMark.position = new Vector3(100, 100, 100);
-        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle1.positionCount = 0;
-        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle2.positionCount = 0;
-        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle3.positionCount = 0;
-        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle4.positionCount = 0;
-        ActionConditionBoard.GetComponent<ActionConditionBoard>().circle5.positionCount = 0;
-
     }
 
     private void ToggleCoachMode()
@@ -614,15 +602,6 @@ public class CoachController : MonoBehaviour
         strategySequence.Add("3");  // DeActiveStrategy
         strategySequence.Add("4");
         strategySequence.Add("5");
-
-
-    }
-
-    public void add_strategy()
-    {
-        int num_c = strategySequence.Count + 1;
-        string name = num_c.ToString();
-        strategySequence.Add(name);
     }
 
     // Update is called once per frame
@@ -701,8 +680,6 @@ public class CoachController : MonoBehaviour
                         BlackBoard.SetActive(false);
                         StrategySequenceBoard.SetActive(false);
                         ActionConditionBoard.SetActive(false);
-                        
-                        //                        scenariosGUI.SetActive(false);
                         ResetVisualization();
                         ActionSequenceBoard.SetActive(false);
                         BlackBoard2.SetActive(false);
@@ -795,7 +772,6 @@ public class CoachController : MonoBehaviour
                         {
                             selectedPlayer = null;
                             userActionsGUI.SetActive(false);
-//                            scenariosGUI.SetActive(false);
                             BlackBoard.SetActive(false);
                             StrategySequenceBoard.SetActive(false);
                             ActionConditionBoard.SetActive(false);
@@ -840,5 +816,35 @@ public class CoachController : MonoBehaviour
         }
 
         countTime += Time.deltaTime;
+    }
+
+    public void PauseGame()
+    {
+        switch (currentCommand)
+        {
+            case coachCommands.NONE:
+                if (selectedPlayer != null)
+                {
+                    _selection = selectedPlayer;
+                    selectedPlayer = null;
+                    userActionsGUI.SetActive(false);
+                    BlackBoard.SetActive(false);
+                    StrategySequenceBoard.SetActive(false);
+                    ActionConditionBoard.SetActive(false);
+                    ResetVisualization();
+                    ActionSequenceBoard.SetActive(false);
+                    BlackBoard2.SetActive(false);
+                }
+                else
+                {
+                    ToggleCoachMode();
+                }
+                break;
+            default:
+                userActionsGUI.SetActive(true);
+                BlackBoard.SetActive(true);
+                currentCommand = coachCommands.NONE;
+                break;
+        }
     }
 }

@@ -9,7 +9,6 @@ public class RestartGameButton : MonoBehaviour
     public Text blueScore;
     public Transform SoccerStadium;
     public Button button;
-
     void Start()
     {
         button.onClick.AddListener(TaskOnClick);
@@ -18,14 +17,7 @@ public class RestartGameButton : MonoBehaviour
     void TaskOnClick()
     {
         SoccerStadium.GetComponent<SoccerEnvController>().ResetScene();
-        if (button.CompareTag("PurpleAttack"))
-            SoccerStadium.GetComponent<SoccerEnvController>().ResetScene_purple_attack();
-
-        if (button.CompareTag("PurpleDefense"))
-            SoccerStadium.GetComponent<SoccerEnvController>().ResetScene_purple_defense();
-
-
-        //        purpleScore.text = "0";
-        //        blueScore.text = "0";
+//        purpleScore.text = "0";
+//        blueScore.text = "0";
     }
 }

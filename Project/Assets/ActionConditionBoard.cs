@@ -44,13 +44,6 @@ public class ActionConditionBoard : MonoBehaviour
     private Transform selectedPlayer;
     public Transform targetMark;
     public LineRenderer lineRenderer;
-    public LineRenderer circle1;
-    public LineRenderer circle2;
-    public LineRenderer circle3;
-    public LineRenderer circle4;
-    public LineRenderer circle5;
-
-
     void Start()
     {
         saveButton.onClick.AddListener(TaskOnClick);
@@ -80,40 +73,6 @@ public class ActionConditionBoard : MonoBehaviour
         return result;
     }
 
-    public void DrawCircle(Vector3 pos, LineRenderer circle, int R, bool team)
-    {
-        int points = 100;                                          
-        float angle = 360f / (points - 20);                
-        Quaternion q = new Quaternion();
-        if(team)
-        {
-            circle.startColor = Color.red;
-            circle.endColor = Color.red;
-            circle.material.SetColor("_Color", Color.red);
-        }
-        else
-        {
-            circle.startColor = Color.blue;
-            circle.endColor = Color.blue;
-            circle.material.SetColor("_Color", Color.blue);
-
-        }
-        circle.startWidth = 0.5f;
-        circle.endWidth = 0.5f;
-        circle.positionCount = points;
-        for (int i = 0; i < points; i++)
-        {
-            if (i != 0)
-            {
-                q = Quaternion.Euler(q.eulerAngles.x + angle, q.eulerAngles.y, q.eulerAngles.z + angle);
-            }
-            Vector3 forwardPosition = pos + q * Vector3.down * R;
-            circle.SetPosition(i, forwardPosition);
-        }
-    }
-    
-
-
     public void resetBoard()
     {
         
@@ -122,60 +81,42 @@ public class ActionConditionBoard : MonoBehaviour
         {
             if (scenario.Key == key)
             {
-                Vector3 pos1 = Vector3.zero;
-                Vector3 pos2 = Vector3.zero;
-                Vector3 pos3 = Vector3.zero;
-                Vector3 pos4 = Vector3.zero;
-                Vector3 pos5 = Vector3.zero;
                 currentScene = scenario.Value;
                 agentPos.text = scenario.Value.agentPosition.ToString();
                 ballPos.text = scenario.Value.ballPosition.ToString();
                 selectedPlayer = CoachController.selectedPlayer;
                 diff = selectedPlayer.position - currentScene.agentPosition;
-//                diff = new Vector3(0, 0, 0);
                 int count = 0;
                 foreach (Vector3 pos in scenario.Value.teammatePositions)
                 {
                     if (count == 0)
                     {
                         teammatePos1.text = pos.ToString();
-                        pos1 = pos;
                     }
                     else if (count == 1)
                     {
                         teammatePos2.text = pos.ToString();
-                        pos2 = pos;
                     }
                     count++;
                 }
-                
-
                 count = 0;
                 foreach (Vector3 pos in scenario.Value.opponentPositions)
                 {
                     if (count == 0)
                     {
                         opponentPos1.text = pos.ToString();
-                        pos3 = pos;
                     }
                     else if (count == 1)
                     {
                         opponentPos2.text = pos.ToString();
-                        pos4 = pos;
                     }
                     else if (count == 2)
                     {
                         opponentPos3.text = pos.ToString();
-                        pos5 = pos;
                     }
                     count++;
                 }
                 Visualization(currentScene);
-                DrawCircle(pos1 + diff, circle1, CoachController.TeamR*2, true);
-                DrawCircle(pos2 + diff, circle2, CoachController.TeamR*2, true);
-                DrawCircle(pos3 + diff, circle3, CoachController.OppoR*2, false);
-                DrawCircle(pos4 + diff, circle4, CoachController.OppoR*2, false);
-                DrawCircle(pos5 + diff, circle5, CoachController.OppoR*2, false);
             }
             else
             {
@@ -202,7 +143,7 @@ public class ActionConditionBoard : MonoBehaviour
         expectedOppoPositions = new HashSet<Transform>();
         target = sc.actionParameter + diff;
         string team = FindSelectedAgent(selectedPlayer);
-        //Filter(sc, selectedPlayer, team);
+        Filter(sc, selectedPlayer, team);
         Visualize();
     }
 

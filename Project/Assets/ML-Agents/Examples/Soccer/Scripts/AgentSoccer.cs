@@ -59,7 +59,7 @@ public class AgentSoccer : Agent
         {
             team = Team.Blue;
             initialPos = new Vector3(transform.position.x -5f, .5f, transform.position.z+10f);
-            rotSign = 90f;
+            rotSign = 1f;
         }
         else
         {
@@ -146,11 +146,7 @@ public class AgentSoccer : Agent
 
                 }
                 break;
-                
-
         }
-
-
 
         transform.Rotate(rotateDir, Time.deltaTime * 100f);
         agentRb.AddForce(dirToGo * m_SoccerSettings.agentRunSpeed,
